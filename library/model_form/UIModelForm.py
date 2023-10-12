@@ -19,6 +19,8 @@ from .ui_fields import IntegerField
 
 
 class UIModelForm(metaclass=UIModelFormMetaClass):
+    # TODO classmethods
+
     ModelField = peewee.Field
     auto_fields: list[ModelField] = [peewee.AutoField]
     form_fields_mapping: dict[ModelField, UIField] = {
@@ -41,13 +43,13 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
 
     def DataTable(
         self,
-        queryset: Callable = None,
         *args,
+        queryset: Callable = None,
         table_actions: list[DataTableAction] = [],
         objects_actions: list[ObjectAction] = [],
         **kwargs,
     ) -> UIModelFormDataTable:
-
+        queryset = self.get_queryset(queryset)
         fields = self._get_fields(write_only=False)
 
         table_actions = getattr(
@@ -88,7 +90,7 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         fields = {}
 
         assert hasattr(self.Meta, 'fields'), (
-            'Meta class must have list/tuple of fields.'
+            'Meta class must have list of fields.'
         )
 
         for field_name in self.Meta.fields:
@@ -141,6 +143,11 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
 
         return attrs
 
+    def get_queryset(self, q=None) -> Callable:
+        # TODO filters widget
+        # TODO filter_widget.get_queryset: Calable
+        return q or self.Meta.model.select
+
     @cached_property
     def _ui_fields(self) -> dict[str, UIField]:
         ui_fields = {}
@@ -160,8 +167,8 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         return ui_fields
 
     class Meta:
-        model = None
-        fields: tuple[str] = ()
+        model: peewee.Model = None
+        fields: Iterable[str] = ()
         read_only_fields: Iterable[str] = ''
         write_only_fields: Iterable[str] = ''
         table_actions: list[DataTableAction] = []
