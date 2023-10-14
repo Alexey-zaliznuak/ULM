@@ -1,9 +1,10 @@
 import locale as loc
 import flet as ft
 import calendar
+from typing import Optional, Union
 from datetime import datetime, timedelta
 
-from widgets.lib.datepicker.selection_type import SelectionType
+from .selection_type import SelectionType
 
 
 class DatePicker(ft.UserControl):
@@ -42,8 +43,8 @@ class DatePicker(ft.UserControl):
 
     def __init__(self,
                  hour_minute: bool = False,
-                 selected_date: list[datetime] | None = None,
-                 selection_type: SelectionType | int = SelectionType.SINGLE,
+                 selected_date: Optional[list[datetime]] = None,
+                 selection_type: Union[SelectionType, int] = SelectionType.SINGLE,
                  disable_to: datetime = None,
                  disable_from: datetime = None,
                  holidays: list[datetime] = None,

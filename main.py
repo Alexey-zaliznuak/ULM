@@ -9,7 +9,7 @@ person_form = PersonUIModelForm()
 def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     # page.scroll = 'always'
-    
+
     c = ft.Column(
         [person_form.DataTable()],
         expand=2, spacing=10, width=800,
