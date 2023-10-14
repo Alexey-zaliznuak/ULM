@@ -6,58 +6,57 @@ from datetime import datetime, timedelta
 
 from .selection_type import SelectionType
 
+PREV_MONTH = "PM"
+NEXT_MONTH = "NM"
+PREV_YEAR = "PY"
+NEXT_YEAR = "NY"
+
+PREV_HOUR = "PH"
+NEXT_HOUR = "NH"
+PREV_MINUTE = "PMIN"
+NEXT_MINUTE = "NMIN"
+
+EMPTY = ""
+WHITE_SPACE = " "
+
+DELTA_MONTH_WEEK = 5
+DELTA_YEAR_WEEK = 52
+DELTA_HOUR = 1
+DELTA_MINUTE = 1
+
+WEEKEND_DAYS = [5, 6]
+
+CELL_SIZE = 32
+LAYOUT_WIDTH = 340
+LAYOUT_MIN_HEIGHT = 280
+LAYOUT_MAX_HEIGHT = 320
+LAYOUT_DT_MIN_HEIGHT = 320
+LAYOUT_DT_MAX_HEIGHT = 360
+
 
 class DatePicker(ft.UserControl):
 
     @property
     def selected_data(self):
-        print('self.selected', self.selected[0])
         return self.selected
 
-    PREV_MONTH = "PM"
-    NEXT_MONTH = "NM"
-    PREV_YEAR = "PY"
-    NEXT_YEAR = "NY"
-
-    PREV_HOUR = "PH"
-    NEXT_HOUR = "NH"
-    PREV_MINUTE = "PMIN"
-    NEXT_MINUTE = "NMIN"
-
-    EMPTY = ""
-    WHITE_SPACE = " "
-
-    DELTA_MONTH_WEEK = 5
-    DELTA_YEAR_WEEK = 52
-    DELTA_HOUR = 1
-    DELTA_MINUTE = 1
-
-    WEEKEND_DAYS = [5, 6]
-
-    CELL_SIZE = 32
-    LAYOUT_WIDTH = 340
-    LAYOUT_MIN_HEIGHT = 280
-    LAYOUT_MAX_HEIGHT = 320
-    LAYOUT_DT_MIN_HEIGHT = 320
-    LAYOUT_DT_MAX_HEIGHT = 360
-
-    def __init__(self,
-                 hour_minute: bool = False,
-                 selected_date: Optional[list[datetime]] = None,
-                 selection_type: Union[SelectionType, int] = SelectionType.SINGLE,
-                 disable_to: datetime = None,
-                 disable_from: datetime = None,
-                 holidays: list[datetime] = None,
-                 hide_prev_next_month_days: bool = False,
-                 first_weekday: int = 0,
-                 show_three_months: bool = False,
-                 locale: str = None
-                 ):
+    def __init__(
+        self,
+        hour_minute: bool = False,
+        selected_date: Optional[list[datetime]] = None,
+        selection_type: Union[SelectionType, int] = SelectionType.SINGLE,
+        disable_to: datetime = None,
+        disable_from: datetime = None,
+        holidays: list[datetime] = None,
+        hide_prev_next_month_days: bool = False,
+        first_weekday: int = 0,
+        show_three_months: bool = False,
+        locale: str = None
+    ):
         super().__init__()
 
-        self.selected = selected_date if selected_date else []
-        self.selection_type = selection_type if not type(
-            int) else SelectionType.from_value(selection_type)
+        self.selected = selected_date or []
+        self.selection_type = SelectionType(selection_type)
         self.hour_minute = hour_minute
         self.disable_to = disable_to
         self.disable_from = disable_from
@@ -89,11 +88,19 @@ class DatePicker(ft.UserControl):
 
         ym = self._year_month_selectors(year, month, hide_ymhm)
         week_rows_controls.append(
-            ft.Column([ym], alignment=ft.MainAxisAlignment.START))
+            ft.Column(
+                [ym],
+                alignment=ft.MainAxisAlignment.START
+            )
+        )
 
         labels = ft.Row(self._row_labels(), spacing=18)
         week_rows_controls.append(
-            ft.Column([labels], alignment=ft.MainAxisAlignment.START))
+            ft.Column(
+                [labels],
+                alignment=ft.MainAxisAlignment.START
+            )
+        )
 
         weeks_rows_num = len(self._get_current_month(year, month))
 
@@ -102,21 +109,28 @@ class DatePicker(ft.UserControl):
 
             for d in days[w]:
 
-                d = datetime(
-                    d.year,
-                    d.month,
-                    d.day,
-                    self.hour,
-                    self.minute,
-                ) if self.hour_minute else datetime(
-                    d.year, d.month, d.day)
+                if self.hour_minute:
+                    d = datetime(
+                        d.year,
+                        d.month,
+                        d.day,
+                        self.hour,
+                        self.minute,
+                    )
+                else:
+                    d = datetime(d.year, d.month, d.day)
 
                 month = d.month
                 is_main_month = True if month == self.mm else False
 
                 if self.hide_prev_next_month_days and not is_main_month:
-                    row.append(ft.Text("", width=self.CELL_SIZE,
-                               height=self.CELL_SIZE,))
+                    row.append(
+                        ft.Text(
+                            "",
+                            width=self.CELL_SIZE,
+                            height=self.CELL_SIZE,
+                        )
+                    )
                     continue
 
                 dt_weekday = d.weekday()
@@ -233,34 +247,45 @@ class DatePicker(ft.UserControl):
         if self.hour_minute and not hide_ymhm:
             hm = self._hour_minute_selector(hour, minute)
             week_rows_controls.append(
-                ft.Row([hm], alignment=ft.MainAxisAlignment.CENTER))
+                ft.Row(
+                    [hm],
+                    alignment=ft.MainAxisAlignment.CENTER
+                )
+            )
 
         return week_rows_controls
 
     def _year_month_selectors(self, year, month, hide_ymhm=False):
-        prev_year = ft.IconButton(
-            icon=ft.icons.ARROW_BACK,
-            data=self.PREV_YEAR,
-            on_click=self._adjust_calendar
-        ) if (not hide_ymhm) else ft.Text(
-            self.EMPTY,
-            height=self.CELL_SIZE,
-        )
-        next_year = ft.IconButton(
-            icon=ft.icons.ARROW_FORWARD,
-            data=self.NEXT_YEAR,
-            on_click=self._adjust_calendar
-        ) if not hide_ymhm else ft.Text(self.EMPTY)
-        prev_month = ft.IconButton(
-            icon=ft.icons.ARROW_BACK,
-            data=self.PREV_MONTH,
-            on_click=self._adjust_calendar
-        ) if not hide_ymhm else ft.Text(self.EMPTY)
-        next_month = ft.IconButton(
-            icon=ft.icons.ARROW_FORWARD,
-            data=self.NEXT_MONTH,
-            on_click=self._adjust_calendar
-        ) if not hide_ymhm else ft.Text(self.EMPTY)
+        if not hide_ymhm:
+            prev_year = ft.IconButton(
+                icon=ft.icons.ARROW_BACK,
+                data=self.PREV_YEAR,
+                on_click=self._adjust_calendar
+            )
+            next_year = ft.IconButton(
+                icon=ft.icons.ARROW_FORWARD,
+                data=self.NEXT_YEAR,
+                on_click=self._adjust_calendar
+            )
+            prev_month = ft.IconButton(
+                icon=ft.icons.ARROW_BACK,
+                data=self.PREV_MONTH,
+                on_click=self._adjust_calendar
+            )
+            next_month = ft.IconButton(
+                icon=ft.icons.ARROW_FORWARD,
+                data=self.NEXT_MONTH,
+                on_click=self._adjust_calendar
+            )
+        else:
+            prev_year = ft.Text(
+                self.EMPTY,
+                height=self.CELL_SIZE,
+            )
+            next_year = ft.Text(self.EMPTY)
+            prev_month = ft.Text(self.EMPTY)
+            next_month = ft.Text(self.EMPTY)
+
         ym = ft.Row([
             ft.Row([
                 prev_year,
@@ -274,8 +299,7 @@ class DatePicker(ft.UserControl):
                     text_align=ft.alignment.center
                 ),
                 next_month,
-            ],
-                spacing=0),
+            ], spacing=0),
         ],
             spacing=0,
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN
