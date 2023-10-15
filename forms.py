@@ -12,6 +12,6 @@ class PersonUIModelForm(UIModelForm):
             'name',
             'phone',
             'age',
+            'male',
         )
-        read_only_fields = ('name',)
         objects_actions = (DeleteObjectAction, DetailObjectAction)

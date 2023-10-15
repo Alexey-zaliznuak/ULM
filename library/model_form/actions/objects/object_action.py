@@ -4,7 +4,7 @@ from typing import Callable, Union
 from flet import Control, Page
 
 
-from library.core.utils import LazyAttribute
+from library.utils import LazyAttribute
 from library.core.widgets.actions import ActionButton
 
 

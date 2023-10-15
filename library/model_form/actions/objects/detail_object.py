@@ -1,7 +1,7 @@
 from typing import Union
 
 from library.core.widgets.actions.objects.detail import DetailObjectActionButtonWidget, DetailObjectActionDialog
-from library.core.utils import LazyAttribute
+from library.utils import LazyAttribute
 from flet import Page
 
 from .object_action import ObjectAction

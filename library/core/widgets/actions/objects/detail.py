@@ -10,7 +10,7 @@ from flet import (
 )
 from library.core.widgets.actions import ActionButton
 from library.model_form.actions.objects import DeleteObjectAction
-from library.core.utils import LazyAttribute
+from library.utils import LazyAttribute
 
 
 class DetailObjectActionButtonWidget(ActionButton):

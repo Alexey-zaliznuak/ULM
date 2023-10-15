@@ -2,7 +2,7 @@ from typing import Union
 from functools import partial
 
 from library.core.widgets.actions.objects.delete import DeleteObjectActionButtonWidget
-from library.core.utils import LazyAttribute
+from library.utils import LazyAttribute
 from library.core.widgets import ConfirmActionDialog
 from flet import Page
 

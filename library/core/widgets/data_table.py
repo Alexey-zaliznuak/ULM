@@ -11,7 +11,7 @@ from flet import (
 
 from library.model_form.ui_fields import Field
 from library.model_form.actions import DataTableAction, ObjectAction
-from library.core.utils import LazyAttribute
+from library.utils import LazyAttribute
 
 
 class UIModelFormDataTableCell(DataCell):

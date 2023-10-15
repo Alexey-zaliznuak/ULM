@@ -116,7 +116,7 @@ class CharField(Field):
     ...  # hide_input_value,
 
 
-class ChoseField(Field):
+class ChooseField(Field):  # ???? ValueValidator?
     ...
 
 
@@ -128,15 +128,15 @@ class DateTimeField(Field):
     ...
 
 
-class DecimalField(Field):
+class DecimalField(Field):  # not in prioritet
     ...
 
 
-class DurationField(Field):
+class DurationField(Field):  # ?????
     ...  # from date time to date time
 
 
-class EmailField(Field):
+class EmailField(Field): # ?????
     ...
 
 
