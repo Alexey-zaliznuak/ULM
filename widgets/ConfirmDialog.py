@@ -1,4 +1,11 @@
-from flet import AlertDialog, ElevatedButton, Text, MainAxisAlignment, SnackBar, colors
+from flet import (
+    AlertDialog,
+    ElevatedButton,
+    Text,
+    MainAxisAlignment,
+    SnackBar,
+    colors,
+)
 from typing import Callable
 
 

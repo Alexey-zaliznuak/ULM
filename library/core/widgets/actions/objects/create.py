@@ -26,8 +26,8 @@ class CreateObjectActionDialog(AlertDialog):
     SNACK_BAR_DURATION = 1600
 
     def __init__(self, obj, datatable=None):
-        self.obj=obj
-        self.datatable=datatable
+        self.obj = obj
+        self.datatable = datatable
 
         super().__init__(
             modal=True,
@@ -51,7 +51,7 @@ class CreateObjectActionDialog(AlertDialog):
         self.close_dlg()
 
         self.page.snack_bar = SnackBar(
-            Text(f"Success deleted object"),
+            Text("Success deleted object"),
             duration=self.SNACK_BAR_DURATION,
             open=True
         )

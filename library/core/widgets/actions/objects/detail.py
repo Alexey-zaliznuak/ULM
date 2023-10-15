@@ -9,8 +9,6 @@ from flet import (
     Column
 )
 from library.core.widgets.actions import ActionButton
-from library.model_form.actions.objects import DeleteObjectAction
-from library.utils import LazyAttribute
 
 
 class DetailObjectActionButtonWidget(ActionButton):
@@ -24,7 +22,7 @@ class DetailObjectActionButtonWidget(ActionButton):
 class DetailObjectActionDialog(AlertDialog):
     def __init__(self, obj, datatable):
         self.obj = obj
-        self.datatable=datatable
+        self.datatable = datatable
 
         super().__init__(
             modal=True,

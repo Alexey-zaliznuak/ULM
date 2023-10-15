@@ -1,5 +1,13 @@
-from flet import AlertDialog, ElevatedButton, Text, MainAxisAlignment, SnackBar, colors
 from typing import Callable
+
+from flet import (
+    AlertDialog,
+    ElevatedButton,
+    MainAxisAlignment,
+    SnackBar,
+    Text,
+    colors
+)
 
 
 class ConfirmActionDialog(AlertDialog):
@@ -12,8 +20,8 @@ class ConfirmActionDialog(AlertDialog):
         success_snackbar: bool = True,
         success_snackbar_duration: int = 1600,
     ):
-        self.on_success=on_success
-        self.on_cancel=on_cancel
+        self.on_success = on_success
+        self.on_cancel = on_cancel
 
         self.success_snack_bar = success_snackbar
         self.success_snack_bar_duration = success_snackbar_duration
@@ -33,7 +41,7 @@ class ConfirmActionDialog(AlertDialog):
         self.on_success()
         if self.success_snack_bar:
             self.page.snack_bar = SnackBar(
-                Text(f"Success.", size=18),
+                Text("Success.", size=18),
                 duration=self.success_snack_bar_duration,
                 bgcolor=colors.GREY,
                 open=True

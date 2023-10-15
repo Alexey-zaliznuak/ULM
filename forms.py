@@ -1,5 +1,8 @@
 from library.model_form import UIModelForm
-from library.model_form.actions.objects import DeleteObjectAction, DetailObjectAction
+from library.model_form.actions.objects import (
+    DeleteObjectAction,
+    DetailObjectAction
+)
 
 from models import Person
 

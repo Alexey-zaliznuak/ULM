@@ -28,7 +28,7 @@ class ModelDataGenerator():
         for _ in range(count):
             obj = {}
 
-            for field, mthd  in cls.__fields().items():
+            for field, mthd in cls.__fields().items():
                 obj[field] = mthd()
 
             objects.append(obj)
@@ -58,7 +58,6 @@ class ModelDataGenerator():
                 ]()
 
         return fields
-
 
     class Meta:
         model: Optional[Model] = None

@@ -142,15 +142,15 @@ class DatePicker(ft.UserControl):
 
                 if (
                     self.disable_from
-                    and self._trunc_datetime(d) >
-                        self._trunc_datetime(self.disable_from)
+                    and self._trunc_datetime(d)
+                    > self._trunc_datetime(self.disable_from)
                 ):
                     is_day_disabled = True
 
                 if (
                     self.disable_to
-                    and self._trunc_datetime(d) <
-                        self._trunc_datetime(self.disable_to)
+                    and self._trunc_datetime(d)
+                    < self._trunc_datetime(self.disable_to)
                 ):
                     is_day_disabled = True
 

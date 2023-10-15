@@ -1,7 +1,7 @@
 import flet as ft
 from forms import PersonUIModelForm
 
-from flet_core.types import ScrollMode, ScrollModeString
+from flet_core.types import ScrollMode
 
 person_form = PersonUIModelForm()
 

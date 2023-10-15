@@ -1,7 +1,6 @@
 from flet import UserControl
 
 
-
 class DataTableAction(UserControl):
     """Base class for doing smth with all data."""
 
@@ -10,4 +9,3 @@ class DataTableAction(UserControl):
 
     def widget(self) -> UserControl:
         ...
-

@@ -16,7 +16,9 @@ class LengthValidator():
     def __call__(self, value):
         errors = []
         if self.mx and value > self.mx:
-            errors.append(f'Value of this field mustn`t be greater then {self.mx}')
+            errors.append(
+                f'Value of this field mustn`t be greater then {self.mx}'
+            )
 
         if self.mn and value < self.mn:
             errors.append(f'Value of this field must be low then {self.mn}')

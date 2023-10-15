@@ -1,7 +1,9 @@
 from typing import Union
 from functools import partial
 
-from library.core.widgets.actions.objects.delete import DeleteObjectActionButtonWidget
+from library.core.widgets.actions.objects.delete import (
+    DeleteObjectActionButtonWidget
+)
 from library.utils import LazyAttribute
 from library.core.widgets import ConfirmActionDialog
 from flet import Page
@@ -19,7 +21,13 @@ class DeleteObjectAction(ObjectAction):
         self.request_confirm = request_confirm
         super().__init__()
 
-    def on_click_method(self, obj, page: Union[Page, LazyAttribute[Page]], datatable, e):
+    def on_click_method(
+        self,
+        obj,
+        page: Union[Page, LazyAttribute[Page]],
+        datatable,
+        e
+    ):
         if isinstance(page, LazyAttribute):
             page = page()
 
