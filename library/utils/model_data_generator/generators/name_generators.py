@@ -9,14 +9,14 @@ class NameGenerator(FieldGenerator):
         first_name: bool = True,
         last_name: bool = True,
         *,
-        language: str = 'en_IN'
+        locate: str = 'en_US'
     ):
 
         assert first_name or last_name, (
             'At least one of first or last names must be specified.'
         )
 
-        self.faker = Faker(language)
+        self.faker = Faker(locate)
         self.first_name = first_name
         self.last_name = last_name
 

@@ -1,6 +1,6 @@
 import inspect
 from functools import cached_property
-from typing import Callable, Iterable
+from typing import Callable, Sequence
 
 import peewee
 from flet import Control, DataColumn, Text
@@ -168,8 +168,8 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
 
     class Meta:
         model: peewee.Model = None
-        fields: Iterable[str] = ()
-        read_only_fields: Iterable[str] = ''
-        write_only_fields: Iterable[str] = ''
+        fields: Sequence[str] = ()
+        read_only_fields: Sequence[str] = ''
+        write_only_fields: Sequence[str] = ''
         table_actions: list[DataTableAction] = []
         objects_actions: list[ObjectAction] = []

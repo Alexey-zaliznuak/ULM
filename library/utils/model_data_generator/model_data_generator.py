@@ -6,19 +6,30 @@ from peewee import Field as DataBaseField
 from peewee import Model
 
 from .generators import (
-    FieldGenerator,
-    IntegerGenerator,
     BooleanGenerator,
+    DateGenerator,
+    DateTimeGenerator,
+    FloatGenerator,
+    IntegerGenerator,
+    TextGenerator,
+    TimeGenerator,
+    UUIDGenerator,
 )
 
 
 class ModelDataGenerator():
-    "Create random fake data for your model."
+    "Create random data for your model."
 
     generated_objects: list[dict] = []
-    fields_mapping: dict[DataBaseField, FieldGenerator] = {
-        peewee.IntegerField: IntegerGenerator,
+    fields_mapping: dict[DataBaseField, Callable] = {
+        peewee.DateField: DateGenerator,
+        peewee.DateTimeField: DateTimeGenerator,
+        peewee.FloatField: FloatGenerator,
         peewee.BooleanField: BooleanGenerator,
+        peewee.IntegerField: IntegerGenerator,
+        peewee.TextField: TextGenerator,
+        peewee.TimeField: TimeGenerator,
+        peewee.UUIDField: UUIDGenerator,
     }
 
     @classmethod

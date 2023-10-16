@@ -1,11 +1,21 @@
 from .field_generator import FieldGenerator
+from functools import partial
 from random import randint
 
 
 class IntegerGenerator(FieldGenerator):
-    def __init__(self, mn: int = -10**9, mx: int = 10**9):
+    def __init__(
+        self,
+        mn: int = -10**9,
+        mx: int = 10**9,
+        *,
+        only_positive: bool = False
+    ):
         self.mn = mn
         self.mx = mx
+
+        if only_positive:
+            self.mn = max(0, mn)
 
         assert mn < mx, "Invalid value: min value is greater than max."
 
@@ -13,8 +23,4 @@ class IntegerGenerator(FieldGenerator):
         return randint(self.mn, self.mx)
 
 
-class PositiveIntegerGenerator(IntegerGenerator):
-    def __init__(self, mn: int = 1, mx: int = 10 ** 9):
-        assert mn > 0, f'Invalid minimal value for positive int: "{mn}".'
-
-        super().__init__(mn, mx)
+PositiveIntegerGenerator = partial(IntegerGenerator, only_positive=True)

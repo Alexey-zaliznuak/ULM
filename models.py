@@ -4,6 +4,7 @@ from peewee import (
     DateField,
     DateTimeField,
     FloatField,
+    ForeignKeyField,
     IntegerField,
     Model,
     SqliteDatabase,
@@ -30,6 +31,7 @@ class Person(BaseModel):
 
 
 class GodModel(BaseModel):
+    entity = ForeignKeyField(Person, 'id')
     is_god = BooleanField()
     name = CharField(max_length=150)
     years = IntegerField()
