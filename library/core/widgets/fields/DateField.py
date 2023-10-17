@@ -5,6 +5,12 @@ from datetime import datetime
 
 
 class DateViewer(ft.Container):
+    holidays = [
+        datetime(2023, 4, 25),
+        datetime(2023, 5, 1),
+        datetime(2023, 6, 2),
+    ]
+
     def __init__(
             self,
             width: ft.OptionalNumber = None,
@@ -21,11 +27,6 @@ class DateViewer(ft.Container):
         self.type = SelectionType.SINGLE.value
         self.datepicker = None
         self.width = width
-        self.holidays = [
-            datetime(2023, 4, 25), 
-            datetime(2023, 5, 1), 
-            datetime(2023, 6, 2)
-        ]
         self.selected_locale = None
         self.datepicker_type = datepicker_type
         self.hour_minute = hour_minute
@@ -74,18 +75,18 @@ class DateViewer(ft.Container):
         )
 
     def confirm_dlg(self, e):
-        if int(self.type) == SelectionType.SINGLE.value:
+        if int(self.type) == SelectionType.SINGLE:
             self.value = self.datepicker.selected_data[0] if len(
                 self.datepicker.selected_data) > 0 else None
         elif (
-            int(self.type) == SelectionType.MULTIPLE.value
+            int(self.type) == SelectionType.MULTIPLE
             and len(self.datepicker.selected_data) > 0
         ):
             self.from_to_text.value = "[" + ", ".join(
                 [d.isoformat() for d in self.datepicker.selected_data]) + "]"
             self.from_to_text.visible = True
         elif (
-            int(self.type) == SelectionType.RANGE.value
+            int(self.type) == SelectionType.RANGE
             and len(self.datepicker.selected_data) > 0
         ):
             self.from_to_text.value = (

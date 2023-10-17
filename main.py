@@ -3,6 +3,8 @@ from forms import PersonUIModelForm
 
 from flet_core.types import ScrollMode
 
+from library.core.widgets.fields.PhoneField import PhoneViewer
+
 person_form = PersonUIModelForm()
 
 
@@ -17,8 +19,7 @@ def main(page: ft.Page):
     )
 
     page.add(
-        ft.Text('Persons'),
-        c
+        PhoneViewer('79375470417')
     )
 
 
