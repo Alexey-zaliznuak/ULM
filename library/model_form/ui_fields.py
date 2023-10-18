@@ -2,6 +2,10 @@ from flet import Control, Text, TextField
 from types import FunctionType
 
 from library.core.validators import URLValidator
+from library.core.widgets.fields import (
+    BooleanViewer,
+    PhoneViewer,
+)
 
 
 class empty:
@@ -111,11 +115,15 @@ class Field:
 
 
 class BooleanField(Field):
-    ...
+    display_widget = BooleanViewer
 
 
 class CharField(Field):
     ...  # hide_input_value,
+
+
+class PhoneField(CharField):
+    display_widget = PhoneViewer
 
 
 class ChooseField(Field):  # ???? ValueValidator?

@@ -2,7 +2,7 @@ import flet as ft
 from typing import Union
 
 
-class BoolField(ft.Checkbox):
+class BooleanViewer(ft.Checkbox):
     def __init__(
         self,
         value: Union[bool, None] = False,
@@ -12,7 +12,7 @@ class BoolField(ft.Checkbox):
 
     ):
         super().__init__(
-            value=value,
+            value=bool(value),
             tristate=tristate,
             disabled=True,
             label_position=label_position,

@@ -168,7 +168,8 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             # TODO ClassLookupDict
             field = getattr(self, field_name, None)
             if field:
-                return field
+                ui_fields[field_name] = field
+                continue
 
             model_field = getattr(self.Meta.model, field_name)
             ui_field = self.form_fields_mapping[model_field.__class__]

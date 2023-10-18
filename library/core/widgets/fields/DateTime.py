@@ -4,7 +4,7 @@ from ..datepicker.selection_type import SelectionType
 from datetime import datetime
 
 
-class DateViewer(ft.Container):
+class DateTimeViewer(ft.Container):
     holidays = [
         datetime(2023, 4, 25),
         datetime(2023, 5, 1),
