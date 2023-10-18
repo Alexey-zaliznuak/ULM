@@ -3,6 +3,7 @@ from library.model_form.actions.objects import (
     DeleteObjectAction,
     DetailObjectAction
 )
+from library.model_form.actions.table import CreateObjectAction
 
 from models import Person
 
@@ -18,3 +19,4 @@ class PersonUIModelForm(UIModelForm):
             'male',
         )
         objects_actions = (DeleteObjectAction, DetailObjectAction)
+        table_actions = (CreateObjectAction, )

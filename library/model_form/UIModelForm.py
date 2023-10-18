@@ -3,7 +3,7 @@ from functools import cached_property
 from typing import Callable, Sequence
 
 import peewee
-from flet import Control, DataColumn, Text
+from flet import Control, DataColumn, Text, Column, Row
 
 from library.core.validators import LengthValidator
 from library.core.widgets.data_table import (
@@ -49,6 +49,7 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         objects_actions: list[ObjectAction] = [],
         **kwargs,
     ) -> UIModelFormDataTable:
+
         queryset = self.get_queryset(queryset)
         fields = self._get_fields(write_only=False)
 
@@ -68,14 +69,25 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             for field_name, field in fields.items()
         ]
 
-        return UIModelFormDataTable(
-            columns=columns,
-            queryset=queryset,
-            fields=fields.values(),
-            table_actions=table_actions,
-            objects_actions=objects_actions,
+        data_table = UIModelFormDataTable(
             action_column=DataColumn(Text(objects_actions_column_name)),
+            columns=columns,
+            fields=fields.values(),
+            model=self.Meta.model,
+            objects_actions=objects_actions,
+            queryset=queryset,
+            table_actions=table_actions,
             *args, **kwargs,
+        )
+        data_table_actions_row = Row(
+            [action()(data_table) for action in table_actions]
+        )
+
+        return Column(
+            [
+                data_table_actions_row,
+                data_table
+            ]
         )
 
     def EditWindow(self, pk) -> Control:

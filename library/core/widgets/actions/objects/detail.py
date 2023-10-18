@@ -56,7 +56,7 @@ class DetailObjectActionDialog(AlertDialog):
             result.append(
                 Row([
                     Text(field.label + " - "),
-                    field.display_widget(self.obj)
+                    field.display(self.obj)
                 ])
             )
 

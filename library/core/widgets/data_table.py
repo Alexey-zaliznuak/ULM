@@ -1,4 +1,6 @@
 from typing import Callable, Iterable
+
+from peewee import Model
 from flet import (
     border,
     DataTable,
@@ -17,7 +19,7 @@ from library.utils import LazyAttribute
 class UIModelFormDataTableCell(DataCell):
     def __init__(self, obj, field: Field, *args, **kwargs):
         # TODO paddings
-        super().__init__(field.display_widget(obj), *args, **kwargs)
+        super().__init__(field.display(obj), *args, **kwargs)
 
 
 class UIModelFormDataTableObjectActionCell(DataCell):
@@ -80,18 +82,20 @@ class UIModelFormDataTable(DataTable):
     def __init__(
         self,
         columns: list[UIModelFormDataTableColumn],
-        queryset: Callable,
         fields: list[Field],
-        table_actions: list[DataTableAction] = [],
-        objects_actions: list[ObjectAction] = [],
-        action_column: DataColumn = DataColumn(Text('Actions')),
+        queryset: Callable,
+        model: Model,
         *args,
-        **kwargs
+        action_column: DataColumn = DataColumn(Text('Actions')),
+        objects_actions: list[ObjectAction] = [],
+        table_actions: list[DataTableAction] = [],
+        **kwargs,
     ):
-        self.queryset = queryset
-        self.objects_actions = objects_actions
-        self.table_actions = table_actions
         self.fields = fields
+        self.model = model
+        self.objects_actions = objects_actions
+        self.queryset = queryset
+        self.table_actions = table_actions
 
         self.update_rows()
 

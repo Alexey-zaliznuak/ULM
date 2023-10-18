@@ -1,2 +1,2 @@
 from .objects import ObjectAction
-from .tables import DataTableAction
+from .table import DataTableAction

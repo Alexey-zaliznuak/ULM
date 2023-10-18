@@ -22,8 +22,8 @@ class DateViewer(ft.Container):
         self.datepicker = None
         self.width = width
         self.holidays = [
-            datetime(2023, 4, 25), 
-            datetime(2023, 5, 1), 
+            datetime(2023, 4, 25),
+            datetime(2023, 5, 1),
             datetime(2023, 6, 2)
         ]
         self.selected_locale = None

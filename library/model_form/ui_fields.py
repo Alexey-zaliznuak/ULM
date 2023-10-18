@@ -17,13 +17,17 @@ class empty:
 class Field:
     """Base class for all field types."""
 
+    numeric = False
+
     default_validators = []
-    default_empty_value = ''
+    # default_empty_value = '' TODO mb delete if useless
     default_error_messages = {
         'required': 'This field is required.',
         'null': 'This field may not be null.'
     }
-    numeric = False
+
+    edit_widget: Control = TextField
+    display_widget: Control = Text
 
     def __init__(
         self,
@@ -67,7 +71,7 @@ class Field:
         self.initial = initial
         self.label = label or source
         self.help_text = help_text
-        self.style = {} if style is None else style
+        self.style = style or {}
         self.allow_null = allow_null
         self.validators = validators
         self.validators.extend(self.default_validators)
@@ -93,16 +97,17 @@ class Field:
     def _get_editing_default_value(self, obj):
         return self._get_db_value(obj)
 
-    def _display_form_widget(self, value) -> Control:
-        return Text(value, size=15)
+    def edit(self, obj=empty) -> Control:
+        value = empty
 
-    def editing_widget(self, obj) -> Control:
-        value = self._get_editing_default_value(obj)
-        return TextField(value)
+        if obj is not empty:
+            value = self._get_editing_default_value(obj)
 
-    def display_widget(self, obj) -> Control:
+        return self.edit_widget(value if not isinstance(value, empty) else '')
+
+    def display(self, obj) -> Control:
         value = self._get_display_value(obj)
-        return self._display_form_widget(value)
+        return self.display_widget(value)
 
 
 class BooleanField(Field):
