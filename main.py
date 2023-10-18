@@ -3,6 +3,7 @@ from forms import PersonUIModelForm
 
 from flet_core.types import ScrollMode
 
+
 person_form = PersonUIModelForm()
 
 
@@ -17,7 +18,6 @@ def main(page: ft.Page):
     )
 
     page.add(
-        ft.Text('Persons'),
         c
     )
 
