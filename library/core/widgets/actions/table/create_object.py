@@ -32,7 +32,7 @@ class EditFieldWidget(Container):
                 )]
             ),
             width=600,
-    )
+        )
 
 
 class CreateObjectActionDialog(AlertDialog):
@@ -42,7 +42,6 @@ class CreateObjectActionDialog(AlertDialog):
         self.fields: dict[Field, Control] = {}
         self.widgets: list[Control] = []
         self.errors = {'name': ['hello!']}
-
 
         super().__init__(
             modal=True,
@@ -75,6 +74,7 @@ class CreateObjectActionDialog(AlertDialog):
                     field.label, edit_field, self.errors.get(field.label, [])
                 )
             )
+        # print(controls[0].content)
 
         return controls
 
@@ -86,13 +86,8 @@ class CreateObjectActionDialog(AlertDialog):
         new_obj = {}
         self.errors = {'name': ['world!']}
 
-        # help please
+        self.content = Column(self._get_content())
         self.update()
-        self.page.update()
-        for child in self._get_children():
-            child.update()
-        self.update()
-        self.page.update()
 
         return
 
