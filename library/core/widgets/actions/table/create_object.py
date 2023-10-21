@@ -8,7 +8,9 @@ from flet import (
     Container,
     Column
 )
+from typing import Callable
 from library.core.widgets.actions import ActionButton
+from library.utils import LazyAttribute
 from library.core.widgets import ErrorText
 from library.model_form.ui_fields import Field
 
@@ -22,17 +24,40 @@ class CreateObjectActionButtonWidget(ActionButton):
 
 
 class EditFieldWidget(Container):
-    def __init__(self, label, editing_field: Control = None, errors: list[str] = []):
+    def __init__(
+        self,
+        label,
+        editing_field: Control = None,
+        errors: Callable[[], list[str]] = None
+    ):
+        self.label = label
+        self._get_errors = errors
+        self.column_errors = Column(self._get_column_errors())
+
         super().__init__(
-            content=Column([
-                Text(label),
-                editing_field,
-                Column(
-                    [ErrorText(text) for text in errors]
-                )]
+            content=Column(
+                [
+                    Text(label),
+                    editing_field,
+                    self.column_errors
+                ]
             ),
             width=600,
         )
+
+    def update(self):
+        # print('field updated', flush=True)
+        for i, child in enumerate(self.content.controls):
+            if child is self.column_errors:
+                child.controls = self._get_column_errors()
+                child.update()
+                self.content.update()
+                self.page.update()
+
+        return super().update()
+
+    def _get_column_errors(self) -> list[Control]:
+        return [ErrorText(text) for text in self._get_errors()()]
 
 
 class CreateObjectActionDialog(AlertDialog):
@@ -40,13 +65,12 @@ class CreateObjectActionDialog(AlertDialog):
         self.datatable = datatable
         self.errors: dict[str, list[str]] = {}
         self.fields: dict[Field, Control] = {}
-        self.widgets: list[Control] = []
-        self.errors = {'name': ['hello!']}
+        self.fields_widgets: list[Control] = self._get_content()
 
         super().__init__(
             modal=True,
             title=Text("Create new."),
-            content=Column(self._get_content()),
+            content=Column(self.fields_widgets),
             actions=[
                 ElevatedButton("Cancel", on_click=self._close_dlg),
                 ElevatedButton("Save", on_click=self._save_obj),
@@ -54,11 +78,9 @@ class CreateObjectActionDialog(AlertDialog):
             actions_alignment=MainAxisAlignment.END,
         )
 
-    # TODO : mb cached property
-    # TODO noraml annotate - list of widget[column(fields)], list fields
-
     def _get_content(self) -> list[Control]:
-        print('get content called')
+        # TODO : mb cached property
+        # TODO noraml annotate - list of widget[column(fields)], list fields
         controls = []
 
         for field in self.datatable.fields:
@@ -71,10 +93,12 @@ class CreateObjectActionDialog(AlertDialog):
 
             controls.append(
                 EditFieldWidget(
-                    field.label, edit_field, self.errors.get(field.label, [])
-                )
+                    field.label, edit_field, LazyAttribute(
+                        obj=self,
+                        attr='errors.get',
+                        args=(field.label, []),
+                    ))
             )
-        # print(controls[0].content)
 
         return controls
 
@@ -84,12 +108,6 @@ class CreateObjectActionDialog(AlertDialog):
 
     def _save_obj(self, e=None):
         new_obj = {}
-        self.errors = {'name': ['world!']}
-
-        self.content = Column(self._get_content())
-        self.update()
-
-        return
 
         # TODO validators, some checks
         for ui_field, input_widget in self.fields.items():
@@ -104,3 +122,9 @@ class CreateObjectActionDialog(AlertDialog):
 
         self.open = False
         self.page.update()
+
+    def update(self):
+        for widget in self.fields_widgets:
+            widget.update()
+
+        return super().update()
