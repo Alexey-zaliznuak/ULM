@@ -46,13 +46,9 @@ class EditFieldWidget(Container):
         )
 
     def update(self):
-        # print('field updated', flush=True)
-        for i, child in enumerate(self.content.controls):
+        for child in self.content.controls:
             if child is self.column_errors:
                 child.controls = self._get_column_errors()
-                child.update()
-                self.content.update()
-                self.page.update()
 
         return super().update()
 
