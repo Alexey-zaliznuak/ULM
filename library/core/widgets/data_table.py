@@ -32,7 +32,7 @@ class UIModelFormDataTableCell(DataCell):
     def copy_to_clipboard(self, e):
         if not (
             hasattr(self.content, 'copy_value')
-            and self.content.copy_value
+            and self.content.has_value_for_copy
         ):
             return
 

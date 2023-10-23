@@ -4,6 +4,8 @@ from .BaseViewer import Viewer
 
 
 class BooleanViewer(ft.Checkbox, Viewer):
+    has_value_for_copy = False
+
     def __init__(
         self,
         value: Union[bool, None] = False,
