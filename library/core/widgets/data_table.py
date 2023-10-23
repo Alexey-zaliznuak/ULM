@@ -30,17 +30,20 @@ class UIModelFormDataTableCell(DataCell):
         )
 
     def copy_to_clipboard(self, e):
-        if not self.content.copy_value:
+        if not (
+            hasattr(self.content, 'copy_value')
+            and self.content.copy_value
+        ):
             return
 
+        pc.copy(str(self.content.copy_value))
+
         self.page.snack_bar = SnackBar(
-            content=Text("copy to clipboard!"),
+            content=Text("Success copy to clipboard!"),
             action="Alright!",
         )
         self.page.snack_bar.open = True
         self.page.update()
-
-        pc.copy(self.content.copy_value)
 
 
 class UIModelFormDataTableObjectActionCell(DataCell):

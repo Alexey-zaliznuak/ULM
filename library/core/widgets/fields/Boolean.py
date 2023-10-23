@@ -1,8 +1,9 @@
 import flet as ft
 from typing import Union
+from .BaseViewer import Viewer
 
 
-class BooleanViewer(ft.Checkbox):
+class BooleanViewer(ft.Checkbox, Viewer):
     def __init__(
         self,
         value: Union[bool, None] = False,

@@ -2,9 +2,10 @@ import flet as ft
 from ..datepicker.datepicker import DatePicker
 from ..datepicker.selection_type import SelectionType
 from datetime import datetime
+from .BaseViewer import Viewer
 
 
-class DateTimeViewer(ft.Container):
+class DateTimeViewer(ft.Container, Viewer):
     holidays = [
         datetime(2023, 4, 25),
         datetime(2023, 5, 1),

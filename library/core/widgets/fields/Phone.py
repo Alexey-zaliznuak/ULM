@@ -1,6 +1,6 @@
 import flet as ft
 
-from library.core.widgets.fields.temp import Viewer
+from .BaseViewer import Viewer
 
 
 class PhoneViewer(ft.Text, Viewer):

@@ -1,12 +1,12 @@
-from flet import Control, Text, TextField
+from flet import Control, TextField
 from types import FunctionType
 
 from library.core.validators import URLValidator
 from library.core.widgets.fields import (
+    TextViewer,
     BooleanViewer,
     PhoneViewer,
 )
-from library.core.widgets.fields.IntField import IntegerViewer
 
 
 class empty:
@@ -32,7 +32,7 @@ class Field:
     }
 
     edit_widget: Control = TextField
-    display_widget: Control = Text
+    display_widget: Control = TextViewer
 
     def __init__(
         self,
@@ -156,7 +156,7 @@ class FloatField(Field):
 
 
 class IntegerField(Field):
-    display_widget = IntegerViewer
+    ...
 
 
 class MultipleChoiceField(Field):
