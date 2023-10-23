@@ -15,10 +15,6 @@ class PhoneViewer(ft.Text, Viewer):
             ),
         )
 
-    @property
-    def copy_value(self):
-        return '123'
-
     def input_mask(self, value):
         result = self.MASK
         text = ''.join(i for i in value if i.isdigit())
