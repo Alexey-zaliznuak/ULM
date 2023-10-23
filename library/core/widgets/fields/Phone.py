@@ -1,14 +1,23 @@
 import flet as ft
 
+from library.core.widgets.fields.temp import Viewer
 
-class PhoneViewer(ft.Text):
+
+class PhoneViewer(ft.Text, Viewer):
     MASK = '+X (XXX) XXX-XX-XX'
 
     def __init__(self, value: str = ''):
         super().__init__(
             value=self.input_mask(value),
-            max_lines=1
+            width=150,
+            style=ft.ButtonStyle(
+                color=ft.colors.BLACK87
+            ),
         )
+
+    @property
+    def copy_value(self):
+        return '123'
 
     def input_mask(self, value):
         result = self.MASK

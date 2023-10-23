@@ -6,6 +6,7 @@ from library.core.widgets.fields import (
     BooleanViewer,
     PhoneViewer,
 )
+from library.core.widgets.fields.IntField import IntegerViewer
 
 
 class empty:
@@ -56,10 +57,10 @@ class Field:
         # Some combinations of keyword arguments do not make sense.
         assert not (read_only and write_only), (
             'Invalid combination of fields values: '
-            f'read_only - {read_only} and wrte_only - {write_only}'
+            f'read_only - {read_only} and write_only - {write_only}'
         )
         assert not (read_only and required), (
-            'Invalid combination of fields values: read_obly and required'
+            'Invalid combination of fields values: read_only and required'
             f'read_only - {read_only} and required - {required}'
         )
         assert not (required and default is not empty), (
@@ -138,7 +139,7 @@ class DateTimeField(Field):
     ...
 
 
-class DecimalField(Field):  # not in prioritet
+class DecimalField(Field):  # not in priority
     ...
 
 
@@ -155,7 +156,7 @@ class FloatField(Field):
 
 
 class IntegerField(Field):
-    ...
+    display_widget = IntegerViewer
 
 
 class MultipleChoiceField(Field):

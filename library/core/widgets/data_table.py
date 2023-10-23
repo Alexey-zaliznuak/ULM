@@ -1,10 +1,12 @@
 from typing import Callable, Iterable
 
+import pyperclip3 as pc
 from peewee import Model
 from flet import (
     border,
     DataTable,
     DataColumn,
+    SnackBar,
     DataCell,
     DataRow,
     Text,
@@ -19,7 +21,26 @@ from library.utils import LazyAttribute
 class UIModelFormDataTableCell(DataCell):
     def __init__(self, obj, field: Field, *args, **kwargs):
         # TODO paddings
-        super().__init__(field.display(obj), *args, **kwargs)
+        self.content = field.display(obj)
+        super().__init__(
+            self.content,
+            on_tap=self.copy_to_clipboard,
+            *args,
+            **kwargs
+        )
+
+    def copy_to_clipboard(self, e):
+        if not self.content.copy_value:
+            return
+
+        self.page.snack_bar = SnackBar(
+            content=Text("copy to clipboard!"),
+            action="Alright!",
+        )
+        self.page.snack_bar.open = True
+        self.page.update()
+
+        pc.copy(self.content.copy_value)
 
 
 class UIModelFormDataTableObjectActionCell(DataCell):
