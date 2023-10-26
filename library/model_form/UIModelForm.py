@@ -1,11 +1,12 @@
 import inspect
 from functools import cached_property
-from typing import Callable, Sequence
+from typing import Callable, Sequence, Optional
 
 import peewee
 from flet import Control, DataColumn, Text, Column, Row
 
 from library.core.validators import LengthValidator
+from library.core.exceptions import ValidationError
 from library.core.widgets.data_table import (
     UIModelFormDataTable,
     UIModelFormDataTableColumn
@@ -13,9 +14,9 @@ from library.core.widgets.data_table import (
 
 from .actions import DataTableAction, ObjectAction
 from .meta import UIModelFormMetaClass
-from .ui_fields import BooleanField, CharField
-from .ui_fields import Field as UIField
-from .ui_fields import IntegerField
+from .fields import BooleanField, CharField
+from .fields import Field as UIField
+from .fields import IntegerField
 
 
 class UIModelForm(metaclass=UIModelFormMetaClass):
@@ -51,7 +52,7 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
     ) -> UIModelFormDataTable:
 
         queryset = self.get_queryset(queryset)
-        fields = self._get_fields(write_only=False)
+        fields = self._form_fields(write_only=False)
 
         table_actions = getattr(
             self.Meta, 'table_actions', table_actions
@@ -73,6 +74,7 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             action_column=DataColumn(Text(objects_actions_column_name)),
             columns=columns,
             fields=fields.values(),
+            form=self,
             model=self.Meta.model,
             objects_actions=objects_actions,
             queryset=queryset,
@@ -80,7 +82,10 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             *args, **kwargs,
         )
         data_table_actions_row = Row(
-            [action()(data_table) for action in table_actions]
+            [
+                action()(datatable=data_table, form=self)
+                for action in table_actions
+            ]
         )
 
         return Column(
@@ -93,7 +98,53 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
     def EditWindow(self, pk) -> Control:
         pass
 
-    def _get_fields(
+    def clear(self, obj: dict) -> dict:
+        new_obj = {}
+
+        for field_name, field in self._form_fields(read_only=False).items():
+            new_obj[field_name] = field.clear(obj[field_name])
+
+        return new_obj
+
+    def create(self, obj: dict) -> tuple[bool, str, dict[str, list[str]]]:
+        obj = self.clear(obj)
+        created = False
+
+        object_error, fields_errors = self._run_validators(obj)
+
+        if not (object_error or fields_errors):
+            self.Meta.model.create(**obj)
+            created = True
+
+        return created, object_error, fields_errors
+
+    def validate(self, obj: dict) -> Optional[str]:
+        ...
+
+    def get_queryset(self, q=None) -> Callable:
+        # TODO filters widget
+        # TODO filter_widget.get_queryset: Calable
+        return q or self.Meta.model.select
+
+    def _run_validators(self, obj: dict) -> tuple[str, dict[str, list[str]]]:
+        fields_errors = {}
+
+        for field_name, field in self._form_fields(read_only=False).items():
+            e = field.validate(obj[field_name])
+            if e:
+                fields_errors[field_name] = e
+
+        object_error = self.validate(obj)
+
+        if not object_error:
+            try:
+                self.Meta.model(**obj).validate()
+            except ValidationError as e:
+                object_error = str(e)
+
+        return object_error, fields_errors
+
+    def _form_fields(
         self,
         read_only: bool = True,
         write_only: bool = True
@@ -102,11 +153,11 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         fields = {}
 
         assert hasattr(self.Meta, 'fields'), (
-            'Meta class must have list of fields.'
+            'Meta class must have a list of fields.'
         )
 
         for field_name in self.Meta.fields:
-            field = self._ui_fields[field_name]
+            field = self._all_form_fields[field_name]
 
             if not read_only and getattr(field, 'read_only', False):
                 continue
@@ -155,13 +206,8 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
 
         return attrs
 
-    def get_queryset(self, q=None) -> Callable:
-        # TODO filters widget
-        # TODO filter_widget.get_queryset: Calable
-        return q or self.Meta.model.select
-
     @cached_property
-    def _ui_fields(self) -> dict[str, UIField]:
+    def _all_form_fields(self) -> dict[str, UIField]:
         ui_fields = {}
 
         for field_name in self.Meta.fields:

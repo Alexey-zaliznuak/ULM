@@ -13,15 +13,16 @@ from flet import (
     Row,
 )
 
-from library.model_form.ui_fields import Field
+from library.model_form.fields import Field
 from library.model_form.actions import DataTableAction, ObjectAction
 from library.utils import LazyAttribute
 
 
 class UIModelFormDataTableCell(DataCell):
-    def __init__(self, obj, field: Field, *args, **kwargs):
+    def __init__(self, obj, field: Field, form, *args, **kwargs):
         # TODO paddings
         self.content = field.display(obj)
+        self.form = form
         super().__init__(
             self.content,
             on_tap=self.copy_to_clipboard,
@@ -61,12 +62,17 @@ class UIModelFormDataTableRow(DataRow):
         self,
         obj,
         fields: list[Field],
+        form,
         actions: list[ObjectAction],
         datatable: 'UIModelFormDataTable',
         *args,
         **kwargs
     ):
-        cells = [UIModelFormDataTableCell(obj, field) for field in fields]
+        self.form = form
+        cells = [
+            UIModelFormDataTableCell(obj, field, form)
+            for field in fields
+        ]
 
         if actions:
             cells.append(DataCell(Row([
@@ -109,6 +115,7 @@ class UIModelFormDataTable(DataTable):
         fields: list[Field],
         queryset: Callable,
         model: Model,
+        form,
         *args,
         action_column: DataColumn = DataColumn(Text('Actions')),
         objects_actions: list[ObjectAction] = [],
@@ -116,6 +123,7 @@ class UIModelFormDataTable(DataTable):
         **kwargs,
     ):
         self.fields = fields
+        self.form = form
         self.model = model
         self.objects_actions = objects_actions
         self.queryset = queryset
@@ -135,7 +143,8 @@ class UIModelFormDataTable(DataTable):
                 obj=obj,
                 fields=self.fields,
                 actions=self.objects_actions,
-                datatable=self
+                datatable=self,
+                form=self.form
             )
             for obj in (queryset or self.queryset())
         ]

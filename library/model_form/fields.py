@@ -2,6 +2,7 @@ from flet import Control, TextField
 from types import FunctionType
 
 from library.core.validators import URLValidator
+from library.core.exceptions import ValidationError
 from library.core.widgets.fields import (
     TextViewer,
     BooleanViewer,
@@ -89,9 +90,15 @@ class Field:
         errors = []
 
         for validator in self.validators:
-            errors.extend(validator(value))
+            try:
+                validator(value)
+            except ValidationError as e:
+                errors.append(e)
 
         return errors
+
+    def clear(self, value):
+        return value
 
     def _get_db_value(self, obj):
         return getattr(obj, self.source)
