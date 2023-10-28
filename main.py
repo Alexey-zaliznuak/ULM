@@ -2,6 +2,9 @@ import flet as ft
 from forms import PersonUIModelForm
 
 from flet_core.types import ScrollMode
+from library.core.widgets.fields.DateTime import DateTimePicker, DateTimeViewer
+
+from library.core.widgets.fields.Phone import PhoneInput
 
 
 person_form = PersonUIModelForm()
@@ -18,7 +21,7 @@ def main(page: ft.Page):
     )
 
     page.add(
-        c
+        c,
     )
 
 

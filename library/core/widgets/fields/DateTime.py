@@ -5,7 +5,7 @@ from datetime import datetime
 from .BaseViewer import Viewer
 
 
-class DateTimeViewer(ft.Container, Viewer):
+class DateTimeViewer(ft.UserControl, Viewer):
     holidays = [
         datetime(2023, 4, 25),
         datetime(2023, 5, 1),
@@ -21,9 +21,8 @@ class DateTimeViewer(ft.Container, Viewer):
             datepicker_type: int = 0,
             value: str = None
     ):
-        super().__init__(
-            content=self.st,
-        )
+        super().__init__()
+
         self.value = self._to_datetime(value)
         self.type = SelectionType.SINGLE.value
         self.datepicker = None
@@ -54,6 +53,7 @@ class DateTimeViewer(ft.Container, Viewer):
             width=260,
             height=40
         )
+
         self.cal_ico = ft.TextButton(
             icon=ft.icons.CALENDAR_MONTH,
             on_click=self.open_dlg_modal,
@@ -75,19 +75,25 @@ class DateTimeViewer(ft.Container, Viewer):
             ]
         )
 
+    def build(self):
+        return ft.Container(
+            content=self.st,
+        )
+
     def confirm_dlg(self, e):
-        if int(self.type) == SelectionType.SINGLE:
-            self.value = self.datepicker.selected_data[0] if len(
+        if int(self.type) == SelectionType.SINGLE.value:
+            print('selected_data[0]', str(self.datepicker.selected_data[0]))
+            self.tf.value = self.datepicker.selected_data[0] if len(
                 self.datepicker.selected_data) > 0 else None
         elif (
-            int(self.type) == SelectionType.MULTIPLE
+            int(self.type) == SelectionType.MULTIPLE.value
             and len(self.datepicker.selected_data) > 0
         ):
             self.from_to_text.value = "[" + ", ".join(
                 [d.isoformat() for d in self.datepicker.selected_data]) + "]"
             self.from_to_text.visible = True
         elif (
-            int(self.type) == SelectionType.RANGE
+            int(self.type) == SelectionType.RANGE.value
             and len(self.datepicker.selected_data) > 0
         ):
             self.from_to_text.value = (
@@ -105,6 +111,7 @@ class DateTimeViewer(ft.Container, Viewer):
         self.page.update()
 
     def open_dlg_modal(self, e):
+
         self.datepicker = DatePicker(
             hour_minute=self.hour_minute,  # Time
             show_three_months=self.show_three_months,  # 3 Months
@@ -124,10 +131,53 @@ class DateTimeViewer(ft.Container, Viewer):
 
     def _to_datetime(self, date_str=None):
         if date_str:
-            print(date_str)
             return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
         else:
             return None
 
     def set_locale(self, e):
         self.selected_locale = self.dd.value if self.dd.value else None
+
+
+class DateTimePicker(DateTimeViewer):
+    def __init__(
+            self,
+            hour_minute: bool = False,
+            show_three_months: bool = False,
+            hide_no_month: bool = False,
+            datepicker_type: int = 0,
+            value: str = None
+    ):
+        super().__init__()
+
+        self.value = self._to_datetime(value)
+        self.datepicker_type = datepicker_type
+        self.hour_minute = hour_minute
+        self.show_three_months = show_three_months
+        self.hide_no_month = hide_no_month
+
+        self.dlg_modal.actions = [
+            ft.TextButton("Cancel", on_click=self.cancel_dlg),
+            ft.TextButton("Confirm", on_click=self.confirm_dlg),
+        ]
+
+        self.tf = ft.TextField(
+            value=self.value,
+            label="Select Date",
+            dense=True,
+            hint_text="yyyy-mm-ddThh:mm:ss",
+            width=260,
+            height=40
+        )
+        self.st = ft.Stack(
+            [
+                self.tf,
+                self.cal_ico,
+            ]
+        )
+
+    def build(self):
+        self.widget = ft.Container(
+            content=self.st,
+        )
+        return self.widget

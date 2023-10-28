@@ -127,8 +127,8 @@ class DatePicker(ft.UserControl):
                     row.append(
                         ft.Text(
                             "",
-                            width=self.CELL_SIZE,
-                            height=self.CELL_SIZE,
+                            width=CELL_SIZE,
+                            height=CELL_SIZE,
                         )
                     )
                     continue
@@ -158,7 +158,7 @@ class DatePicker(ft.UserControl):
                 border_side = None
                 bg = None
                 # week end bg color
-                if dt_weekday in self.WEEKEND_DAYS:
+                if dt_weekday in WEEKEND_DAYS:
                     text_color = ft.colors.RED_500
                     is_weekend = True
                 # holidays
@@ -217,8 +217,8 @@ class DatePicker(ft.UserControl):
                     ft.TextButton(
                         text=str(day),
                         data=d,
-                        width=self.CELL_SIZE,
-                        height=self.CELL_SIZE,
+                        width=CELL_SIZE,
+                        height=CELL_SIZE,
                         disabled=is_day_disabled,
                         style=ft.ButtonStyle(
                             color=text_color,
@@ -259,32 +259,32 @@ class DatePicker(ft.UserControl):
         if not hide_ymhm:
             prev_year = ft.IconButton(
                 icon=ft.icons.ARROW_BACK,
-                data=self.PREV_YEAR,
+                data=PREV_YEAR,
                 on_click=self._adjust_calendar
             )
             next_year = ft.IconButton(
                 icon=ft.icons.ARROW_FORWARD,
-                data=self.NEXT_YEAR,
+                data=NEXT_YEAR,
                 on_click=self._adjust_calendar
             )
             prev_month = ft.IconButton(
                 icon=ft.icons.ARROW_BACK,
-                data=self.PREV_MONTH,
+                data=PREV_MONTH,
                 on_click=self._adjust_calendar
             )
             next_month = ft.IconButton(
                 icon=ft.icons.ARROW_FORWARD,
-                data=self.NEXT_MONTH,
+                data=NEXT_MONTH,
                 on_click=self._adjust_calendar
             )
         else:
             prev_year = ft.Text(
-                self.EMPTY,
-                height=self.CELL_SIZE,
+                EMPTY,
+                height=CELL_SIZE,
             )
-            next_year = ft.Text(self.EMPTY)
-            prev_month = ft.Text(self.EMPTY)
-            next_month = ft.Text(self.EMPTY)
+            next_year = ft.Text(EMPTY)
+            prev_month = ft.Text(EMPTY)
+            next_month = ft.Text(EMPTY)
 
         ym = ft.Row([
             ft.Row([
@@ -309,7 +309,7 @@ class DatePicker(ft.UserControl):
 
     def _row_labels(self):
         label_row = []
-        days_label = calendar.weekheader(2).split(self.WHITE_SPACE)
+        days_label = calendar.weekheader(2).split(WHITE_SPACE)
 
         for _ in range(0, self.first_weekday):
             days_label.append(days_label.pop(0))
@@ -318,8 +318,8 @@ class DatePicker(ft.UserControl):
             label_row.append(
                 ft.TextButton(
                     text=day,
-                    width=self.CELL_SIZE,
-                    height=self.CELL_SIZE,
+                    width=CELL_SIZE,
+                    height=CELL_SIZE,
                     disabled=True,
                     style=ft.ButtonStyle(
                         padding=0,
@@ -341,13 +341,13 @@ class DatePicker(ft.UserControl):
                 ft.Row([
                     ft.IconButton(
                         icon=ft.icons.ARROW_BACK,
-                        data=self.PREV_HOUR,
+                        data=PREV_HOUR,
                         on_click=self._adjust_hh_min
                     ),
                     ft.Text(hour),
                     ft.IconButton(
                         icon=ft.icons.ARROW_FORWARD,
-                        data=self.NEXT_HOUR,
+                        data=NEXT_HOUR,
                         on_click=self._adjust_hh_min
                     ),
                 ]),
@@ -355,13 +355,13 @@ class DatePicker(ft.UserControl):
                 ft.Row([
                     ft.IconButton(
                         icon=ft.icons.ARROW_BACK,
-                        data=self.PREV_MINUTE,
+                        data=PREV_MINUTE,
                         on_click=self._adjust_hh_min,
                     ),
                     ft.Text(minute),
                     ft.IconButton(
                         icon=ft.icons.ARROW_FORWARD,
-                        data=self.NEXT_MINUTE,
+                        data=NEXT_MINUTE,
                         on_click=self._adjust_hh_min,
                     ),
                 ]),
@@ -406,24 +406,24 @@ class DatePicker(ft.UserControl):
             week_rows_controls_prev = self._create_calendar(
                 prev.year, prev.month, hour, minute, True)
             rows.append(ft.Column(week_rows_controls_prev,
-                        width=self.LAYOUT_WIDTH, spacing=10))
+                        width=LAYOUT_WIDTH, spacing=10))
             rows.append(ft.VerticalDivider())
 
         week_rows_controls = self._create_calendar(year, month, hour, minute)
         rows.append(ft.Column(week_rows_controls,
-                    width=self.LAYOUT_WIDTH, spacing=10))
+                    width=LAYOUT_WIDTH, spacing=10))
 
         if self.show_three_months:
             rows.append(ft.VerticalDivider())
             week_rows_controls_next = self._create_calendar(
                 next.year, next.month, hour, minute, True)
             rows.append(ft.Column(week_rows_controls_next,
-                        width=self.LAYOUT_WIDTH, spacing=10))
+                        width=LAYOUT_WIDTH, spacing=10))
 
         return rows
 
     def _prev_next_month(self, year, month):
-        delta = timedelta(weeks=self.DELTA_MONTH_WEEK)
+        delta = timedelta(weeks=DELTA_MONTH_WEEK)
         current = datetime(year, month, 15)
         prev = current - delta
         next = current + delta
@@ -475,23 +475,23 @@ class DatePicker(ft.UserControl):
         # print(self.yy, self.mm)
 
         if (
-            e.control.data == self.PREV_MONTH
-            or e.control.data == self.NEXT_MONTH
+            e.control.data == PREV_MONTH
+            or e.control.data == NEXT_MONTH
         ):
-            delta = timedelta(weeks=self.DELTA_MONTH_WEEK)
+            delta = timedelta(weeks=DELTA_MONTH_WEEK)
         if (
-            e.control.data == self.PREV_YEAR
-            or e.control.data == self.NEXT_YEAR
+            e.control.data == PREV_YEAR
+            or e.control.data == NEXT_YEAR
         ):
-            delta = timedelta(weeks=self.DELTA_YEAR_WEEK)
+            delta = timedelta(weeks=DELTA_YEAR_WEEK)
         if (
-            e.control.data == self.PREV_MONTH
-            or e.control.data == self.PREV_YEAR
+            e.control.data == PREV_MONTH
+            or e.control.data == PREV_YEAR
         ):
             self.now = self.now - delta
         if (
-            e.control.data == self.NEXT_MONTH
-            or e.control.data == self.NEXT_YEAR
+            e.control.data == NEXT_MONTH
+            or e.control.data == NEXT_YEAR
         ):
             self.now = self.now + delta
 
@@ -502,23 +502,23 @@ class DatePicker(ft.UserControl):
     def _adjust_hh_min(self, e: ft.ControlEvent):
 
         if (
-            e.control.data == self.PREV_HOUR
-            or e.control.data == self.NEXT_HOUR
+            e.control.data == PREV_HOUR
+            or e.control.data == NEXT_HOUR
         ):
-            delta = timedelta(hours=self.DELTA_HOUR)
+            delta = timedelta(hours=DELTA_HOUR)
         if (
-            e.control.data == self.PREV_MINUTE
-            or e.control.data == self.NEXT_MINUTE
+            e.control.data == PREV_MINUTE
+            or e.control.data == NEXT_MINUTE
         ):
-            delta = timedelta(minutes=self.DELTA_MINUTE)
+            delta = timedelta(minutes=DELTA_MINUTE)
         if (
-            e.control.data == self.PREV_HOUR
-            or e.control.data == self.PREV_MINUTE
+            e.control.data == PREV_HOUR
+            or e.control.data == PREV_MINUTE
         ):
             self.now = self.now - delta
         if (
-            e.control.data == self.NEXT_HOUR
-            or e.control.data == self.NEXT_MINUTE
+            e.control.data == NEXT_HOUR
+            or e.control.data == NEXT_MINUTE
         ):
             self.now = self.now + delta
 
@@ -535,16 +535,16 @@ class DatePicker(ft.UserControl):
 
     def _cal_height(self, weeks_number):
         if self.hour_minute:
-            return self.LAYOUT_DT_MIN_HEIGHT if (
+            return LAYOUT_DT_MIN_HEIGHT if (
                 weeks_number == 5
             ) else (
-                self.LAYOUT_DT_MAX_HEIGHT
+                LAYOUT_DT_MAX_HEIGHT
             )
         else:
-            return self.LAYOUT_MIN_HEIGHT if (
+            return LAYOUT_MIN_HEIGHT if (
                 weeks_number == 5
             ) else (
-                self.LAYOUT_MAX_HEIGHT
+                LAYOUT_MAX_HEIGHT
             )
 
     def _trunc_datetime(self, date):
