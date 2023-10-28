@@ -472,8 +472,6 @@ class DatePicker(ft.UserControl):
 
     def _adjust_calendar(self, e: ft.ControlEvent):
 
-        # print(self.yy, self.mm)
-
         if (
             e.control.data == PREV_MONTH
             or e.control.data == NEXT_MONTH

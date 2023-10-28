@@ -82,8 +82,6 @@ class DateTimeViewer(ft.UserControl, Viewer):
 
     def confirm_dlg(self, e):
         if int(self.type) == SelectionType.SINGLE.value:
-            print('selected_data[0]', str(self.datepicker.selected_data[0]))
-            self.tf.value = self.datepicker.selected_data[0] if len(
                 self.datepicker.selected_data) > 0 else None
         elif (
             int(self.type) == SelectionType.MULTIPLE.value
