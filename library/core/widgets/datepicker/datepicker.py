@@ -438,16 +438,14 @@ class DatePicker(ft.UserControl):
                 self.selected = []
 
             if len(self.selected) > 0:
-                if self.selected[0] == result:
-                    self.selected = []
-                else:
-                    if result > self.selected[0]:
-                        if len(self.selected) == 1:
-                            self.selected.append(result)
-                        else:
-                            return
-                    else:
+                if self.selected[0] != result:
+                    if result <= self.selected[0] or len(self.selected) != 1:
                         return
+                    self.selected.append(result)
+                    return
+
+                self.selected = []
+                return
             else:
                 self.selected.append(result)
         elif self.selection_type == SelectionType.MULTIPLE:
@@ -455,8 +453,13 @@ class DatePicker(ft.UserControl):
                 self.selected.remove(result)
             else:
                 if self.hour_minute:
-                    result = datetime(result.year, result.month,
-                                      result.day, self.hour, self.minute)
+                    result = datetime(
+                        result.year,
+                        result.month,
+                        result.day,
+                        self.hour,
+                        self.minute
+                    )
                 self.selected.append(result)
         else:
             if len(self.selected) == 1 and result in self.selected:

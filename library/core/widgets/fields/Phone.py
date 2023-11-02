@@ -1,4 +1,5 @@
 import flet as ft
+import re
 
 from .BaseViewer import Viewer
 
@@ -45,20 +46,16 @@ class PhoneInput(ft.TextField, PhoneParent):
 
     def broker_input(self, e):
         mask = self.MASK
-        result = ''
         text = ''.join(i for i in e.control.value if i.isdigit())
 
-        for w in mask:
-            if w == 'X':
-                if not text:
-                    break
-                mask = mask.replace('X', text[0], 1)
-                result += text[0]
-                text = text[1:]
-            else:
-                if not text:
-                    break
-                result += w
+        for char in text:
+            mask = mask.replace('X', char, 1)
+
+        r = re.compile(r'[^\d]+')
+
+        result = mask
+        if mask.find('X') != -1:
+            result = mask.replace(re.findall(r, mask)[-1], '', 1)
 
         self.value = result
         self.update()

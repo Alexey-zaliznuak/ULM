@@ -112,13 +112,12 @@ class DateTimeViewer(ft.UserControl, Viewer):
     def open_dlg_modal(self, e):
 
         self.datepicker = DatePicker(
-            hour_minute=self.hour_minute,  # Time
-            show_three_months=self.show_three_months,  # 3 Months
-            hide_prev_next_month_days=False,  # Not Month Days
-            # Selected Date
+            hour_minute=self.hour_minute,
+            show_three_months=self.show_three_months,
+            hide_prev_next_month_days=False,
             selected_date=[self.tf.value] if self.tf.value else None,
-            selection_type=self.datepicker_type,  # 0-SINGLE 1-MULTIPLE 2-RANGE
-            holidays=self.holidays,  # ?
+            selection_type=self.datepicker_type,
+            holidays=self.holidays,
             # disable_to=self._to_datetime(self.tf1.value),
             # disable_from=self._to_datetime(self.tf2.value),
             # locale=self.selected_locale,
@@ -129,23 +128,23 @@ class DateTimeViewer(ft.UserControl, Viewer):
         self.page.update()
 
     def _to_datetime(self, date_str=None):
-        if date_str:
-            return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
-        else:
+        if not date_str:
             return None
 
+        return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+
     def set_locale(self, e):
-        self.selected_locale = self.dd.value if self.dd.value else None
+        self.selected_locale = self.dd.value or None
 
 
 class DateTimePicker(DateTimeViewer):
     def __init__(
-            self,
-            hour_minute: bool = False,
-            show_three_months: bool = False,
-            hide_no_month: bool = False,
-            datepicker_type: int = 0,
-            value: str = None
+        self,
+        hour_minute: bool = False,
+        show_three_months: bool = False,
+        hide_no_month: bool = False,
+        datepicker_type: int = 0,
+        value: str = None,
     ):
         super().__init__()
 
