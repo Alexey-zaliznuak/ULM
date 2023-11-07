@@ -1,13 +1,14 @@
 import flet as ft
 
 from .BaseViewer import Viewer
+from .BaseInput import InputField
 
 
-class IntegerInput(ft.Row, Viewer):
+class IntegerInput(ft.Row, InputField):
 
     def __init__(
         self,
-        value: int = 0,
+        value: int,
     ):
         txt_number = ft.TextField(
             value=str(value),
@@ -35,7 +36,7 @@ class IntegerInput(ft.Row, Viewer):
 class FloatViewer(ft.Text, Viewer):
     def __init__(
         self,
-        value: float = 0
+        value: float,
     ):
         number = str(value).split('.')
         if len(number) < 2:

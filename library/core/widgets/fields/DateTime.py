@@ -3,9 +3,10 @@ from ..datepicker.datepicker import DatePicker
 from ..datepicker.selection_type import SelectionType
 from datetime import datetime
 from .BaseViewer import Viewer
+from .BaseInput import InputField
 
 
-class DateTimeViewer(ft.UserControl, Viewer):
+class DateTimeField(ft.UserControl):
     holidays = [
         datetime(2023, 4, 25),
         datetime(2023, 5, 1),
@@ -14,12 +15,12 @@ class DateTimeViewer(ft.UserControl, Viewer):
 
     def __init__(
             self,
+            value: str,
             width: ft.OptionalNumber = None,
             hour_minute: bool = False,
             show_three_months: bool = False,
             hide_no_month: bool = False,
             datepicker_type: int = 0,
-            value: str = None
     ):
         super().__init__()
 
@@ -137,7 +138,11 @@ class DateTimeViewer(ft.UserControl, Viewer):
         self.selected_locale = self.dd.value or None
 
 
-class DateTimePicker(DateTimeViewer):
+class DateTimeViewer(DateTimeField, Viewer):
+    pass
+
+
+class DateTimePicker(DateTimeField, InputField):
     def __init__(
         self,
         hour_minute: bool = False,

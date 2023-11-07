@@ -1,6 +1,6 @@
 import flet as ft
-from typing import Union
 from .BaseViewer import Viewer
+from .BaseInput import InputField
 
 
 class BooleanViewer(ft.Checkbox, Viewer):
@@ -8,7 +8,7 @@ class BooleanViewer(ft.Checkbox, Viewer):
 
     def __init__(
         self,
-        value: Union[bool, None] = False,
+        value,
         tristate: bool = False,
         label_position: ft.LabelPosition = ft.LabelPosition.RIGHT,
         label: str = '',
@@ -23,12 +23,12 @@ class BooleanViewer(ft.Checkbox, Viewer):
         )
 
 
-class BooleanInput(ft.Checkbox, Viewer):
+class BooleanInput(ft.Checkbox, InputField):
     has_value_for_copy = False
 
     def __init__(
         self,
-        value: Union[bool, None] = False,
+        value: bool,
         tristate: bool = False,
         label_position: ft.LabelPosition = ft.LabelPosition.RIGHT,
         label: str = '',

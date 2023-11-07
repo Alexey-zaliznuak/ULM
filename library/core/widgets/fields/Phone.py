@@ -2,9 +2,10 @@ import flet as ft
 import re
 
 from .BaseViewer import Viewer
+from .BaseInput import InputField
 
 
-class PhoneParent():
+class PhoneParent:
     MASK = '+X (XXX) XXX-XX-XX'
 
     def input_mask(self, value):
@@ -18,7 +19,7 @@ class PhoneParent():
         return result
 
 
-class PhoneViewer(ft.Text, Viewer, PhoneParent):
+class PhoneViewer(ft.Text, PhoneParent, Viewer):
     def __init__(self, value: str = ''):
         super().__init__(
             value=self.input_mask(value),
@@ -29,11 +30,11 @@ class PhoneViewer(ft.Text, Viewer, PhoneParent):
         )
 
 
-class PhoneInput(ft.TextField, PhoneParent):
+class PhoneInput(ft.TextField, PhoneParent, InputField):
 
     MASK = '(XXX) XXX-XX-XX'
 
-    def __init__(self, default_value: str = ''):
+    def __init__(self, default_value: str):
         super().__init__(
             value=self.input_mask(default_value),
             icon=ft.icons.PHONE,

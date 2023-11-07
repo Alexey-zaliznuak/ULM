@@ -1,23 +1,16 @@
-from flet import Control, TextField
+from flet import Control
 from types import FunctionType
 
 from library.core.validators import URLValidator
 from library.core.exceptions import ValidationError
+from library.types import empty
 from library.core.widgets.fields import (
-    TextViewer,
     BooleanViewer,
+    PhoneInput,
     PhoneViewer,
+    TextViewer,
+    TextEditor,
 )
-
-
-class empty:
-    """
-    This class is used to represent no data being provided for a given input
-    or output value.
-
-    It is required because `None` may be a valid input or output value.
-    """
-    pass
 
 
 class Field:
@@ -32,7 +25,8 @@ class Field:
         'null': 'This field may not be null.'
     }
 
-    edit_widget: Control = TextField
+    initial_empty_value = None
+    edit_widget: Control = TextEditor
     display_widget: Control = TextViewer
 
     def __init__(
@@ -41,7 +35,6 @@ class Field:
         read_only=False,
         write_only=False,
         required: bool = None,
-        initial=None,
         default=empty,
         label: str = '',
         help_text: str = None,
@@ -72,15 +65,17 @@ class Field:
         self.read_only = read_only
         self.write_only = write_only
         self.required = required
-        self.default = default
         self.source = source
-        self.initial = initial
         self.label = label or source
         self.help_text = help_text
         self.style = style or {}
         self.allow_null = allow_null
         self.validators = validators
         self.validators.extend(self.default_validators)
+
+        self.initial = self.initial_empty_value
+        if default is not empty:
+            self.initial = default
 
         self.field_name = None
 
@@ -109,13 +104,21 @@ class Field:
     def _get_editing_default_value(self, obj):
         return self._get_db_value(obj)
 
-    def edit(self, obj=empty) -> Control:
-        value = empty
+    def edit(self, *, value=empty, obj=empty) -> Control:
+        assert not (value is not empty and obj is not empty), (
+            "Only one of 'value' and 'obj' can be specified."
+        )
 
         if obj is not empty:
             value = self._get_editing_default_value(obj)
 
-        return self.edit_widget(value if not isinstance(value, empty) else '')
+        elif value is not empty:
+            value = self.default or self.initial_empty_value
+
+        else:
+            value = self.initial
+
+        return self.edit_widget(value)
 
     def display(self, obj) -> Control:
         value = self._get_display_value(obj)
@@ -131,7 +134,9 @@ class CharField(Field):
 
 
 class PhoneField(CharField):
+    initial_empty_value = ''
     display_widget = PhoneViewer
+    edit_widget = PhoneInput
 
 
 class ChooseField(Field):  # ???? ValueValidator?

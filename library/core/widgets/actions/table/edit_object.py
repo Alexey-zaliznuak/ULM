@@ -118,7 +118,7 @@ class EditObjectActionDialog(AlertDialog):
             # if field.read_only:
             #     edit_field = Text(field.label + ' - read only.')
             # else:
-            edit_field = field.edit(self.obj.get(field.label, empty))
+            edit_field = field.edit(value=self.obj.get(field.label, empty))
             self.fields[field] = edit_field
 
             controls.append(
@@ -141,7 +141,7 @@ class EditObjectActionDialog(AlertDialog):
 
         # TODO validators, some checks
         for ui_field, input_widget in self.fields.items():
-            new_obj[ui_field.source] = input_widget.value
+            new_obj[ui_field.source] = input_widget.clear_value
 
         _, object_error, self.errors = self.form.create(new_obj)
 

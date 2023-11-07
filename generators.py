@@ -1,9 +1,10 @@
 from library.utils.model_data_generator import ModelDataGenerator
 from library.utils.model_data_generator.generators import (
-    PositiveIntegerGenerator,
-    PhoneNumberGenerator,
+    BooleanGenerator,
     ForeignKeyGenerator,
     NameGenerator,
+    PhoneNumberGenerator,
+    PositiveIntegerGenerator,
 )
 
 from models import Person, GodModel
@@ -13,6 +14,7 @@ class PersonModelDataGenerator(ModelDataGenerator):
     age = PositiveIntegerGenerator(mx=100)
     name = NameGenerator()
     phone = PhoneNumberGenerator()
+    male = BooleanGenerator()
 
     class Meta:
         model = Person

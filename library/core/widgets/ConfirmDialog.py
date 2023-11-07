@@ -11,7 +11,6 @@ from flet import (
 
 
 class ConfirmActionDialog(AlertDialog):
-
     def __init__(
         self,
         on_success: Callable,

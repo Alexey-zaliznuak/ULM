@@ -29,7 +29,7 @@ class Person(BaseModel):
     name = CharField()
     phone = CharField()
     age = IntegerField()
-    male = BooleanField()
+    male = CharField()
 
     def validate(self):
         if not (1 < int(self.age) < 120):
