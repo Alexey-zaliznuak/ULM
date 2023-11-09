@@ -2,8 +2,9 @@ from flet import (
     AlertDialog,
     BottomSheet,
     ElevatedButton,
-    Text,
+    icons,
     MainAxisAlignment,
+    Text,
     Control,
     Row,
     Container,
@@ -15,6 +16,7 @@ from library.core.widgets.text import Text, TitleText
 from library.utils import LazyAttribute
 from library.core.widgets import ErrorText
 from library.model_form.fields import Field, empty
+from library.core.widgets.actions import ActionButton
 
 
 class EditFieldWidget(Container):
@@ -114,10 +116,6 @@ class EditObjectActionDialog(AlertDialog):
         controls = []
 
         for field in self.form._form_fields(read_only=False).values():
-
-            # if field.read_only:
-            #     edit_field = Text(field.label + ' - read only.')
-            # else:
             edit_field = field.edit(value=self.obj.get(field.label, empty))
             self.fields[field] = edit_field
 
@@ -162,3 +160,11 @@ class EditObjectActionDialog(AlertDialog):
             widget.update()
 
         return super().update()
+
+
+class EditObjectActionButton(ActionButton):
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            *args, **kwargs,
+            icon=icons.EDIT,
+        )
