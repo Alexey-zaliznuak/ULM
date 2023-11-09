@@ -438,13 +438,12 @@ class DatePicker(ft.UserControl):
                 self.selected = []
 
             if len(self.selected) > 0:
-                if self.selected[0] != result:
-                    if result <= self.selected[0] or len(self.selected) != 1:
-                        return
-                    self.selected.append(result)
+                if result <= self.selected[0] or len(self.selected) != 1:
                     return
-
-                self.selected = []
+                if self.selected[0] == result:
+                    self.selected = []
+                    return
+                self.selected.append(result)
                 return
             else:
                 self.selected.append(result)

@@ -14,13 +14,13 @@ class DateTimeField(ft.UserControl):
     ]
 
     def __init__(
-            self,
-            value: str,
-            width: ft.OptionalNumber = None,
-            hour_minute: bool = False,
-            show_three_months: bool = False,
-            hide_no_month: bool = False,
-            datepicker_type: int = 0,
+        self,
+        value: str,
+        width: ft.OptionalNumber = None,
+        hour_minute: bool = False,
+        show_three_months: bool = False,
+        hide_no_month: bool = False,
+        datepicker_type: int = 0,
     ):
         super().__init__()
 

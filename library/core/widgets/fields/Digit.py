@@ -1,5 +1,7 @@
 import flet as ft
 
+from library.core.widgets.text import Text
+
 from .BaseViewer import Viewer
 from .BaseInput import InputField
 
@@ -37,7 +39,7 @@ class IntegerInput(ft.Row, InputField):
         return int(''.join(s for s in self.controls[1].value if s.isdigit()))
 
 
-class FloatViewer(ft.Text, Viewer):
+class FloatViewer(Text, Viewer):
     def __init__(
         self,
         value: float,
@@ -66,6 +68,6 @@ class FloatViewer(ft.Text, Viewer):
         )
 
 
-class IntegerViewer(ft.Text, Viewer):
+class IntegerViewer(Text, Viewer):
     "View content as Text."
     pass

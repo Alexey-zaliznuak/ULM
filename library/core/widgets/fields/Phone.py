@@ -3,6 +3,7 @@ import re
 
 from .BaseViewer import Viewer
 from .BaseInput import InputField
+from library.core.widgets.text import Text
 
 
 class PhoneParent:
@@ -19,8 +20,8 @@ class PhoneParent:
         return result
 
 
-class PhoneViewer(ft.Text, PhoneParent, Viewer):
-    def __init__(self, value: str = ''):
+class PhoneViewer(Text, PhoneParent, Viewer):
+    def __init__(self, value: str):
         super().__init__(
             value=self.input_mask(value),
             width=150,
