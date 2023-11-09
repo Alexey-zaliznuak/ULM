@@ -4,7 +4,7 @@ from library.core.exceptions import ValidationError
 
 
 class ValueValidator:
-    def __init__(self, *, mn: int = None, mx: int = None) -> None:
+    def __init__(self, mn: int = None, mx: int = None) -> None:
         if not (mn or mx):
             raise AttributeError('mn or mx must be set.')
         if mx and mn and mx < mn:
@@ -52,3 +52,16 @@ class URLValidator():
             validators.url(value)
         except validators.ValidationError:
             raise ValidationError('Invalid URL')
+
+
+class PhoneValidator():
+    NUMBERS_IN_PHONE_COUNT = 10
+
+    def __call__(self, value: str) -> Any:
+        c = 0
+        for s in value:
+            if s.isdigit():
+                c += 1
+
+        if c != self.NUMBERS_IN_PHONE_COUNT:
+            raise ValidationError(f'Inalid telephone number length - {c+1}')

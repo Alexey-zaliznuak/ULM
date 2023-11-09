@@ -34,6 +34,10 @@ class IntegerInput(ft.Row, InputField):
         self.controls[1].value = str(int(self.controls[1].value) + 1)
         self.update()
 
+    @property
+    def clear_value(self):
+        return int(''.join(s for s in self.controls[1].value if s.isdigit()))
+
 
 class FloatViewer(Text, Viewer):
     def __init__(

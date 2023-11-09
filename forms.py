@@ -1,5 +1,6 @@
+from library.core.validators import ValueValidator
 from library.model_form import UIModelForm
-from library.model_form.fields import PhoneField
+from library.model_form.fields import PhoneField, IntegerField
 from library.model_form.actions.objects import (
     DeleteObjectAction,
     DetailObjectAction
@@ -11,6 +12,11 @@ from models import Person
 
 class PersonUIModelForm(UIModelForm):
     phone = PhoneField('phone')
+    age = IntegerField(
+        'age',
+        required=True,
+        validators=[ValueValidator(3, 124)]
+    )
 
     class Meta:
         model = Person

@@ -1,15 +1,17 @@
 from flet import Control
 from types import FunctionType
 
-from library.core.validators import URLValidator
+from library.core.validators import URLValidator, PhoneValidator
 from library.core.exceptions import ValidationError
 from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
+    BooleanInput,
     PhoneInput,
     PhoneViewer,
     TextViewer,
     TextEditor,
+    IntegerInput,
 )
 
 
@@ -70,7 +72,7 @@ class Field:
         self.help_text = help_text
         self.style = style or {}
         self.allow_null = allow_null
-        self.validators = validators
+        self.validators = validators.copy()
         self.validators.extend(self.default_validators)
 
         self.initial = self.initial_empty_value
@@ -83,6 +85,9 @@ class Field:
 
     def validate(self, value) -> list[str]:
         errors = []
+
+        if not value and self.required:
+            errors.append('Required value.')
 
         for validator in self.validators:
             try:
@@ -127,6 +132,7 @@ class Field:
 
 class BooleanField(Field):
     display_widget = BooleanViewer
+    edit_widget = BooleanInput
 
 
 class CharField(Field):
@@ -137,6 +143,7 @@ class PhoneField(CharField):
     initial_empty_value = ''
     display_widget = PhoneViewer
     edit_widget = PhoneInput
+    default_validators = [PhoneValidator()]
 
 
 class ChooseField(Field):  # ???? ValueValidator?
@@ -168,7 +175,8 @@ class FloatField(Field):
 
 
 class IntegerField(Field):
-    ...
+    initial_empty_value = 0
+    edit_widget = IntegerInput
 
 
 class MultipleChoiceField(Field):

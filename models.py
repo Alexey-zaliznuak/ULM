@@ -15,7 +15,6 @@ from peewee import (
 
 import settings
 
-from library.core.exceptions import ValidationError
 
 db = SqliteDatabase(settings.DB_NAME, pragmas={'cache_size': 0})
 
@@ -32,8 +31,7 @@ class Person(BaseModel):
     male = CharField()
 
     def validate(self):
-        if not (1 < int(self.age) < 120):
-            raise ValidationError('uncorrect age - ' + str(self.age))
+        ...
 
 
 class GodModel(BaseModel):
