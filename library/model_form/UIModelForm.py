@@ -20,7 +20,7 @@ from .fields import IntegerField
 
 
 class UIModelForm(metaclass=UIModelFormMetaClass):
-    # TODO classmethods
+    # TODO classMethods
 
     ModelField = peewee.Field
     auto_fields: list[ModelField] = [peewee.AutoField]
@@ -123,7 +123,7 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
 
     def get_queryset(self, q=None) -> Callable:
         # TODO filters widget
-        # TODO filter_widget.get_queryset: Calable
+        # TODO filter_widget.get_queryset: Callable
         return q or self.Meta.model.select
 
     def _run_validators(self, obj: dict) -> tuple[str, dict[str, list[str]]]:

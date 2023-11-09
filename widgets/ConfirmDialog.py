@@ -27,7 +27,7 @@ class ConfirmActionDialog(AlertDialog):
         super().__init__(
             modal=True,
             title=Text("Confirmation"),
-            content=Text("Please, congirm this action."),
+            content=Text("Please, confirm this action."),
             actions=[
                 ElevatedButton("Yes", on_click=self.ok),
                 ElevatedButton("No", on_click=self.cancel, color='red'),

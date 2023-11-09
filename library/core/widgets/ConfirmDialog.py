@@ -28,7 +28,7 @@ class ConfirmActionDialog(AlertDialog):
         super().__init__(
             modal=True,
             title=Text("Confirmation"),
-            content=Text("Please, congirm this action."),
+            content=Text("Please, confirm this action."),
             actions=[
                 ElevatedButton("Yes", on_click=self.ok),
                 ElevatedButton("No", on_click=self.cancel, color='red'),
@@ -42,7 +42,7 @@ class ConfirmActionDialog(AlertDialog):
             self.page.snack_bar = SnackBar(
                 Text("Success.", size=18),
                 duration=self.success_snack_bar_duration,
-                bgcolor=colors.GREY,
+                bgcolor=colors.GREY_700,
                 open=True
             )
 

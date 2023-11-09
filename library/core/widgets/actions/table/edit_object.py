@@ -15,7 +15,8 @@ from flet import (
     BoxShadow,
     ShadowBlurStyle,
     Offset,
-    ListView
+    ListView,
+    padding,
 )
 from typing import Callable
 from library.core.widgets.text import Text, TitleText
@@ -81,7 +82,13 @@ class ObjectErrorBottomSheet(BottomSheet):
                     ),
                     Row(
                         [
-                            ElevatedButton("OK", on_click=self.close, width=95, height=45, bgcolor=colors.AMBER_ACCENT_200)
+                            ElevatedButton(
+                                "OK",
+                                width=95,
+                                height=45,
+                                bgcolor=colors.AMBER_ACCENT_200,
+                                on_click=self.close,
+                            ),
                         ],
                         alignment=MainAxisAlignment.END
                     ),
@@ -91,11 +98,10 @@ class ObjectErrorBottomSheet(BottomSheet):
                 padding=30,
                 expand=True,
                 bgcolor=colors.BLUE_400,
-                border_radius=border_radius.vertical(top = 26, bottom = 0),
+                border_radius=border_radius.vertical(top=26, bottom=0),
             ),
             open=True,
             enable_drag=True,
-            
         )
 
     def close(self, e=None):
@@ -123,47 +129,44 @@ class EditObjectActionDialog(AlertDialog):
             modal=True,
             # title=,
             content=Container(
-                content=ListView([
+                content=ListView(
+                    [
                         TitleText("Create new."),
                         Column(self.fields_widgets),
                         Container(
-                            content= Row(
+                            content=Row(
                                 [
-                                    ElevatedButton("Cancel", on_click=self._close_dlg),
-                                    ElevatedButton("Save", on_click=self._save_obj),
+                                    ElevatedButton(
+                                        "Cancel",
+                                        on_click=self._close_dlg,
+                                    ),
+                                    ElevatedButton(
+                                        "Save",
+                                        on_click=self._save_obj,
+                                    ),
                                 ],
                                 alignment=MainAxisAlignment.END,
-                                
                             ),
                             margin=10
                         ),
-                       
                     ],
-                    # scroll="adaptive",
                     width=600,
-                    padding=15
-                    # alignment=MainAxisAlignment.SPACE_BETWEEN,
-                    
+                    padding=padding.only(right=20)
                 ),
-                
-                # bgcolor=colors.AMBER,
                 border_radius=26,
                 padding=30,
-                
+                # image_src='https://huivpizde.com/uploads/posts/2023-02/thumbs/1677017462_huivpizde-com-p-porno-guan-yui-3.jpg',
+                # image_fit=ImageFit.COVER,
             ),
             title_padding=0,
             actions_padding=0,
             content_padding=0,
-            # actions=[
-            #     ElevatedButton("Cancel", on_click=self._close_dlg),
-            #     ElevatedButton("Save", on_click=self._save_obj),
-            # ],
             actions_alignment=MainAxisAlignment.END,
         )
 
     def _get_content(self) -> list[Control]:
         # TODO : mb cached property
-        # TODO noraml annotate - list of widget[column(fields)], list fields
+        # TODO normal annotate - list of widget[column(fields)], list fields
         controls = []
 
         for field in self.form._form_fields(read_only=False).values():

@@ -41,7 +41,7 @@ class UIModelFormDataTableCell(DataCell):
 
         self.page.snack_bar = SnackBar(
             content=Text("Success copy to clipboard!"),
-            action="Alright!",
+            action="Grasp!",
         )
         self.page.snack_bar.open = True
         self.page.update()
@@ -106,7 +106,7 @@ class UIModelFormDataTable(DataTable):
         'border': border.all(0.5, "dark"),
         'border_radius': 3,
         'horizontal_lines': border.BorderSide(1, "dark"),
-        'vertical_lines': border.BorderSide(0.5, "dark"),
+        'vertical_lines': border.BorderSide(0.5, "dark")
     }
 
     def __init__(
