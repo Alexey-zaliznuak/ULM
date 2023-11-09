@@ -7,7 +7,7 @@ from library.core.widgets.text import Text
 
 
 class PhoneParent:
-    MASK = '+X (XXX) XXX-XX-XX'
+    MASK = '+7 (XXX) XXX-XX-XX'
 
     def input_mask(self, value):
         result = self.MASK
@@ -45,6 +45,10 @@ class PhoneInput(ft.TextField, PhoneParent, InputField):
             keyboard_type=ft.KeyboardType.PHONE,
             on_change=self.broker_input,
         )
+
+    @property
+    def clear_value(self):
+        return ''.join(i for i in self.value if i.isdigit())
 
     def broker_input(self, e):
         mask = self.MASK

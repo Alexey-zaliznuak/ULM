@@ -8,7 +8,13 @@ from flet import (
     Row,
     Container,
     Column,
-    MainAxisAlignment
+    MainAxisAlignment,
+    colors,
+    border_radius,
+    BoxShadow,
+    ShadowBlurStyle,
+    Offset,
+    ListView
 )
 from typing import Callable
 from library.core.widgets.text import Text, TitleText
@@ -56,24 +62,38 @@ class ObjectErrorBottomSheet(BottomSheet):
         super().__init__(
             Container(
                 Column([
-                    Column([
-                        TitleText("Uncorrect data:"),
-                        Text(error_text)
-                    ]),
+                    Container(
+                        Column([
+                            TitleText("Invalid data:"),
+                            Text(error_text)
+                        ]),
+                        padding=8,
+                        bgcolor=colors.WHITE,
+                        border_radius=16,
+                        shadow=BoxShadow(
+                            blur_radius=15,
+                            color=colors.WHITE,
+                            offset=Offset(0, 0),
+                            blur_style=ShadowBlurStyle.OUTER,
+                        )
+                    ),
                     Row(
                         [
-                            ElevatedButton("OK", on_click=self.close)
+                            ElevatedButton("OK", on_click=self.close, width=95, height=45, bgcolor=colors.AMBER_ACCENT_200)
                         ],
                         alignment=MainAxisAlignment.END
                     ),
                 ],
-                    alignment=MainAxisAlignment.SPACE_BETWEEN
+                    alignment=MainAxisAlignment.SPACE_BETWEEN,
                 ),
                 padding=30,
-                expand=True
+                expand=True,
+                bgcolor=colors.BLUE_400,
+                border_radius=border_radius.vertical(top = 26, bottom = 0),
             ),
             open=True,
-            enable_drag=True
+            enable_drag=True,
+            
         )
 
     def close(self, e=None):
@@ -99,12 +119,43 @@ class EditObjectActionDialog(AlertDialog):
 
         super().__init__(
             modal=True,
-            title=Text("Create new."),
-            content=Column(self.fields_widgets),
-            actions=[
-                ElevatedButton("Cancel", on_click=self._close_dlg),
-                ElevatedButton("Save", on_click=self._save_obj),
-            ],
+            # title=,
+            content=Container(
+                content=ListView([
+                        TitleText("Create new."),
+                        Column(self.fields_widgets),
+                        Container(
+                            content= Row(
+                                [
+                                    ElevatedButton("Cancel", on_click=self._close_dlg),
+                                    ElevatedButton("Save", on_click=self._save_obj),
+                                ],
+                                alignment=MainAxisAlignment.END,
+                                
+                            ),
+                            margin=10
+                        ),
+                       
+                    ],
+                    # scroll="adaptive",
+                    width=600,
+                    padding=15
+                    # alignment=MainAxisAlignment.SPACE_BETWEEN,
+                    
+                ),
+                
+                # bgcolor=colors.AMBER,
+                border_radius=26,
+                padding=30,
+                
+            ),
+            title_padding=0,
+            actions_padding=0,
+            content_padding=0,
+            # actions=[
+            #     ElevatedButton("Cancel", on_click=self._close_dlg),
+            #     ElevatedButton("Save", on_click=self._save_obj),
+            # ],
             actions_alignment=MainAxisAlignment.END,
         )
 
