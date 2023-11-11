@@ -3,7 +3,8 @@ from library.model_form import UIModelForm
 from library.model_form.fields import PhoneField, IntegerField
 from library.model_form.actions.objects import (
     DeleteObjectAction,
-    DetailObjectAction
+    DetailObjectAction,
+    EditObjectAction,
 )
 from library.model_form.actions.table import CreateObjectAction
 
@@ -27,5 +28,5 @@ class PersonUIModelForm(UIModelForm):
             'age',
             'male',
         )
-        objects_actions = (DeleteObjectAction, DetailObjectAction)
+        objects_actions = (DeleteObjectAction, DetailObjectAction, EditObjectAction)
         table_actions = (CreateObjectAction, )
