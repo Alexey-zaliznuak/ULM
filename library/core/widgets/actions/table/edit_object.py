@@ -2,6 +2,7 @@ from flet import (
     AlertDialog,
     BottomSheet,
     ElevatedButton,
+    ImageFit,
     icons,
     MainAxisAlignment,
     Text,
@@ -24,6 +25,7 @@ from library.utils import LazyAttribute
 from library.core.widgets import ErrorText
 from library.model_form.fields import Field, empty
 from library.core.widgets.actions import ActionButton
+from peewee import Model
 
 
 class EditFieldWidget(Container):
@@ -119,11 +121,14 @@ class EditObjectActionDialog(AlertDialog):
         **kwargs
     ):
         self.obj = obj
+        self.create = not self.obj  # if not obj we create it
         self.form = form
         self.datatable = datatable
         self.errors: dict[str, list[str]] = {}
         self.fields: dict[Field, Control] = {}
         self.fields_widgets: list[Control] = self._get_content()
+
+        assert isinstance(self.obj, (Model, dict))
 
         super().__init__(
             modal=True,
@@ -156,7 +161,7 @@ class EditObjectActionDialog(AlertDialog):
                 border_radius=26,
                 padding=30,
                 # image_src='https://huivpizde.com/uploads/posts/2023-02/thumbs/1677017462_huivpizde-com-p-porno-guan-yui-3.jpg',
-                # image_fit=ImageFit.COVER,
+                image_fit=ImageFit.COVER,
             ),
             title_padding=0,
             actions_padding=0,
@@ -170,7 +175,12 @@ class EditObjectActionDialog(AlertDialog):
         controls = []
 
         for field in self.form._form_fields(read_only=False).values():
-            edit_field = field.edit(value=self.obj.get(field.label, empty))
+            if isinstance(self.obj, dict):
+                value = self.obj.get(field.label, empty)
+            else:
+                value = getattr(self.obj, field.label, empty)
+
+            edit_field = field.edit(value=value)
             self.fields[field] = edit_field
 
             controls.append(
@@ -195,7 +205,10 @@ class EditObjectActionDialog(AlertDialog):
         for ui_field, input_widget in self.fields.items():
             new_obj[ui_field.source] = input_widget.clear_value
 
-        _, object_error, self.errors = self.form.create(new_obj)
+        if self.create:
+            _, object_error, self.errors = self.form.create(new_obj)
+        else:
+            _, object_error, self.errors = self.form.update(self.obj, new_obj)
 
         if not (self.errors or object_error):
             self.datatable.update_rows()

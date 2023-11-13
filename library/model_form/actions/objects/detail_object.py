@@ -23,6 +23,6 @@ class DetailObjectAction(ObjectAction):
         if isinstance(page, LazyAttribute):
             page = page()
 
-        page.dialog = DetailObjectActionDialog(obj, datatable)
+        page.dialog = DetailObjectActionDialog(obj, datatable.fields)
         page.dialog.open = True
         page.update()

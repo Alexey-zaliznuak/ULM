@@ -7,6 +7,7 @@ from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
     BooleanInput,
+    ForeignKeyViewer,
     PhoneInput,
     PhoneViewer,
     TextViewer,
@@ -45,7 +46,7 @@ class Field:
         validators: list = [],
         allow_null=False,
     ):
-
+        # TODO mb model in mapping in future
         # If `required` is unset, then use `True` unless a default is provided.
         if required is None:
             required = default is empty and not read_only
@@ -110,6 +111,14 @@ class Field:
         return self._get_db_value(obj)
 
     def edit(self, *, value=empty, obj=empty) -> Control:
+        value = self._get_edit_value(value=value, obj=obj)
+        return self.edit_widget(value)
+
+    def display(self, obj) -> Control:
+        value = self._get_display_value(obj)
+        return self.display_widget(value)
+
+    def _get_edit_value(self, *, value, obj):
         assert not (value is not empty and obj is not empty), (
             "Only one of 'value' and 'obj' can be specified."
         )
@@ -117,17 +126,10 @@ class Field:
         if obj is not empty:
             value = self._get_editing_default_value(obj)
 
-        elif value is not empty:
-            value = self.default or self.initial_empty_value
+        elif value is empty:
+            value = self.initial_empty_value
 
-        else:
-            value = self.initial
-
-        return self.edit_widget(value)
-
-    def display(self, obj) -> Control:
-        value = self._get_display_value(obj)
-        return self.display_widget(value)
+        return value
 
 
 class BooleanField(Field):
@@ -136,10 +138,12 @@ class BooleanField(Field):
 
 
 class CharField(Field):
-    ...  # hide_input_value,
+    def edit(self, *, value=empty, obj=empty) -> Control:
+        value = self._get_edit_value(value=value, obj=obj)
+        return self.edit_widget(value=value)
 
 
-class PhoneField(CharField):
+class PhoneField(Field):
     initial_empty_value = ''
     display_widget = PhoneViewer
     edit_widget = PhoneInput
@@ -225,11 +229,61 @@ class MethodField(Field):
 
 
 class RelatedField(Field):
-    ...
-
-    def displayed_value(self):
+    # TODO overriden decorator
+    def _get_display_value(self, obj):
         raise AttributeError(
             'displayed value must be override in RelatedField'
+        )
+
+    def display(self, obj) -> Control:
+        raise AttributeError(
+            'displayed value must be override in RelatedField'
+        )
+
+
+class ForeignKeyField(RelatedField):
+    display_widget = ForeignKeyViewer
+
+    def __init__(
+        self,
+        source: str,
+        foreign_form,  # form for getting fields for display object
+        read_only=False,
+        write_only=False,
+        required: bool = None,
+        default=empty,
+        label: str = '',
+        help_text: str = None,
+        style=None,
+        error_messages: dict = None,
+        validators: list = [],
+        allow_null=False,
+        # special
+    ):
+        self.fields = foreign_form()._form_fields(write_only=False).values()
+
+        super().__init__(
+            source=source,
+            read_only=read_only,
+            write_only=write_only,
+            required=required,
+            default=default,
+            label=label,
+            help_text=help_text,
+            style=style,
+            error_messages=error_messages,
+            validators=validators,
+            allow_null=allow_null
+        )
+
+    def _get_display_value(self, obj):
+        return str(self._get_db_value(obj))
+
+    def display(self, obj) -> Control:
+        # TODO mb figna
+        label = self._get_display_value(obj)
+        return self.display_widget(
+            obj=self._get_db_value(obj), fields=self.fields, label=label
         )
 
 

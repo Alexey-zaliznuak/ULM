@@ -14,7 +14,6 @@ class ValueValidator:
         self.mn = mn
 
     def __call__(self, value):
-        errors = []
         if self.mx and value > self.mx:
             raise ValidationError(
                 f'Value of this field mustn`t be greater then {self.mx}'
@@ -24,8 +23,6 @@ class ValueValidator:
             raise ValidationError(
                 f'Value of this field must be low then {self.mn}'
             )
-
-        return errors
 
 
 class LengthValidator(ValueValidator):

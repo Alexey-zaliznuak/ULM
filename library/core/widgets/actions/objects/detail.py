@@ -6,7 +6,8 @@ from flet import (
     MainAxisAlignment,
     Row,
     Control,
-    Column
+    Column,
+    Container,
 )
 from library.core.widgets.actions import ActionButton
 
@@ -19,45 +20,46 @@ class DetailObjectActionButtonWidget(ActionButton):
         )
 
 
-class DetailObjectActionDialog(AlertDialog):
-    def __init__(self, obj, datatable):
-        self.obj = obj
-        self.datatable = datatable
+class DetailObjectWidget(Container):
+    def __init__(self, obj, fields):
+        content = Column(
+            [*self.fields_row(obj, fields)],
+            tight=True,
+            width=300
+        )
 
+        super().__init__(content=content)
+
+    def fields_row(self, obj, fields) -> list[Control]:
+        result = []
+
+        for field in fields:
+            result.append(
+                Row([
+                    Text(field.label + " - "),
+                    field.display(obj)
+                ])
+            )
+
+        return result
+
+
+class DetailObjectActionDialog(AlertDialog):
+    def __init__(self, obj, fields):
+        self.obj = obj
+
+        print('nepon')
         super().__init__(
             modal=True,
             title=Text("Details"),
-            content=Column(
-                [
-                    *self.fields_row(),
-                    # DeleteObjectAction()(
-                    #     obj=obj,
-                    #     page=LazyAttribute(self, 'page'),
-                    #     datatable=datatable
-                    # )
-                ],
-                tight=True,
-                width=300
-            ),
+            content=DetailObjectWidget(obj, fields),
             actions=[
                 ElevatedButton("Close", on_click=self.close_dlg),
             ],
             actions_alignment=MainAxisAlignment.END,
+            open=True,
         )
 
     def close_dlg(self, e=None):
         self.open = False
         self.page.update()
-
-    def fields_row(self) -> list[Control]:
-        result = []
-
-        for field in self.datatable.fields:
-            result.append(
-                Row([
-                    Text(field.label + " - "),
-                    field.display(self.obj)
-                ])
-            )
-
-        return result

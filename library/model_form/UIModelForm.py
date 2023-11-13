@@ -11,10 +11,11 @@ from library.core.widgets.data_table import (
     UIModelFormDataTable,
     UIModelFormDataTableColumn
 )
+from models import Person
 
 from .actions import DataTableAction, ObjectAction
 from .meta import UIModelFormMetaClass
-from .fields import BooleanField, CharField
+from .fields import BooleanField, CharField, ForeignKeyField, FloatField
 from .fields import Field as UIField
 from .fields import IntegerField
 
@@ -29,6 +30,8 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         peewee.BooleanField: BooleanField,
         peewee.CharField: CharField,
         peewee.IntegerField: IntegerField,
+        peewee.ForeignKeyField: ForeignKeyField,
+        peewee.FloatField: FloatField
     }
     # db_attr_name: ui_attr_name
     fields_attrs_mapping: dict[str, str] = {
@@ -104,6 +107,9 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         for field_name, field in self._form_fields(read_only=False).items():
             new_obj[field_name] = field.clear(obj[field_name])
 
+            if hasattr(self, f'clear_{field_name}'):
+                new_obj[field_name] = getattr(self, f'clear_{field_name}')(obj)
+
         return new_obj
 
     def create(self, obj: dict) -> tuple[bool, str, dict[str, list[str]]]:
@@ -117,6 +123,24 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             created = True
 
         return created, object_error, fields_errors
+
+    def update(
+        self, obj: Person, update: dict
+    ) -> tuple[bool, str, dict[str, list[str]]]:
+        update = self.clear(update)
+        success = False
+
+        object_error, fields_errors = self._run_validators(update)
+
+        if not (object_error or fields_errors):
+            self.Meta.model.update(
+                **update
+            ).where(
+                self.Meta.model.id == obj.id
+            ).execute()
+            success = True
+
+        return success, object_error, fields_errors
 
     def validate(self, obj: dict) -> Optional[str]:
         ...
@@ -188,6 +212,10 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         if 'source' not in attrs.keys():
             attrs['source'] = field_name
 
+        # if isinstance(ui_field, RelatedField):
+        #     print('find related_field')
+        #     attrs['foreign_form'] = model_field.rel_model
+
         max_length = getattr(model_field, 'max_length', None)
         min_length = getattr(model_field, 'min_length', None)
 
@@ -205,6 +233,12 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             attrs['write_only'] = True
 
         return attrs
+
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(UIModelForm, cls).__new__(cls)
+
+        return cls.instance
 
     @cached_property
     def _all_form_fields(self) -> dict[str, UIField]:
