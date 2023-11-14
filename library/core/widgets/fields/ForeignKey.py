@@ -25,9 +25,8 @@ class ForeignKeyViewer(ft.Container, Viewer):
     def open_detail_modal(self, e=None):
         # TODO While open https://github.com/flet-dev/flet/issues/1670
         # don`t open NEW modal
-        if getattr(self.page.dialog, 'open', False):
-            self.page.dialog.open = False
-
-        self.page.dialog = DetailObjectActionDialog(self.obj, self.fields)
-        self.page.dialog.open = True
-        self.page.update()
+        if not getattr(self.page.dialog, 'open', False):
+            # self.page.dialog.open = False
+            self.page.dialog = DetailObjectActionDialog(self.obj, self.fields)
+            self.page.dialog.open = True
+            self.page.update()

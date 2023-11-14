@@ -48,7 +48,6 @@ class DetailObjectActionDialog(AlertDialog):
     def __init__(self, obj, fields):
         self.obj = obj
 
-        print('nepon')
         super().__init__(
             modal=True,
             title=Text("Details"),
