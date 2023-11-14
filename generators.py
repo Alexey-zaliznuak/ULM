@@ -7,7 +7,7 @@ from library.utils.model_data_generator.generators import (
     PositiveIntegerGenerator,
 )
 
-from models import Person, GodModel
+from models import Person, GodModel, Place
 
 
 class PersonModelDataGenerator(ModelDataGenerator):
@@ -15,6 +15,7 @@ class PersonModelDataGenerator(ModelDataGenerator):
     name = NameGenerator()
     phone = PhoneNumberGenerator()
     male = BooleanGenerator()
+    place = ForeignKeyGenerator(Place)
 
     class Meta:
         model = Person
@@ -23,6 +24,7 @@ class PersonModelDataGenerator(ModelDataGenerator):
             'male',
             'name',
             'phone',
+            'place',
         )
 
 
@@ -48,8 +50,8 @@ class GodModelDataGenerator(ModelDataGenerator):
 
 
 if __name__ == "__main__":
-    PersonModelDataGenerator.generate_rows(15)
+    PersonModelDataGenerator.generate_rows(20)
     PersonModelDataGenerator.save()
 
-    GodModelDataGenerator.generate_rows(10)
-    GodModelDataGenerator.save()
+    # GodModelDataGenerator.generate_rows(10)
+    # GodModelDataGenerator.save()
