@@ -3,4 +3,5 @@ from .validators import (
     URLValidator,
     PhoneValidator,
     ValueValidator,
+    ForeignKeyValidator,
 )

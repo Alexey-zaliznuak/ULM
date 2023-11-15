@@ -1,3 +1,4 @@
+import peewee
 import validators
 from typing import Any
 from library.core.exceptions import ValidationError
@@ -62,3 +63,14 @@ class PhoneValidator():
 
         if c != self.NUMBERS_IN_PHONE_COUNT:
             raise ValidationError(f'Inalid telephone number length - {c+1}')
+
+
+class ForeignKeyValidator():
+    def __init__(self, model_to: peewee.Model) -> None:
+        self.model_to = model_to
+
+    def __call__(self, pk):
+        try:
+            self.model_to.get_by_id(pk)
+        except peewee.DoesNotExist:
+            raise ValidationError('Object with this id does not exist')

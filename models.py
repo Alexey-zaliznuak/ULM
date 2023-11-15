@@ -16,7 +16,8 @@ from peewee import (
 import settings
 
 
-db = SqliteDatabase(settings.DB_NAME, pragmas={'cache_size': 0})
+# pragmas is sqlite mega move
+db = SqliteDatabase(settings.DB_NAME, pragmas={'foreign_keys': 1})
 
 
 class BaseModel(Model):
@@ -38,7 +39,7 @@ class Person(BaseModel):
     phone = CharField()
     age = IntegerField()
     male = CharField()
-    place = ForeignKeyField(Place)
+    place = ForeignKeyField(Place, on_delete='CASCADE')
 
     def validate(self):
         ...

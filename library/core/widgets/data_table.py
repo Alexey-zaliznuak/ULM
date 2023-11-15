@@ -137,7 +137,12 @@ class UIModelFormDataTable(DataTable):
         kwargs = (self.default | kwargs)
         super().__init__(*args, columns=columns, rows=self.rows, **kwargs)
 
-    def update_rows(self, queryset: Iterable = None):
+    def update_rows(
+        self,
+        queryset: Iterable = None,
+        *,
+        only_self_content_update: bool = False
+    ):
         self.rows = [
             UIModelFormDataTableRow(
                 obj=obj,
@@ -150,4 +155,8 @@ class UIModelFormDataTable(DataTable):
         ]
 
         if hasattr(self, 'page'):
+            if not only_self_content_update:
+                for datatabel in self.page.datatables:
+                    datatabel.update_rows(only_self_content_update=True)
+
             self.update()

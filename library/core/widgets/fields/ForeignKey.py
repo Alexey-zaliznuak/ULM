@@ -3,6 +3,7 @@ from .BaseViewer import Viewer
 from library.core.widgets.actions.objects.detail import (
     DetailObjectActionDialog
 )
+from .BaseInput import InputField
 
 
 class ForeignKeyViewer(ft.Container, Viewer):
@@ -30,3 +31,20 @@ class ForeignKeyViewer(ft.Container, Viewer):
             self.page.dialog = DetailObjectActionDialog(self.obj, self.fields)
             self.page.dialog.open = True
             self.page.update()
+
+
+class ForeignKeyEditor(ft.Dropdown, InputField):
+    defaults = {
+        'width': 300,
+        'hint_text': 'Choose object',
+    }
+
+    def __init__(self, queryset, default_key=None):  # TODO filters
+        return super().__init__(
+            options=[
+                ft.dropdown.Option(text=str(obj), key=obj.id)
+                for obj in queryset()
+            ],
+            value=default_key,
+            **self.defaults
+        )
