@@ -45,6 +45,6 @@ class ForeignKeyEditor(ft.Dropdown, InputField):
                 ft.dropdown.Option(text=str(obj), key=obj.id)
                 for obj in queryset()
             ],
-            key=default_key,
+            value=default_key,
             **self.defaults
         )

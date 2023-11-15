@@ -300,7 +300,7 @@ class ForeignKeyField(RelatedField):
         )
 
     def edit(self, *, value=empty, obj=empty) -> Control:
-        default_key = self._get_edit_value(value=value, obj=obj)
+        default_key = self._get_edit_value(value=value, obj=obj).id
         return self.edit_widget(
             queryset=self.foreign_form.Meta.model.select,
             default_key=default_key
