@@ -38,7 +38,7 @@ class IntegerInput(ft.Row, InputField):
     def clear_value(self):
         cleared = ''.join(s for s in self.controls[1].value if s.isdigit())
         if cleared:
-            return int(''.join(s for s in self.controls[1].value if s.isdigit()))
+            return int(cleared)
         return ''
 
 

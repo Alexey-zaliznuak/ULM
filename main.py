@@ -13,7 +13,7 @@ def main(page: ft.Page):
 
     c = ft.Column(
         [person_form.DataTable()],
-        expand=2, spacing=10,
+        expand=2, spacing=10, width=800,
         on_scroll_interval=30, scroll=ScrollMode.AUTO
     )
 
