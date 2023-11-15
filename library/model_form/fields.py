@@ -21,7 +21,7 @@ from library.core.widgets.fields import (
 )
 
 
-class   Field:
+class Field:
     """Base class for all field types."""
 
     numeric = False

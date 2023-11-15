@@ -21,7 +21,7 @@ def main(page: ft.Page):
     page.datatables.append(place_dt)
 
     c = ft.Column(
-        [ 
+        [
             PersonDataTable,
             PlaceDataTable,
         ],
