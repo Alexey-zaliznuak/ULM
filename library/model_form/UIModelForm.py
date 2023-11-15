@@ -6,6 +6,7 @@ import peewee
 from flet import Control, DataColumn, Text, Column, Row
 
 from library.core.validators import LengthValidator
+from library.utils import Singleton
 from library.core.exceptions import ValidationError
 from library.core.widgets.data_table import (
     UIModelFormDataTable,
@@ -14,13 +15,12 @@ from library.core.widgets.data_table import (
 from models import Person
 
 from .actions import DataTableAction, ObjectAction
-from .meta import UIModelFormMetaClass
 from .fields import BooleanField, CharField, ForeignKeyField, FloatField
 from .fields import Field as UIField
 from .fields import IntegerField
 
 
-class UIModelForm(metaclass=UIModelFormMetaClass):
+class UIModelForm(metaclass=Singleton):
     # TODO classMethods
 
     ModelField = peewee.Field
@@ -96,7 +96,7 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
                 data_table_actions_row,
                 data_table
             ]
-        )
+        ), data_table
 
     def EditWindow(self, pk) -> Control:
         pass
@@ -162,7 +162,8 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
 
         if not object_error:
             try:
-                self.Meta.model(**obj).validate()
+                if hasattr(self.Meta.model, 'validate'):
+                    self.Meta.model(**obj).validate()
             except ValidationError as e:
                 object_error = str(e)
 
@@ -212,10 +213,6 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
         if 'source' not in attrs.keys():
             attrs['source'] = field_name
 
-        # if isinstance(ui_field, RelatedField):
-        #     print('find related_field')
-        #     attrs['foreign_form'] = model_field.rel_model
-
         max_length = getattr(model_field, 'max_length', None)
         min_length = getattr(model_field, 'min_length', None)
 
@@ -233,12 +230,6 @@ class UIModelForm(metaclass=UIModelFormMetaClass):
             attrs['write_only'] = True
 
         return attrs
-
-    def __new__(cls):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(UIModelForm, cls).__new__(cls)
-
-        return cls.instance
 
     @cached_property
     def _all_form_fields(self) -> dict[str, UIField]:

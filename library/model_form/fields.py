@@ -1,13 +1,18 @@
 from flet import Control
 from types import FunctionType
 
-from library.core.validators import URLValidator, PhoneValidator
+from library.core.validators import (
+    URLValidator,
+    PhoneValidator,
+    ForeignKeyValidator
+)
 from library.core.exceptions import ValidationError
 from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
     BooleanInput,
     ForeignKeyViewer,
+    ForeignKeyEditor,
     PhoneInput,
     PhoneViewer,
     TextViewer,
@@ -175,7 +180,9 @@ class EmailField(Field):  # ?????
 
 
 class FloatField(Field):
-    ...
+    def edit(self, *, value=empty, obj=empty) -> Control:
+        value = self._get_edit_value(value=value, obj=obj)
+        return self.edit_widget(value=value)
 
 
 class IntegerField(Field):
@@ -243,6 +250,7 @@ class RelatedField(Field):
 
 class ForeignKeyField(RelatedField):
     display_widget = ForeignKeyViewer
+    edit_widget = ForeignKeyEditor
 
     def __init__(
         self,
@@ -261,6 +269,11 @@ class ForeignKeyField(RelatedField):
         # special
     ):
         self.fields = foreign_form()._form_fields(write_only=False).values()
+        self.foreign_form = foreign_form
+        self.default_validators = self.default_validators.copy()
+        self.default_validators.append(
+            ForeignKeyValidator(foreign_form().Meta.model)
+        )
 
         super().__init__(
             source=source,
@@ -271,9 +284,9 @@ class ForeignKeyField(RelatedField):
             label=label,
             help_text=help_text,
             style=style,
-            error_messages=error_messages,
             validators=validators,
-            allow_null=allow_null
+            error_messages=error_messages,
+            allow_null=allow_null,
         )
 
     def _get_display_value(self, obj):
@@ -284,6 +297,13 @@ class ForeignKeyField(RelatedField):
         label = self._get_display_value(obj)
         return self.display_widget(
             obj=self._get_db_value(obj), fields=self.fields, label=label
+        )
+
+    def edit(self, *, value=empty, obj=empty) -> Control:
+        default_key = self._get_edit_value(value=value, obj=obj)
+        return self.edit_widget(
+            queryset=self.foreign_form.Meta.model.select,
+            default_key=default_key
         )
 
 

@@ -1,18 +1,30 @@
 import flet as ft
-from forms import PersonUIModelForm
+from forms import PersonForm, PlaceForm
 
 from flet_core.types import ScrollMode
 
 
-person_form = PersonUIModelForm()
+person_form = PersonForm()
+place_form = PlaceForm()
 
 
 def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
-    # page.scroll = 'always'
+    page.datatables = []
+
+    # TODO global context class
+
+    PersonDataTable, person_dt = person_form.DataTable()
+    page.datatables.append(person_dt)
+
+    PlaceDataTable, place_dt = place_form.DataTable()
+    page.datatables.append(place_dt)
 
     c = ft.Column(
-        [person_form.DataTable()],
+        [
+            PersonDataTable,
+            PlaceDataTable,
+        ],
         expand=2, spacing=10,
         on_scroll_interval=30, scroll=ScrollMode.AUTO
     )

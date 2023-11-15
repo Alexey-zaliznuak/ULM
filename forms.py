@@ -23,7 +23,7 @@ class PlaceForm(UIModelForm):
         table_actions = (CreateObjectAction, )
 
 
-class PersonUIModelForm(UIModelForm):
+class PersonForm(UIModelForm):
     phone = PhoneField('phone')
     age = IntegerField(
         'age',
