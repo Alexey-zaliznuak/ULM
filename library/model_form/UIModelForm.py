@@ -14,7 +14,13 @@ from library.core.widgets.data_table import (
 )
 
 from .actions import DataTableAction, ObjectAction
-from .fields import BooleanField, CharField, ForeignKeyField, FloatField, DateTimeField
+from .fields import (
+    BooleanField,
+    CharField,
+    ForeignKeyField,
+    FloatField,
+    DateTimeField
+)
 from .fields import Field as UIField
 from .fields import IntegerField
 

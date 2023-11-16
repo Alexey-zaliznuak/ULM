@@ -158,9 +158,7 @@ class UIModelFormDataTable(DataTable):
             if not only_self_content_update:
                 for datatable in self.page.datatables:
                     try:
-                        print(datatable, flush=True)
                         datatable.update_rows(only_self_content_update=True)
-                    except Exception as e:
-                        print('Error')
-                        print(e)
+                    except AssertionError:
+                        pass
             self.update()

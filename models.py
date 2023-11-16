@@ -1,17 +1,11 @@
 from peewee import (
-    BooleanField,
     CharField,
-    DateField,
     DateTimeField,
     DateTimeField,
-    FloatField,
     ForeignKeyField,
-    IntegerField,
     Model,
     SqliteDatabase,
     TextField,
-    TimeField,
-    UUIDField
 )
 from library.core.exceptions import ValidationError
 from datetime import datetime
@@ -37,7 +31,9 @@ class PlaceCategories(BaseModel):
 
 class Place(BaseModel):
     name = CharField(max_length=100)
-    category = ForeignKeyField(PlaceCategories, to_field='id', on_delete='CASCADE')
+    category = ForeignKeyField(
+        PlaceCategories, to_field='id', on_delete='CASCADE'
+    )
 
     def __str__(self) -> str:
         return self.name
@@ -52,12 +48,13 @@ class EventTypes(BaseModel):
 
 class Event(BaseModel):
     date = DateTimeField()
-    event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
+    event_type = ForeignKeyField(
+        EventTypes, to_field='id', on_delete='CASCADE'
+    )
     describe = TextField()
 
-
     def validate(self):
-        if False and self.date < datetime.today().date:
+        if self.date < datetime.today():
             raise ValidationError('Выбранная дата уже прошла!')
 
 
