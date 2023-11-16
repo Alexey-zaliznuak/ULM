@@ -3,6 +3,7 @@ from peewee import (
     CharField,
     DateField,
     DateTimeField,
+    DateTimeField,
     FloatField,
     ForeignKeyField,
     IntegerField,
@@ -50,13 +51,13 @@ class EventTypes(BaseModel):
 
 
 class Event(BaseModel):
-    date = DateField()
-    type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
+    date = DateTimeField()
+    event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
     describe = TextField()
 
 
     def validate(self):
-        if self.date < datetime.today().date:
+        if False and self.date < datetime.today().date:
             raise ValidationError('Выбранная дата уже прошла!')
 
 

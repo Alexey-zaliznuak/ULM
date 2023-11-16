@@ -54,7 +54,7 @@ class DatePicker(ft.UserControl):
         locale: str = None
     ):
         super().__init__()
-
+        print(selected_date)
         self.selected = selected_date or []
         self.selection_type = SelectionType(selection_type)
         self.hour_minute = hour_minute

@@ -24,7 +24,7 @@ class PlaceCategoriesForm(UIModelForm):
 
 
 class PlaceForm(UIModelForm):
-    type = ForeignKeyField('type', PlaceCategoriesForm)
+    category = ForeignKeyField('category', PlaceCategoriesForm, )
     class Meta:
         model = Place
         fields = ('id', 'name', 'category')
@@ -49,11 +49,11 @@ class EventTypesForm(UIModelForm):
 
 
 class EventForm(UIModelForm):
-    type = ForeignKeyField('type', EventTypesForm)
+    event_type = ForeignKeyField('event_type', EventTypesForm)
 
     class Meta:
         model = Event
-        fields = ('date', 'type', 'describe')
+        fields = ('date', 'event_type', 'describe')
         objects_actions = (
             DeleteObjectAction,
             DetailObjectAction,

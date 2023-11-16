@@ -14,7 +14,7 @@ from library.core.widgets.data_table import (
 )
 
 from .actions import DataTableAction, ObjectAction
-from .fields import BooleanField, CharField, ForeignKeyField, FloatField, DateField
+from .fields import BooleanField, CharField, ForeignKeyField, FloatField, DateTimeField
 from .fields import Field as UIField
 from .fields import IntegerField
 
@@ -29,7 +29,7 @@ class UIModelForm(metaclass=Singleton):
         peewee.BooleanField: BooleanField,
         peewee.CharField: CharField,
         peewee.TextField: CharField,
-        peewee.DateField: DateField,
+        peewee.DateTimeField: DateTimeField,
         peewee.IntegerField: IntegerField,
         peewee.ForeignKeyField: ForeignKeyField,
         peewee.FloatField: FloatField

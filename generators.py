@@ -47,11 +47,11 @@ EventTypesGenerator.save()
 class EventGenerator(ModelDataGenerator):
     class Meta:
         model=Event
-        fields=('name', 'category')
+        fields=('date', 'event_type', 'describe')
 
 EventGenerator.generated_objects = [
-    {'date': date.today()+timedelta(days=2), 'type': EventTypes.get(name='Спектакль'), 'describe': 'Super event1'},
-    {'date': date.today()+timedelta(days=3), 'type': EventTypes.get(name='Концерт'), 'describe': 'Super event1'},
-    {'date': date.today()+timedelta(days=7), 'type': EventTypes.get(name='Спектакль'), 'describe': 'Super event1'},
+    {'date': date.today()+timedelta(days=2), 'event_type': EventTypes.get(name='Спектакль'), 'describe': 'Super event1'},
+    {'date': date.today()+timedelta(days=3), 'event_type': EventTypes.get(name='Концерт'), 'describe': 'Super event1'},
+    {'date': date.today()+timedelta(days=7), 'event_type': EventTypes.get(name='Спектакль'), 'describe': 'Super event1'},
 ]
 EventGenerator.save()

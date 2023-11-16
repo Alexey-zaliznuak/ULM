@@ -11,6 +11,8 @@ from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
     BooleanInput,
+    DateTimeViewer,
+    DateTimePicker,
     ForeignKeyViewer,
     ForeignKeyEditor,
     PhoneInput,
@@ -162,10 +164,9 @@ class ChooseField(Field):  # ???? ValueValidator?
 class DateField(Field):
     ...
 
-
 class DateTimeField(Field):
-    ...
-
+    display_widget = DateTimeViewer
+    edit_widget = DateTimePicker
 
 class DecimalField(Field):  # not in priority
     ...
@@ -300,7 +301,10 @@ class ForeignKeyField(RelatedField):
         )
 
     def edit(self, *, value=empty, obj=empty) -> Control:
-        default_key = self._get_edit_value(value=value, obj=obj).id
+        default_key = self._get_edit_value(value=value, obj=obj)
+        if default_key:
+            default_key = default_key.id
+
         return self.edit_widget(
             queryset=self.foreign_form.Meta.model.select,
             default_key=default_key
