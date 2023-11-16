@@ -1,11 +1,11 @@
 import flet as ft
-from forms import PersonForm, PlaceForm
+from forms import EventTypesForm, EventForm
 
 from flet_core.types import ScrollMode
 
 
-person_form = PersonForm()
-place_form = PlaceForm()
+person_form = EventTypesForm()
+place_form = EventForm()
 
 
 def main(page: ft.Page):

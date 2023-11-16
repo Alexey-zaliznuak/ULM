@@ -1,57 +1,57 @@
+from datetime import date, timedelta
 from library.utils.model_data_generator import ModelDataGenerator
-from library.utils.model_data_generator.generators import (
-    BooleanGenerator,
-    ForeignKeyGenerator,
-    NameGenerator,
-    PhoneNumberGenerator,
-    PositiveIntegerGenerator,
-)
-
-from models import Person, GodModel, Place
+from models import PlaceCategories, Place, EventTypes, Event
 
 
-class PersonModelDataGenerator(ModelDataGenerator):
-    age = PositiveIntegerGenerator(mx=100)
-    name = NameGenerator()
-    phone = PhoneNumberGenerator()
-    male = BooleanGenerator()
-    place = ForeignKeyGenerator(Place)
-
+class PlaceCategoriesGenerator(ModelDataGenerator):
     class Meta:
-        model = Person
-        fields = (
-            'age',
-            'male',
-            'name',
-            'phone',
-            'place',
-        )
+        model=PlaceCategories
+        fields=('name',)
+
+PlaceCategoriesGenerator.generated_objects = [
+    {'name': 'Развлекательное'},
+    {'name': 'Просветительское'},
+    {'name': 'Образовательное'},
+]
+PlaceCategoriesGenerator.save()
 
 
-class GodModelDataGenerator(ModelDataGenerator):
-    name = NameGenerator()
-    years = PositiveIntegerGenerator()
-    entity = ForeignKeyGenerator(Person)
-
+class PlaceGenerator(ModelDataGenerator):
     class Meta:
-        model = GodModel
-        fields = (
-            'entity',
-            'is_god',
-            'name',
-            'years',
-            'date_birth',
-            'date_time_birth',
-            'divine_value',
-            'divine_description',
-            'replenish_divine_time',
-            'divine_uuid',
-        )
+        model=Place
+        fields=('name', 'category')
+
+PlaceGenerator.generated_objects = [
+    {'name': 'Музей № 1', 'category': PlaceCategories.get(name='Просветительское')},
+    {'name': 'Музей № 2', 'category': PlaceCategories.get(name='Просветительское')},
+    {'name': 'Татр № 1', 'category': PlaceCategories.get(name='Развлекательное')},
+    {'name': 'Секция Пения № 1', 'category': PlaceCategories.get(name='Образовательное')},
+]
+PlaceGenerator.save()
 
 
-if __name__ == "__main__":
-    PersonModelDataGenerator.generate_rows(20)
-    PersonModelDataGenerator.save()
+class EventTypesGenerator(ModelDataGenerator):
+    class Meta:
+        model=EventTypes
+        fields=('name',)
 
-    # GodModelDataGenerator.generate_rows(10)
-    # GodModelDataGenerator.save()
+EventTypesGenerator.generated_objects = [
+    {'name': 'Спектакль'},
+    {'name': 'Концерт'},
+    {'name': 'Репетиция'},
+    {'name': 'Выставка'},
+]
+EventTypesGenerator.save()
+
+
+class EventGenerator(ModelDataGenerator):
+    class Meta:
+        model=Event
+        fields=('name', 'category')
+
+EventGenerator.generated_objects = [
+    {'date': date.today()+timedelta(days=2), 'type': EventTypes.get(name='Спектакль'), 'describe': 'Super event1'},
+    {'date': date.today()+timedelta(days=3), 'type': EventTypes.get(name='Концерт'), 'describe': 'Super event1'},
+    {'date': date.today()+timedelta(days=7), 'type': EventTypes.get(name='Спектакль'), 'describe': 'Super event1'},
+]
+EventGenerator.save()

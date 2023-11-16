@@ -12,10 +12,9 @@ from library.core.widgets.data_table import (
     UIModelFormDataTable,
     UIModelFormDataTableColumn
 )
-from models import Person
 
 from .actions import DataTableAction, ObjectAction
-from .fields import BooleanField, CharField, ForeignKeyField, FloatField
+from .fields import BooleanField, CharField, ForeignKeyField, FloatField, DateField
 from .fields import Field as UIField
 from .fields import IntegerField
 
@@ -29,6 +28,8 @@ class UIModelForm(metaclass=Singleton):
         peewee.AutoField: IntegerField,
         peewee.BooleanField: BooleanField,
         peewee.CharField: CharField,
+        peewee.TextField: CharField,
+        peewee.DateField: DateField,
         peewee.IntegerField: IntegerField,
         peewee.ForeignKeyField: ForeignKeyField,
         peewee.FloatField: FloatField
@@ -125,7 +126,7 @@ class UIModelForm(metaclass=Singleton):
         return created, object_error, fields_errors
 
     def update(
-        self, obj: Person, update: dict
+        self, obj: peewee.Model, update: dict
     ) -> tuple[bool, str, dict[str, list[str]]]:
         update = self.clear(update)
         success = False

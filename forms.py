@@ -8,13 +8,13 @@ from library.model_form.actions.objects import (
 )
 from library.model_form.actions.table import CreateObjectAction
 
-from models import Place, Person
+from models import PlaceCategories, Place, EventTypes, Event
 
 
-class PlaceForm(UIModelForm):
+class PlaceCategoriesForm(UIModelForm):
     class Meta:
-        model = Place
-        fields = ('id', 'name', 'x_coord', 'y_coord')
+        model = PlaceCategories
+        fields = ('id', 'name',)
         objects_actions = (
             DeleteObjectAction,
             DetailObjectAction,
@@ -23,25 +23,37 @@ class PlaceForm(UIModelForm):
         table_actions = (CreateObjectAction, )
 
 
-class PersonForm(UIModelForm):
-    phone = PhoneField('phone')
-    age = IntegerField(
-        'age',
-        required=True,
-        validators=[ValueValidator(3, 124)]
-    )
-    place = ForeignKeyField('place', PlaceForm)
+class PlaceForm(UIModelForm):
+    type = ForeignKeyField('type', PlaceCategoriesForm)
+    class Meta:
+        model = Place
+        fields = ('id', 'name', 'category')
+        objects_actions = (
+            DeleteObjectAction,
+            DetailObjectAction,
+            EditObjectAction
+        )
+        table_actions = (CreateObjectAction, )
+
+
+class EventTypesForm(UIModelForm):
+    class Meta:
+        model = EventTypes
+        fields = ('id', 'name',)
+        objects_actions = (
+            DeleteObjectAction,
+            DetailObjectAction,
+            EditObjectAction
+        )
+        table_actions = (CreateObjectAction, )
+
+
+class EventForm(UIModelForm):
+    type = ForeignKeyField('type', EventTypesForm)
 
     class Meta:
-        model = Person
-        fields = (
-            'id',
-            'name',
-            'phone',
-            'age',
-            'male',
-            'place',
-        )
+        model = Event
+        fields = ('date', 'type', 'describe')
         objects_actions = (
             DeleteObjectAction,
             DetailObjectAction,

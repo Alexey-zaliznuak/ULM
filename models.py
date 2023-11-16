@@ -12,6 +12,8 @@ from peewee import (
     TimeField,
     UUIDField
 )
+from library.core.exceptions import ValidationError
+from datetime import datetime
 
 import settings
 
@@ -25,51 +27,42 @@ class BaseModel(Model):
         database = db
 
 
-class Place(BaseModel):
+class PlaceCategories(BaseModel):
     name = CharField(max_length=100)
-    x_coord = FloatField()
-    y_coord = FloatField()
 
     def __str__(self) -> str:
         return self.name
 
 
-class Person(BaseModel):
-    name = CharField()
-    phone = CharField()
-    age = IntegerField()
-    male = CharField()
-    place = ForeignKeyField(Place, on_delete='CASCADE')
-
-    def validate(self):
-        ...
+class Place(BaseModel):
+    name = CharField(max_length=100)
+    category = ForeignKeyField(PlaceCategories, to_field='id', on_delete='CASCADE')
 
     def __str__(self) -> str:
-        return str(self.name + ' ' + self.phone)
+        return self.name
 
 
-class GodModel(BaseModel):
-    entity = ForeignKeyField(Person, 'id')
-    is_god = BooleanField()
-    name = CharField(max_length=150)
-    years = IntegerField()
-    date_birth = DateField()
-    date_time_birth = DateTimeField()
-    divine_value = FloatField()
-    divine_description = TextField()
-    replenish_divine_time = TimeField()
-    divine_uuid = UUIDField()
+class EventTypes(BaseModel):
+    name = CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Event(BaseModel):
+    date = DateField()
+    type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
+    describe = TextField()
+
+
+    def validate(self):
+        if self.date < datetime.today().date:
+            raise ValidationError('Выбранная дата уже прошла!')
 
 
 if __name__ == '__main__':
-    tables = [Person, Place]
+    tables = [PlaceCategories, Place, EventTypes, Event]
 
     db.connect()
     db.drop_tables(tables)
     db.create_tables(tables)
-
-    # p, _ = Place.get_or_create(name='city', x_coord=1.15, y_coord=1.15)
-    # User, _ = Person.get_or_create(
-    # name='username', age=12, phone='123', male='1234', place=p)
-    # User.name='hello'
-    # print(User)
