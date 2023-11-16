@@ -1,7 +1,7 @@
 import flet as ft
 from ..datepicker.datepicker import DatePicker
 from ..datepicker.selection_type import SelectionType
-from datetime import datetime
+from datetime import datetime, date
 from .BaseViewer import Viewer
 from .BaseInput import InputField
 
@@ -25,6 +25,7 @@ class DateTimeField(ft.UserControl):
         super().__init__()
 
         self.value = self._to_datetime(value)
+        # print(self.value)
         self.type = SelectionType.SINGLE.value
         self.datepicker = None
         self.width = width
@@ -73,7 +74,8 @@ class DateTimeField(ft.UserControl):
             [
                 self.tf,
                 self.cal_ico,
-            ]
+            ],
+            width=150
         )
 
     def build(self):
@@ -104,14 +106,14 @@ class DateTimeField(ft.UserControl):
 
         self.dlg_modal.open = False
         self.update()
-        self.page.update()
 
     def cancel_dlg(self, e):
-        self.dlg_modal.open = False
+        self.page.dialog.open = False
         self.page.update()
 
     def open_dlg_modal(self, e):
-
+        print(self.tf.value)
+        
         self.datepicker = DatePicker(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
@@ -127,15 +129,20 @@ class DateTimeField(ft.UserControl):
         self.dlg_modal.content = self.datepicker
         self.dlg_modal.open = True
         self.page.update()
+        self.update()
 
-    def _to_datetime(self, date_str=None):
-        if not date_str:
+    def _to_datetime(self, dt=None):
+        if not dt:
             return None
 
-        return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S")
+        if isinstance(dt, (datetime, date)):
+            return dt
+
+        return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
 
     def set_locale(self, e):
         self.selected_locale = self.dd.value or None
+
 
 
 class DateTimeViewer(DateTimeField, Viewer):
@@ -145,13 +152,13 @@ class DateTimeViewer(DateTimeField, Viewer):
 class DateTimePicker(DateTimeField, InputField):
     def __init__(
         self,
+        value: datetime,
         hour_minute: bool = False,
         show_three_months: bool = False,
         hide_no_month: bool = False,
         datepicker_type: int = 0,
-        value: str = None,
     ):
-        super().__init__()
+        super().__init__(value=value)
 
         self.value = self._to_datetime(value)
         self.datepicker_type = datepicker_type
@@ -180,7 +187,27 @@ class DateTimePicker(DateTimeField, InputField):
         )
 
     def build(self):
-        self.widget = ft.Container(
-            content=self.st,
+        # self.widget = ft.Container(
+        #     content=self.st,
+        # )
+        # return self.widget
+
+        self.datepicker = DatePicker(
+            hour_minute=self.hour_minute,
+            show_three_months=self.show_three_months,
+            hide_prev_next_month_days=False,
+            selected_date=[self.tf.value] if self.tf.value else None,
+            selection_type=self.datepicker_type,
+            holidays=self.holidays,
+            # disable_to=self._to_datetime(self.tf1.value),
+            # disable_from=self._to_datetime(self.tf2.value),
+            # locale=self.selected_locale,
         )
-        return self.widget
+
+        return self.datepicker
+
+    @property
+    def clear_value(self):
+        print(self.datepicker.selected_data[0])
+        print(self.datepicker.selected_data)
+        return self.datepicker.selected_data[0]
