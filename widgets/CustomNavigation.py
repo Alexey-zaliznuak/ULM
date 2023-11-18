@@ -30,7 +30,7 @@ class CustomNavigation(ft.UserControl):
     def build(self):
         self.state = self.routes[self.selected_index]["page"]
         self.state.expand = True
-        
+
         self.rail = ft.NavigationRail(
             selected_index=self.selected_index,
             label_type=ft.NavigationRailLabelType.ALL,

@@ -112,8 +112,6 @@ class DateTimeField(ft.UserControl):
         self.page.update()
 
     def open_dlg_modal(self, e):
-        print(self.tf.value)
-        
         self.datepicker = DatePicker(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
@@ -142,7 +140,6 @@ class DateTimeField(ft.UserControl):
 
     def set_locale(self, e):
         self.selected_locale = self.dd.value or None
-
 
 
 class DateTimeViewer(DateTimeField, Viewer):

@@ -5,8 +5,8 @@ from models import Categories, Place, EventTypes, Event
 
 class CategoriesGenerator(ModelDataGenerator):
     class Meta:
-        model=Categories
-        fields=('name',)
+        model = Categories
+        fields = ('name',)
 
 CategoriesGenerator.generated_objects = [
     {'name': 'Развлекательное'},
@@ -18,8 +18,9 @@ CategoriesGenerator.save()
 
 class PlaceGenerator(ModelDataGenerator):
     class Meta:
-        model=Place
-        fields=('name', 'category')
+        model = Place
+        fields = ('name', 'category')
+
 
 PlaceGenerator.generated_objects = [
     {'name': 'Музей № 1', 'category': Categories.get(name='Просветительское')},
@@ -33,7 +34,7 @@ PlaceGenerator.save()
 class EventTypesGenerator(ModelDataGenerator):
     class Meta:
         model=EventTypes
-        fields=('name')
+        fields=('name',)
 
 EventTypesGenerator.generated_objects = [
     {'name': 'Спектакль'},

@@ -3,5 +3,8 @@
 		"editor.defaultFormatter": "ms-python.python"
 	},
 	"python.formatting.provider": "none",
-	"cSpell.words": ["ymhm"]
+	"cSpell.words": [
+		"flet",
+		"ymhm"
+	]
 }
