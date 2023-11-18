@@ -59,43 +59,7 @@ def main(page: ft.Page):
     page.add(
         ft.Row(
             controls=[
-                CustomNavigation(
-                    selected_index=3,
-                        routes=[
-                            {
-                                "icon": (
-                                    ft.icons.FAVORITE,
-                                    ft.icons.FAVORITE_BORDER,
-                                ),
-                                'page': ft.ListView(controls=[PlaceCategoriesDataTable])
-                            },
-                            {
-                                "icon": (
-                                    ft.icons.SETTINGS,
-                                    ft.icons.SETTINGS_OUTLINED,
-                                ),
-                                'page': 
-                                    ft.ListView(controls=[PlaceDataTable])
-                            },
-                            {
-                                "icon": (
-                                    ft.icons.ACCOUNT_BOX,
-                                    ft.icons.ACCOUNT_BOX_OUTLINED,
-                                ),
-                                'page': 
-                                    ft.ListView(controls=[EventTypesDataTable])
-                            },
-                            {
-                                "icon": (
-                                    ft.icons.EXPAND_LESS,
-                                    ft.icons.EXPAND_LESS_OUTLINED,
-                                ),
-                                'page': 
-                                    ft.ListView(controls=[EventFormDataTable])
-                            },
-                        ]
-                )
-            ],
+                t],
             expand=True,
         )
     )

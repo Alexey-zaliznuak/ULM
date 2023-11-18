@@ -46,9 +46,10 @@ class EventTypes(BaseModel):
 
 
 class Event(BaseModel):
+    category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
     date = DateTimeField()
-    event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
     describe = TextField()
+    event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
 
     def validate(self):
         if self.date < datetime.today():
