@@ -39,7 +39,7 @@ class CustomNavigation(ft.UserControl):
             destinations=self.destinations,
             on_change=lambda e: self.navigation(e.control.selected_index),
         )
-        self.row = ft.Row(
+        self.row = ft.Row(  
             controls=[
                 self.rail,
                 ft.VerticalDivider(width=1),

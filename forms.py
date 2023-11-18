@@ -8,12 +8,12 @@ from library.model_form.actions.objects import (
 )
 from library.model_form.actions.table import CreateObjectAction
 
-from models import PlaceCategories, Place, EventTypes, Event
+from models import Categories, Place, EventTypes, Event
 
 
-class PlaceCategoriesForm(UIModelForm):
+class CategoriesForm(UIModelForm):
     class Meta:
-        model = PlaceCategories
+        model = Categories
         fields = ('id', 'name',)
         objects_actions = (
             DeleteObjectAction,
@@ -24,7 +24,7 @@ class PlaceCategoriesForm(UIModelForm):
 
 
 class PlaceForm(UIModelForm):
-    category = ForeignKeyField('category', PlaceCategoriesForm, )
+    category = ForeignKeyField('category', CategoriesForm, )
     class Meta:
         model = Place
         fields = ('id', 'name', 'category')
@@ -50,10 +50,12 @@ class EventTypesForm(UIModelForm):
 
 class EventForm(UIModelForm):
     event_type = ForeignKeyField('event_type', EventTypesForm)
+    category = ForeignKeyField('category', CategoriesForm, )
 
     class Meta:
         model = Event
-        fields = ('date', 'event_type', 'describe')
+        # todo create only fields
+        fields = ('date', 'event_type', 'describe', 'category')
         objects_actions = (
             DeleteObjectAction,
             DetailObjectAction,

@@ -155,6 +155,7 @@ class UIModelFormDataTable(DataTable):
         ]
 
         if hasattr(self, 'page'):
+            print('DT COUNT:', len(self.page.datatables))
             if not only_self_content_update:
                 for datatable in self.page.datatables:
                     try:
@@ -163,4 +164,6 @@ class UIModelFormDataTable(DataTable):
                     except Exception as e:
                         print('Error')
                         print(e)
+            print('try to update self')
             self.update()
+            print('update self')

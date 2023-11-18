@@ -28,8 +28,9 @@ class BaseModel(Model):
         database = db
 
 
-class PlaceCategories(BaseModel):
+class Categories(BaseModel):
     name = CharField(max_length=100)
+
 
     def __str__(self) -> str:
         return self.name
@@ -37,7 +38,8 @@ class PlaceCategories(BaseModel):
 
 class Place(BaseModel):
     name = CharField(max_length=100)
-    category = ForeignKeyField(PlaceCategories, to_field='id', on_delete='CASCADE')
+    category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
+
 
     def __str__(self) -> str:
         return self.name
@@ -53,16 +55,17 @@ class EventTypes(BaseModel):
 class Event(BaseModel):
     date = DateTimeField()
     event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
+    category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE') # todo брать из плейсов
     describe = TextField()
 
 
     def validate(self):
-        if False and self.date < datetime.today().date:
+        if self.date < datetime.today():
             raise ValidationError('Выбранная дата уже прошла!')
 
 
 if __name__ == '__main__':
-    tables = [PlaceCategories, Place, EventTypes, Event]
+    tables = [Categories, Place, EventTypes, Event]
 
     db.connect()
     db.drop_tables(tables)
