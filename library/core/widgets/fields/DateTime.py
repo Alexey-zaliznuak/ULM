@@ -25,7 +25,6 @@ class DateTimeField(ft.UserControl):
         super().__init__()
 
         self.value = self._to_datetime(value)
-        # print(self.value)
         self.type = SelectionType.SINGLE.value
         self.datepicker = None
         self.width = width

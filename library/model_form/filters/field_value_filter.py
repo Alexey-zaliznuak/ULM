@@ -8,6 +8,4 @@ class FieldValueFilter:
         self.value = value
 
     def filter(self, queryset: Iterable, filter_widget: ft.Control = None):
-        print(queryset, self.field, self.value)
-        print(queryset.where(self.field==self.value))
         return queryset.where(self.field==self.value)
