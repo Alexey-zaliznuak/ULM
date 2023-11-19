@@ -5,6 +5,7 @@ from widgets.CustomNavigation import CustomNavigation
 
 from forms import EventTypesForm, EventForm, PlaceForm, CategoriesForm
 from models import Event, Categories, Place
+from library.model_form.filters import FieldValueFilter
 
 
 place_catagories_form = CategoriesForm()
@@ -19,13 +20,19 @@ def main(page: ft.Page):
     page.datatables = []
 
 
-    PlaceDataTablePr, place_dtPr = place_form.DataTable(queryset=lambda: Place.select().where(Place.category==Categories.get(name='Просветительское')))
+    PlaceDataTablePr, place_dtPr = place_form.DataTable(
+        default_filters=[FieldValueFilter(Place.category, Categories.get(name='Просветительское'))]
+    )
     page.datatables.append(place_dtPr)
 
-    PlaceDataTableOb, place_dtOb = place_form.DataTable(queryset=lambda: Place.select().where(Place.category==Categories.get(name='Образовательное')))
+    PlaceDataTableOb, place_dtOb = place_form.DataTable(
+        default_filters=[FieldValueFilter(Place.category, Categories.get(name='Образовательное'))]
+    )
     page.datatables.append(place_dtOb)
 
-    PlaceDataTableRa, place_dtRa = place_form.DataTable(queryset=lambda: Place.select().where(Place.category==Categories.get(name='Развлекательное')))
+    PlaceDataTableRa, place_dtRa = place_form.DataTable(
+        default_filters=[FieldValueFilter(Place.category, Categories.get(name='Развлекательное'))]
+    )
     page.datatables.append(place_dtRa)
 
 
@@ -41,13 +48,19 @@ def main(page: ft.Page):
 
 
 
-    EventFormDataTablePr, events_dtPr = events_form.DataTable(queryset=lambda: Event.select().where(Event.category==Categories.get(name='Просветительское')))
+    EventFormDataTablePr, events_dtPr = events_form.DataTable(
+        default_filters=[FieldValueFilter(Event.category, Categories.get(name='Просветительское'))]
+    )
     page.datatables.append(events_dtPr)
 
-    EventFormDataTableOb, events_dtOb = events_form.DataTable(queryset=lambda: Event.select().where(Event.category==Categories.get(name='Образовательное')))
+    EventFormDataTableOb, events_dtOb = events_form.DataTable(
+        default_filters=[FieldValueFilter(Event.category, Categories.get(name='Образовательное'))]
+    )
     page.datatables.append(events_dtOb)
 
-    EventFormDataTableRa, events_dtRa = events_form.DataTable(queryset=lambda: Event.select().where(Event.category==Categories.get(name='Развлекательное')))
+    EventFormDataTableRa, events_dtRa = events_form.DataTable(
+        default_filters=[FieldValueFilter(Event.category, Categories.get(name='Развлекательное'))]
+    )
     page.datatables.append(events_dtRa)
 
 
