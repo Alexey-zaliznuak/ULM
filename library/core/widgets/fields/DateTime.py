@@ -205,6 +205,4 @@ class DateTimePicker(DateTimeField, InputField):
 
     @property
     def clear_value(self):
-        print(self.datepicker.selected_data[0])
-        print(self.datepicker.selected_data)
         return self.datepicker.selected_data[0]

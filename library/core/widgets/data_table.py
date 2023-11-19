@@ -1,6 +1,5 @@
-from typing import Callable, Iterable
+from typing import Callable, Sequence
 
-import pyperclip3 as pc
 from peewee import Model
 from flet import (
     border,
@@ -16,6 +15,7 @@ from flet import (
 from library.model_form.fields import Field
 from library.model_form.actions import DataTableAction, ObjectAction
 from library.utils import LazyAttribute
+from library.model_form.filters import FilterSet, Filter
 
 
 class UIModelFormDataTableCell(DataCell):
@@ -25,26 +25,9 @@ class UIModelFormDataTableCell(DataCell):
         self.form = form
         super().__init__(
             self.content,
-            on_tap=self.copy_to_clipboard,
             *args,
             **kwargs
         )
-
-    def copy_to_clipboard(self, e):
-        if not (
-            hasattr(self.content, 'copy_value')
-            and self.content.has_value_for_copy
-        ):
-            return
-
-        pc.copy(str(self.content.copy_value))
-
-        self.page.snack_bar = SnackBar(
-            content=Text("Success copy to clipboard!"),
-            action="Grasp!",
-        )
-        self.page.snack_bar.open = True
-        self.page.update()
 
 
 class UIModelFormDataTableObjectActionCell(DataCell):
@@ -113,16 +96,19 @@ class UIModelFormDataTable(DataTable):
         self,
         columns: list[UIModelFormDataTableColumn],
         fields: list[Field],
-        queryset: Callable,
-        model: Model,
         form,
-        *args,
+        model: Model,
+        queryset: Callable,
+        filterset: FilterSet = None,
+        default_filters: Sequence[Filter] = (),
+        objects_actions: Sequence[ObjectAction] = (),
+        table_actions: Sequence[DataTableAction] = (),
         action_column: DataColumn = DataColumn(Text('Actions')),
-        objects_actions: list[ObjectAction] = [],
-        table_actions: list[DataTableAction] = [],
         **kwargs,
     ):
         self.fields = fields
+        self.filterset = filterset
+        self.default_filters = default_filters
         self.form = form
         self.model = model
         self.objects_actions = objects_actions
@@ -135,14 +121,9 @@ class UIModelFormDataTable(DataTable):
             columns.append(action_column)
 
         kwargs = (self.default | kwargs)
-        super().__init__(*args, columns=columns, rows=self.rows, **kwargs)
+        super().__init__(columns=columns, rows=self.rows, **kwargs)
 
-    def update_rows(
-        self,
-        queryset: Iterable = None,
-        *,
-        only_self_content_update: bool = False
-    ):
+    def update_rows(self, only_self_content_update: bool = False):
         self.rows = [
             UIModelFormDataTableRow(
                 obj=obj,
@@ -151,18 +132,25 @@ class UIModelFormDataTable(DataTable):
                 datatable=self,
                 form=self.form
             )
-            for obj in (queryset or self.queryset())
+            for obj in self._get_queryset()
         ]
 
         if hasattr(self, 'page'):
-            print('DT COUNT:', len(self.page.datatables))
             if not only_self_content_update:
                 for datatable in self.page.datatables:
                     try:
                         datatable.update_rows(only_self_content_update=True)
                     except Exception as e:
-                        print('Error')
-                        print(e)
-            print('try to update self')
+                        pass
             self.update()
-            print('update self')
+
+    def _get_queryset(self):
+        queryset = self.queryset()
+
+        for f in self.default_filters:
+            queryset = f.filter(queryset)
+
+        if self.filterset:
+            queryset = self.filterset.filter(queryset)
+
+        return queryset

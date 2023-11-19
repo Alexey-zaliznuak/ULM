@@ -23,6 +23,7 @@ from .fields import (
 )
 from .fields import Field as UIField
 from .fields import IntegerField
+from .filters import FilterSet, Filter
 
 
 class UIModelForm(metaclass=Singleton):
@@ -54,15 +55,19 @@ class UIModelForm(metaclass=Singleton):
 
     def DataTable(
         self,
-        *args,
         queryset: Callable = None,
         table_actions: list[DataTableAction] = [],
         objects_actions: list[ObjectAction] = [],
+        filterset: FilterSet = None,
+        default_filters: Sequence[Filter] = (),
         **kwargs,
     ) -> UIModelFormDataTable:
 
+
         queryset = self.get_queryset(queryset)
         fields = self._form_fields(write_only=False)
+        filterset = getattr(self.Meta, 'filterset', filterset)
+        default_filters = getattr(self.Meta, 'default_filters', default_filters)
 
         table_actions = getattr(
             self.Meta, 'table_actions', table_actions
@@ -84,12 +89,14 @@ class UIModelForm(metaclass=Singleton):
             action_column=DataColumn(Text(objects_actions_column_name)),
             columns=columns,
             fields=fields.values(),
+            filterset=filterset,
+            default_filters=default_filters,
             form=self,
             model=self.Meta.model,
             objects_actions=objects_actions,
             queryset=queryset,
             table_actions=table_actions,
-            *args, **kwargs,
+            **kwargs,
         )
         data_table_actions_row = Row(
             [
@@ -264,3 +271,5 @@ class UIModelForm(metaclass=Singleton):
         write_only_fields: Sequence[str] = ''
         table_actions: list[DataTableAction] = []
         objects_actions: list[ObjectAction] = []
+        filterset: FilterSet = None
+        default_filters: Sequence[Filter] = ()
