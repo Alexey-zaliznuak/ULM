@@ -1,6 +1,5 @@
 from typing import Callable, Iterable
 
-import pyperclip3 as pc
 from peewee import Model
 from flet import (
     border,
@@ -25,26 +24,9 @@ class UIModelFormDataTableCell(DataCell):
         self.form = form
         super().__init__(
             self.content,
-            on_tap=self.copy_to_clipboard,
             *args,
             **kwargs
         )
-
-    def copy_to_clipboard(self, e):
-        if not (
-            hasattr(self.content, 'copy_value')
-            and self.content.has_value_for_copy
-        ):
-            return
-
-        pc.copy(str(self.content.copy_value))
-
-        self.page.snack_bar = SnackBar(
-            content=Text("Success copy to clipboard!"),
-            action="Grasp!",
-        )
-        self.page.snack_bar.open = True
-        self.page.update()
 
 
 class UIModelFormDataTableObjectActionCell(DataCell):
@@ -90,7 +72,7 @@ class UIModelFormDataTableColumn(DataColumn):
     def __init__(self, label: str, field: Field, *args, **kwargs):
         numeric = getattr(field, 'numeric', False)
         tooltip = getattr(field, 'help_text', None) or label
-
+        
         # TODO modal window with details of column type
         super().__init__(
             Text(label),

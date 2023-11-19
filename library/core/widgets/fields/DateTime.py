@@ -46,24 +46,23 @@ class DateTimeField(ft.UserControl):
             content_padding=0
         )
 
-        self.tf = ft.TextField(
-            value=self.value,
-            disabled=True,
-            label="Select Date",
-            dense=True,
-            hint_text="yyyy-mm-ddThh:mm:ss",
-            width=260,
-            height=40
+        self.tf = ft.Container(
+                content=ft.Text(
+                value=self.value.strftime("%Y-%m-%d"),
+            ),
+            width=120,
+            height=50,
+            alignment=ft.alignment.center_left,
         )
+        
 
         self.cal_ico = ft.TextButton(
             icon=ft.icons.CALENDAR_MONTH,
             on_click=self.open_dlg_modal,
-            height=40,
+            height=50,
             width=40,
             right=0,
             style=ft.ButtonStyle(
-                padding=ft.Padding(4, 0, 0, 0),
                 shape={
                     ft.MaterialState.DEFAULT:
                     ft.RoundedRectangleBorder(radius=1),
@@ -75,7 +74,7 @@ class DateTimeField(ft.UserControl):
                 self.tf,
                 self.cal_ico,
             ],
-            width=150
+            width=120
         )
 
     def build(self):
@@ -116,16 +115,17 @@ class DateTimeField(ft.UserControl):
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
             hide_prev_next_month_days=False,
-            selected_date=[self.tf.value] if self.tf.value else None,
+            selected_date=[self.value] if self.value else None,
             selection_type=self.datepicker_type,
             holidays=self.holidays,
             # disable_to=self._to_datetime(self.tf1.value),
             # disable_from=self._to_datetime(self.tf2.value),
             # locale=self.selected_locale,
         )
-        self.page.dialog = self.dlg_modal
-        self.dlg_modal.content = self.datepicker
-        self.dlg_modal.open = True
+        if not (self.page.dialog and self.page.dialog.open):
+            self.page.dialog = self.dlg_modal
+            self.dlg_modal.content = self.datepicker
+            self.dlg_modal.open = True
         self.page.update()
         self.update()
 
@@ -174,7 +174,7 @@ class DateTimePicker(DateTimeField, InputField):
             dense=True,
             hint_text="yyyy-mm-ddThh:mm:ss",
             width=260,
-            height=40
+            height=60
         )
         self.st = ft.Stack(
             [
@@ -205,6 +205,4 @@ class DateTimePicker(DateTimeField, InputField):
 
     @property
     def clear_value(self):
-        print(self.datepicker.selected_data[0])
-        print(self.datepicker.selected_data)
         return self.datepicker.selected_data[0]

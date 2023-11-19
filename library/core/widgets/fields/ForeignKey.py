@@ -19,8 +19,8 @@ class ForeignKeyViewer(ft.Container, Viewer):
         self.fields = fields
 
         super().__init__(
-            content=ft.Text(label),
-            on_click=self.open_detail_modal
+            content=ft.TextButton(text=label, on_click=self.open_detail_modal),
+            
         )
 
     def open_detail_modal(self, e=None):

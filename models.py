@@ -8,7 +8,7 @@ from peewee import (
     TextField,
 )
 from library.core.exceptions import ValidationError
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import settings
 
@@ -52,7 +52,7 @@ class Event(BaseModel):
     event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
 
     def validate(self):
-        if self.date < datetime.today():
+        if self.date < datetime.today() - timedelta(days=1):
             raise ValidationError('Выбранная дата уже прошла!')
 
 

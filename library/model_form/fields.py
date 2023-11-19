@@ -1,4 +1,5 @@
 from flet import Control
+from datetime import datetime
 from types import FunctionType
 
 from library.core.validators import (
@@ -84,7 +85,12 @@ class Field:
         self.validators.extend(self.default_validators)
 
         self.initial = self.initial_empty_value
-        if default is not empty:
+        self.initial = self.initial() if callable(self.initial) else self.initial
+
+        default = default() if callable(default) else default
+
+
+        if not isinstance(default, empty):
             self.initial = default
 
         self.field_name = None
@@ -134,7 +140,7 @@ class Field:
             value = self._get_editing_default_value(obj)
 
         elif value is empty:
-            value = self.initial_empty_value
+            value = self.initial
 
         return value
 
@@ -168,6 +174,7 @@ class DateField(Field):
 class DateTimeField(Field):
     display_widget = DateTimeViewer
     edit_widget = DateTimePicker
+    initial_empty_value = datetime.now
 
 
 class DecimalField(Field):  # not in priority
