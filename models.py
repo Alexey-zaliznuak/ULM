@@ -1,3 +1,4 @@
+import os
 from peewee import (
     CharField,
     DateTimeField,
@@ -25,7 +26,6 @@ class BaseModel(Model):
 class Categories(BaseModel):
     name = CharField(max_length=100)
 
-
     def __str__(self) -> str:
         return self.name
 
@@ -49,7 +49,9 @@ class Event(BaseModel):
     category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
     date = DateTimeField()
     describe = TextField()
-    event_type = ForeignKeyField(EventTypes, to_field='id', on_delete='CASCADE')
+    event_type = ForeignKeyField(
+        EventTypes, to_field='id', on_delete='CASCADE'
+    )
 
     def validate(self):
         if self.date < datetime.today() - timedelta(days=1):
@@ -59,10 +61,17 @@ class Event(BaseModel):
 def init_tables():
     tables = [Categories, Place, EventTypes, Event]
 
-    db.connect()
-    if __name__ == '__main__':
-        db.drop_tables(tables)
-    db.create_tables(tables)
+    if os.path.exists('./db.db'):
+        db.connect()
+        if __name__ == '__main__':
+            db.drop_tables(tables)
+        db.create_tables(tables)
+    else:
+        db.connect()
+        db.create_tables(tables)
+        from generators import generate
+        generate()
+
 
 if __name__ == '__main__':
     init_tables()

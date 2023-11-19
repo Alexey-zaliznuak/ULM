@@ -5,7 +5,6 @@ from flet import (
     border,
     DataTable,
     DataColumn,
-    SnackBar,
     DataCell,
     DataRow,
     Text,
@@ -73,7 +72,7 @@ class UIModelFormDataTableColumn(DataColumn):
     def __init__(self, label: str, field: Field, *args, **kwargs):
         numeric = getattr(field, 'numeric', False)
         tooltip = getattr(field, 'help_text', None) or label
-        
+
         # TODO modal window with details of column type
         super().__init__(
             Text(label),
@@ -140,8 +139,7 @@ class UIModelFormDataTable(DataTable):
                 for datatable in self.page.datatables:
                     try:
                         datatable.update_rows(only_self_content_update=True)
-                    except Exception as e:
-                        print('err')
+                    except Exception:
                         pass
             self.update()
 

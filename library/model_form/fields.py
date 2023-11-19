@@ -85,10 +85,11 @@ class Field:
         self.validators.extend(self.default_validators)
 
         self.initial = self.initial_empty_value
-        self.initial = self.initial() if callable(self.initial) else self.initial
+        self.initial = (
+            self.initial() if callable(self.initial) else self.initial
+        )
 
         default = default() if callable(default) else default
-
 
         if not isinstance(default, empty):
             self.initial = default
@@ -107,7 +108,6 @@ class Field:
             try:
                 validator(value)
             except ValidationError as e:
-                print('val error')
                 errors.append(e)
 
         return errors

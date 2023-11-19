@@ -211,9 +211,9 @@ class EditObjectActionDialog(AlertDialog):
             _, object_error, self.errors = self.form.update(self.obj, new_obj)
 
         if not (self.errors or object_error):
-            self.datatable.update_rows()
-            self.open = False
+            self.page.dialog.open = False
             self.page.update()
+            self.datatable.update_rows()
             return
 
         if object_error:

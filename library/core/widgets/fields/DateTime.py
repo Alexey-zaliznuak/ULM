@@ -46,14 +46,13 @@ class DateTimeField(ft.UserControl):
         )
 
         self.tf = ft.Container(
-                content=ft.Text(
+            content=ft.Text(
                 value=self.value.strftime("%Y-%m-%d"),
             ),
             width=120,
             height=50,
             alignment=ft.alignment.center_left,
         )
-        
 
         self.cal_ico = ft.TextButton(
             icon=ft.icons.CALENDAR_MONTH,

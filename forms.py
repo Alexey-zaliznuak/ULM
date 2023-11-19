@@ -24,6 +24,7 @@ class CategoriesForm(UIModelForm):
 
 class PlaceForm(UIModelForm):
     category = ForeignKeyField('category', CategoriesForm, )
+
     class Meta:
         model = Place
         fields = ('id', 'name', 'category')

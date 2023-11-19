@@ -2,7 +2,6 @@ from typing import Sequence
 from functools import cached_property
 from .filter import Filter
 from .filter_widget import FilterWidget
-import flet as ft
 
 
 class FilterSet:

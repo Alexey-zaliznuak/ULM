@@ -20,7 +20,6 @@ class ForeignKeyViewer(ft.Container, Viewer):
 
         super().__init__(
             content=ft.TextButton(text=label, on_click=self.open_detail_modal),
-            
         )
 
     def open_detail_modal(self, e=None):

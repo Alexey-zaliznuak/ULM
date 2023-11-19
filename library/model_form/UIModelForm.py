@@ -63,11 +63,12 @@ class UIModelForm(metaclass=Singleton):
         **kwargs,
     ) -> UIModelFormDataTable:
 
-
         queryset = self.get_queryset(queryset)
         fields = self._form_fields(write_only=False)
         filterset = getattr(self.Meta, 'filterset', filterset)
-        default_filters = getattr(self.Meta, 'default_filters', default_filters)
+        default_filters = getattr(
+            self.Meta, 'default_filters', default_filters
+        )
 
         table_actions = getattr(
             self.Meta, 'table_actions', table_actions
@@ -179,7 +180,6 @@ class UIModelForm(metaclass=Singleton):
                 if hasattr(self.Meta.model, 'validate'):
                     self.Meta.model(**obj).validate()
             except ValidationError as e:
-                print('val error')
                 object_error = str(e)
 
         return object_error, fields_errors
