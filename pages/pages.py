@@ -63,14 +63,14 @@ def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                 'page':
                     ft.ListView(controls=[EventTypesDataTable])
             },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    WorkPage(EventTypesDataTable)
-            },
+            # {
+            #     "icon": (
+            #         ft.icons.WORK,
+            #         ft.icons.WORK_OUTLINED,
+            #     ),
+            #     'page':
+            #         WorkPage(EventTypesDataTable)
+            # },
         ],
     )
 
@@ -103,14 +103,14 @@ def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                 'page':
                     ft.ListView(controls=[EventTypesDataTable])
             },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    WorkPage(EventTypesDataTable)
-            },
+            # {
+            #     "icon": (
+            #         ft.icons.WORK,
+            #         ft.icons.WORK_OUTLINED,
+            #     ),
+            #     'page':
+            #         WorkPage(EventTypesDataTable)
+            # },
         ]
     )
 
