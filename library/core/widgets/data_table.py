@@ -141,6 +141,7 @@ class UIModelFormDataTable(DataTable):
                     try:
                         datatable.update_rows(only_self_content_update=True)
                     except Exception as e:
+                        print('err')
                         pass
             self.update()
 

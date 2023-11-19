@@ -4,8 +4,11 @@ from pages.pages import EntertainmentPage, LearningPage, EducationPage
 from widgets.CustomNavigation import CustomNavigation
 
 from forms import EventTypesForm, EventForm, PlaceForm, CategoriesForm
-from models import Event, Categories, Place
+from models import Event, Categories, Place, init_tables
 from library.model_form.filters import FieldValueFilter
+
+
+init_tables()
 
 
 place_catagories_form = CategoriesForm()
@@ -21,17 +24,17 @@ def main(page: ft.Page):
 
 
     PlaceDataTablePr, place_dtPr = place_form.DataTable(
-        default_filters=[FieldValueFilter(Place.category, Categories.get(name='Просветительское'))]
+        default_filters=[FieldValueFilter(Place.category, Categories.get_or_create(name='Просветительское'))]
     )
     page.datatables.append(place_dtPr)
 
     PlaceDataTableOb, place_dtOb = place_form.DataTable(
-        default_filters=[FieldValueFilter(Place.category, Categories.get(name='Образовательное'))]
+        default_filters=[FieldValueFilter(Place.category, Categories.get_or_create(name='Образовательное'))]
     )
     page.datatables.append(place_dtOb)
 
     PlaceDataTableRa, place_dtRa = place_form.DataTable(
-        default_filters=[FieldValueFilter(Place.category, Categories.get(name='Развлекательное'))]
+        default_filters=[FieldValueFilter(Place.category, Categories.get_or_create(name='Развлекательное'))]
     )
     page.datatables.append(place_dtRa)
 
@@ -49,17 +52,17 @@ def main(page: ft.Page):
 
 
     EventFormDataTablePr, events_dtPr = events_form.DataTable(
-        default_filters=[FieldValueFilter(Event.category, Categories.get(name='Просветительское'))]
+        default_filters=[FieldValueFilter(Event.category, Categories.get_or_create(name='Просветительское'))]
     )
     page.datatables.append(events_dtPr)
 
     EventFormDataTableOb, events_dtOb = events_form.DataTable(
-        default_filters=[FieldValueFilter(Event.category, Categories.get(name='Образовательное'))]
+        default_filters=[FieldValueFilter(Event.category, Categories.get_or_create(name='Образовательное'))]
     )
     page.datatables.append(events_dtOb)
 
     EventFormDataTableRa, events_dtRa = events_form.DataTable(
-        default_filters=[FieldValueFilter(Event.category, Categories.get(name='Развлекательное'))]
+        default_filters=[FieldValueFilter(Event.category, Categories.get_or_create(name='Развлекательное'))]
     )
     page.datatables.append(events_dtRa)
 

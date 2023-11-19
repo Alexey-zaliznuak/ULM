@@ -107,6 +107,7 @@ class Field:
             try:
                 validator(value)
             except ValidationError as e:
+                print('val error')
                 errors.append(e)
 
         return errors

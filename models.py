@@ -56,9 +56,13 @@ class Event(BaseModel):
             raise ValidationError('Выбранная дата уже прошла!')
 
 
-if __name__ == '__main__':
+def init_tables():
     tables = [Categories, Place, EventTypes, Event]
 
     db.connect()
-    db.drop_tables(tables)
+    if __name__ == '__main__':
+        db.drop_tables(tables)
     db.create_tables(tables)
+
+if __name__ == '__main__':
+    init_tables()

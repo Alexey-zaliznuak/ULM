@@ -179,6 +179,7 @@ class UIModelForm(metaclass=Singleton):
                 if hasattr(self.Meta.model, 'validate'):
                     self.Meta.model(**obj).validate()
             except ValidationError as e:
+                print('val error')
                 object_error = str(e)
 
         return object_error, fields_errors
