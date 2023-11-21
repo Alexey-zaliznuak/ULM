@@ -3,6 +3,7 @@ from typing import Callable, Sequence
 from peewee import Model
 from flet import (
     border,
+    colors,
     DataTable,
     DataColumn,
     DataCell,
@@ -47,6 +48,7 @@ class UIModelFormDataTableRow(DataRow):
         form,
         actions: list[ObjectAction],
         datatable: 'UIModelFormDataTable',
+        row_number: int = 0,
         *args,
         **kwargs
     ):
@@ -65,7 +67,16 @@ class UIModelFormDataTableRow(DataRow):
                 ) for action in actions
             ])))
 
+        kwargs = self.get_default_params(obj, row_number) | kwargs
         super().__init__(cells, *args, **kwargs)
+
+    def get_default_params(self, obj, row_number: int):
+        return {
+            'color': (
+                colors.GREY_200 if row_number % 2
+                else colors.GREY_50
+            )
+        }
 
 
 class UIModelFormDataTableColumn(DataColumn):
@@ -103,6 +114,7 @@ class UIModelFormDataTable(DataTable):
         objects_actions: Sequence[ObjectAction] = (),
         table_actions: Sequence[DataTableAction] = (),
         action_column: DataColumn = DataColumn(Text('Actions')),
+        get_row_params: Callable = None,
         **kwargs,
     ):
         self.fields = fields
@@ -113,6 +125,7 @@ class UIModelFormDataTable(DataTable):
         self.objects_actions = objects_actions
         self.queryset = queryset
         self.table_actions = table_actions
+        self.get_row_params = get_row_params
 
         self.update_rows()
 
@@ -129,9 +142,15 @@ class UIModelFormDataTable(DataTable):
                 fields=self.fields,
                 actions=self.objects_actions,
                 datatable=self,
-                form=self.form
+                form=self.form,
+                row_number=row_number,
+                **(
+                    self.get_row_params(obj, self, self.form)
+                    if self.get_row_params
+                    else {}
+                )
             )
-            for obj in self._get_queryset()
+            for row_number, obj in enumerate(self._get_queryset())
         ]
 
         if hasattr(self, 'page'):

@@ -62,6 +62,7 @@ class UIModelForm(metaclass=Singleton):
         default_filters: Sequence[Filter] = (),
         **kwargs,
     ) -> UIModelFormDataTable:
+        # todo in class
 
         queryset = self.get_queryset(queryset)
         fields = self._form_fields(write_only=False)
@@ -97,6 +98,7 @@ class UIModelForm(metaclass=Singleton):
             objects_actions=objects_actions,
             queryset=queryset,
             table_actions=table_actions,
+            get_row_params=self.get_row_params,
             **kwargs,
         )
         data_table_actions_row = Row(
@@ -164,6 +166,9 @@ class UIModelForm(metaclass=Singleton):
         # TODO filters widget
         # TODO filter_widget.get_queryset: Callable
         return q or self.Meta.model.select
+
+    def get_row_params(self, obj, form, datatable) -> dict:
+        return {}
 
     def _run_validators(self, obj: dict) -> tuple[str, dict[str, list[str]]]:
         fields_errors = {}
