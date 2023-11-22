@@ -6,8 +6,7 @@ class CustomNavigation(ft.UserControl):
         self,
         *,
         routes: list = [],
-        selected_index: int = 0
-
+        selected_index: int = 0,
     ):
         super().__init__()
         self.expand = True
@@ -23,13 +22,28 @@ class CustomNavigation(ft.UserControl):
         )
 
     def navigation(self, index: str):
-        self.row.controls[2] = self.routes[index]["page"]
+        page = self.routes[index]["page"]
+        page.expand = True
+        title = ft.Text(self.routes[index]["title"])
+
+        state = ft.Column([
+                title,
+                page
+            ])
+        
+        self.row.controls[2] = state
         self.row.controls[2].expand = True
         self.update()
 
     def build(self):
-        self.state = self.routes[self.selected_index]["page"]
-        self.state.expand = True
+        page = self.routes[self.selected_index]["page"]
+        page.expand = True
+        title = ft.Text(self.routes[self.selected_index]["title"])
+
+        self.state = ft.Column([
+                title,
+                page
+            ])
 
         self.rail = ft.NavigationRail(
             selected_index=self.selected_index,
