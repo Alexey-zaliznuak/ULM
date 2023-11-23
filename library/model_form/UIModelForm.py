@@ -3,7 +3,7 @@ from functools import cached_property
 from typing import Callable, Sequence, Optional
 
 import peewee
-from flet import Control, DataColumn, Text, Column, Row
+from flet import Control, DataColumn, Text, Column, Row, ListView, ScrollMode
 
 from library.core.validators import LengthValidator
 from library.utils import Singleton
@@ -105,13 +105,13 @@ class UIModelForm(metaclass=Singleton):
             [
                 action()(datatable=data_table, form=self)
                 for action in table_actions
-            ]
+            ],
         )
 
         return Column(
             [
                 data_table_actions_row,
-                data_table
+                Row([data_table],scroll=ScrollMode.AUTO), 
             ]
         ), data_table
 
@@ -161,7 +161,7 @@ class UIModelForm(metaclass=Singleton):
 
         return success, object_error, fields_errors
 
-    def validate(self, obj: dict) -> Optional[str]:
+    def validate(self, obj: dict, create: bool = False) -> Optional[str]:
         ...
 
     def get_queryset(self, q=None) -> Callable:

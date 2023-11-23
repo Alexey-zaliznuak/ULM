@@ -89,11 +89,23 @@ class WorkTypeForm(UIModelForm):
         table_actions = (CreateObjectAction, )
 
 
+class TasksStatusesForm(UIModelForm):
+    class Meta:
+        model = TasksStatuses
+        fields = ('id', 'status_name',)
+        objects_actions = (
+            EditObjectAction,
+            DetailObjectAction,
+            DeleteObjectAction,
+        )
+        table_actions = (CreateObjectAction, )
+
+
 class TasksForm(UIModelForm):
-    event = ForeignKeyField('event', Event)
-    work_type = ForeignKeyField('work_type', WorkType)
-    place = ForeignKeyField('place', Place)
-    status = ForeignKeyField('status', TasksStatuses)
+    event = ForeignKeyField('event', EventForm)
+    work_type = ForeignKeyField('work_type', WorkTypeForm)
+    place = ForeignKeyField('place', PlaceForm)
+    status = ForeignKeyField('status', TasksStatusesForm)
 
     class Meta:
         model = Task
@@ -120,7 +132,7 @@ class TasksForm(UIModelForm):
                 TasksStatuses.status_name == 'Создано (черновик)'
             ): colors.WHITE,
             TasksStatuses.get(
-                TasksStatuses.status_name == 'К выполнеию'
+                TasksStatuses.status_name == 'К выполнению'
             ): colors.PINK_ACCENT_100,
             TasksStatuses.get(
                 TasksStatuses.status_name == 'Выполнено'

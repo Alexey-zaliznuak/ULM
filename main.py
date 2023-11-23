@@ -3,7 +3,7 @@ import flet as ft
 from pages.pages import EntertainmentPage, LearningPage, EducationPage
 # from widgets.CustomNavigation import CustomNavigation
 
-from forms import EventTypesForm, EventForm, PlaceForm, CategoriesForm
+from forms import EventTypesForm, EventForm, PlaceForm, CategoriesForm, WorkTypeForm, TasksForm
 from models import Event, Categories, Place, init_tables
 from library.model_form.filters import FieldValueFilter
 
@@ -15,13 +15,15 @@ place_catagories_form = CategoriesForm()
 place_form = PlaceForm()
 events_types_form = EventTypesForm()
 events_form = EventForm()
-
+work_types_form = WorkTypeForm()
+task_form = TasksForm()
 
 def main(page: ft.Page):
     # TODO global context class
     page.theme_mode = ft.ThemeMode.LIGHT
     page.datatables = []
 
+    # ---------------PlaceData---------------
     PlaceDataTablePr, place_dtPr = place_form.DataTable(
         default_filters=[
             FieldValueFilter(
@@ -51,7 +53,7 @@ def main(page: ft.Page):
         ]
     )
     page.datatables.append(place_dtRa)
-
+    # ---------------EventTypesData---------------
     EventTypesDataTablePr, events_types_form_dtPr = (
         events_types_form.DataTable()
     )
@@ -67,6 +69,7 @@ def main(page: ft.Page):
     )
     page.datatables.append(events_types_form_dtRa)
 
+    # ---------------EventData---------------
     EventFormDataTablePr, events_dtPr = events_form.DataTable(
         default_filters=[
             FieldValueFilter(
@@ -97,9 +100,42 @@ def main(page: ft.Page):
     )
     page.datatables.append(events_dtRa)
 
+    # ---------------WorkTypesData---------------
+    WorkTypesFormDataTablePr, work_types_events_dtPr = (
+        work_types_form.DataTable()
+    )
+    page.datatables.append(work_types_events_dtPr)
+
+    WorkTypesFormDataTableOb, work_types_events_dtOb = (
+        work_types_form.DataTable()
+    )
+    page.datatables.append(work_types_events_dtOb)
+
+    WorkTypesFormDataTableRa, work_types_events_dtRa = (
+        work_types_form.DataTable()
+    )
+    page.datatables.append(work_types_events_dtRa)
+
+    # ---------------TaskData---------------
+    TaskFormDataTablePr, task_events_dtPr = (
+        task_form.DataTable()
+    )
+    page.datatables.append(task_events_dtPr)
+
+    TaskFormDataTableOb, task_events_dtOb = (
+        task_form.DataTable()
+    )
+    page.datatables.append(task_events_dtOb)
+
+    TaskFormDataTableRa, task_events_dtRa = (
+        task_form.DataTable()
+    )
+    page.datatables.append(task_events_dtRa)
+
+
     t = ft.Tabs(
         selected_index=0,
-        animation_duration=300,
+        animation_duration=50,
         tabs=[
             ft.Tab(
                 text="Просвещение",
@@ -107,9 +143,12 @@ def main(page: ft.Page):
                     content=EducationPage(
                         EventFormDataTablePr,
                         PlaceDataTablePr,
-                        EventTypesDataTablePr
-                    )
+                        EventTypesDataTablePr,
+                        WorkTypesFormDataTablePr,
+                        TaskFormDataTablePr
+                    ),
                 ),
+
             ),
             ft.Tab(
                 text="Развлечение",
@@ -117,7 +156,9 @@ def main(page: ft.Page):
                     content=LearningPage(
                         EventFormDataTableRa,
                         PlaceDataTableRa,
-                        EventTypesDataTableRa
+                        EventTypesDataTableRa,
+                        WorkTypesFormDataTableRa,
+                        TaskFormDataTableRa
                     )
                 ),
             ),
@@ -125,14 +166,12 @@ def main(page: ft.Page):
                 text="Образование",
                 content=ft.Container(
                     content=EntertainmentPage(
-                        EventFormDataTableOb,
                         PlaceDataTableOb,
-                        EventTypesDataTableOb
                     )
                 ),
             ),
         ],
-        expand=1,
+        expand=True,
     )
 
     page.add(

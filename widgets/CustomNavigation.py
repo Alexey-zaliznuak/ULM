@@ -1,7 +1,9 @@
 import flet as ft
 
+from library.core.widgets.text import Text
 
-class Title(ft.Text):
+
+class Title(Text):
     def __init__(self, text):
         super().__init__(
             value=text,
@@ -36,13 +38,22 @@ class CustomNavigation(ft.UserControl):
             self.routes[index]["title"]
         )
 
-        state = ft.Column(
-            [
-                title,
-                page
-            ],
-            expand=True
-        )
+        if isinstance(page, ft.UserControl):
+            state = ft.Column(
+                [
+                    title,
+                    page
+                ],
+                expand=True,
+            )
+        else:
+            state = ft.ListView(
+                [
+                    title,
+                    page
+                ],
+                expand=True,
+            )
 
         self.row.controls[2] = state
         self.update()
@@ -51,13 +62,22 @@ class CustomNavigation(ft.UserControl):
         page = self.routes[self.selected_index]["page"]
         title = Title(self.routes[self.selected_index]["title"])
 
-        self.state = ft.Column(
-            [
-                title,
-                page
-            ],
-            expand=True
-        )
+        if isinstance(page, ft.UserControl):
+            self.state = ft.Column(
+                [
+                    title,
+                    page
+                ],
+                expand=True,
+            )
+        else:
+            self.state = ft.ListView(
+                [
+                    title,
+                    page
+                ],
+                expand=True,
+            )
 
         self.rail = ft.NavigationRail(
             selected_index=self.selected_index,
@@ -66,6 +86,7 @@ class CustomNavigation(ft.UserControl):
             width=70,
             destinations=self.destinations,
             on_change=lambda e: self.navigation(e.control.selected_index),
+            bgcolor=ft.colors.WHITE,
         )
         self.row = ft.Row(
             controls=[

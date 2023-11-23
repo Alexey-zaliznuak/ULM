@@ -3,7 +3,7 @@ import flet as ft
 from widgets.CustomNavigation import CustomNavigation
 
 
-def WorkPage(page1):
+def WorkPage(WorkTypesFormDataTable, TaskFormDataTable):
     return CustomNavigation(
         selected_index=0,
         routes=[
@@ -13,7 +13,7 @@ def WorkPage(page1):
                     ft.icons.REQUEST_QUOTE_OUTLINED,
                 ),
                 'page':
-                    ft.ListView(controls=[page1]),
+                    ft.ListView(controls=[TaskFormDataTable]),
                 'title': 'Заявки'
             },
             {
@@ -22,16 +22,16 @@ def WorkPage(page1):
                     ft.icons.NOW_WIDGETS_OUTLINED,
                 ),
                 'page':
-                    ft.ListView(controls=[page1]),
+                    ft.ListView(controls=[WorkTypesFormDataTable]),
                 'title': 'Виды работ'
             },
         ],
     )
 
 
-def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
+def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkTypesFormDataTable, TaskFormDataTable):
     return CustomNavigation(
-        selected_index=0,
+        selected_index=3,
         routes=[
             {
                 "icon": (
@@ -66,14 +66,14 @@ def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                     ft.icons.WORK_OUTLINED,
                 ),
                 'page':
-                    WorkPage(EventTypesDataTable),
+                    WorkPage(WorkTypesFormDataTable, TaskFormDataTable),
                 'title': ''
             },
         ],
     )
 
 
-def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
+def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkTypesFormDataTable, TaskFormDataTable):
     return CustomNavigation(
         selected_index=0,
         routes=[
@@ -110,14 +110,14 @@ def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                     ft.icons.WORK_OUTLINED,
                 ),
                 'page':
-                    WorkPage(EventTypesDataTable),
+                    WorkPage(WorkTypesFormDataTable, TaskFormDataTable),
                 'title': ''
             },
         ]
     )
 
 
-def EntertainmentPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
+def EntertainmentPage(PlaceDataTable):
     return CustomNavigation(
         selected_index=0,
         routes=[

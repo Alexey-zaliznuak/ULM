@@ -103,7 +103,7 @@ def generate():
             'event_type': EventTypes.get(name='Спектакль'),
             'describe': (
                 'Театральное зрелище, представление, '
-                'произведение театрального, сценического искусства',
+                'произведение театрального, сценического искусства'
             ),
             'category': Categories.get(name='Развлекательное')
         },
@@ -134,14 +134,14 @@ def generate():
 
     TasksStatusesGenerator.generated_objects = [
         {'status_name': 'Создано (черновик)'},
-        {'status_name': 'К выполнеию'},
+        {'status_name': 'К выполнению'},
         {'status_name': 'Выполнено'},
     ]
     TasksStatusesGenerator.save()
 
     TasksGenerator.generated_objects = [
         {
-            'date-registration': date.today() - timedelta(days=4),
+            'date_registration': date.today() - timedelta(days=4),
             'event': Event.get_by_id(1),
             'work_type': WorkType.get_by_id(1),
             'place': Place.get_by_id(1),
@@ -150,7 +150,7 @@ def generate():
             'status': TasksStatuses.get_by_id(1)
         },
         {
-            'date-registration': date.today() - timedelta(days=1),
+            'date_registration': date.today() - timedelta(days=1),
             'event': Event.get_by_id(1),
             'work_type': WorkType.get_by_id(1),
             'place': Place.get_by_id(1),
@@ -159,7 +159,7 @@ def generate():
             'status': TasksStatuses.get_by_id(1)
         },
         {
-            'date-registration': date.today() - timedelta(days=2),
+            'date_registration': date.today() - timedelta(days=2),
             'event': Event.get_by_id(2),
             'work_type': WorkType.get_by_id(2),
             'place': Place.get_by_id(2),
@@ -168,7 +168,7 @@ def generate():
             'status': TasksStatuses.get_by_id(2)
         },
         {
-            'date-registration': date.today() - timedelta(days=10),
+            'date_registration': date.today() - timedelta(days=10),
             'event': Event.get_by_id(2),
             'work_type': WorkType.get_by_id(2),
             'place': Place.get_by_id(2),
@@ -177,7 +177,7 @@ def generate():
             'status': TasksStatuses.get_by_id(2)
         },
         {
-            'date-registration': date.today() - timedelta(days=6),
+            'date_registration': date.today() - timedelta(days=6),
             'event': Event.get_by_id(3),
             'work_type': WorkType.get_by_id(3),
             'place': Place.get_by_id(3),
@@ -186,7 +186,7 @@ def generate():
             'status': TasksStatuses.get_by_id(3)
         },
         {
-            'date-registration': date.today() - timedelta(days=6),
+            'date_registration': date.today() - timedelta(days=6),
             'event': Event.get_by_id(3),
             'work_type': WorkType.get_by_id(3),
             'place': Place.get_by_id(4),
@@ -195,3 +195,5 @@ def generate():
             'status': TasksStatuses.get_by_id(3)
         },
     ]
+
+    TasksGenerator.save()

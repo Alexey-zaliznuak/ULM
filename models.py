@@ -1,4 +1,4 @@
-import os
+import os, sys
 from peewee import (
     CharField,
     DateTimeField,
@@ -58,6 +58,9 @@ class Event(BaseModel):
             if self.date < datetime.today() - timedelta(days=1):
                 raise ValidationError('Выбранная дата уже прошла!')
 
+    def __str__(self) -> str:
+        return self.describe
+
 
 class WorkType(BaseModel):
     name = CharField(max_length=100)
@@ -93,7 +96,19 @@ class Task(BaseModel):
 
 
 def init_tables():
-    tables = [Categories, Place, EventTypes, Event, TasksStatuses, Task]
+    tables = [Categories, Place, EventTypes, Event, TasksStatuses, WorkType, Task]
+
+    def remake_db():
+        print('create')
+        db.connect()
+        db.drop_tables(tables)
+        db.create_tables(tables)
+        from generators import generate
+        generate()
+
+    if '--make' in sys.argv:
+        remake_db()
+        return
 
     if os.path.exists('./db.db'):
         db.connect()
@@ -101,10 +116,8 @@ def init_tables():
             db.drop_tables(tables)
         db.create_tables(tables)
     else:
-        db.connect()
-        db.create_tables(tables)
-        from generators import generate
-        generate()
+        remake_db()
+
 
 
 if __name__ == '__main__':
