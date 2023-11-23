@@ -106,6 +106,7 @@ class UIModelForm(metaclass=Singleton):
                 action()(datatable=data_table, form=self)
                 for action in table_actions
             ]
+            + [filterset.w]
         )
 
         return Column(
