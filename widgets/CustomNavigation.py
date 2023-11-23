@@ -12,6 +12,15 @@ class Title(Text):
         )
 
 
+def set_page(routes, selected_index):
+    page = routes[selected_index]["page"]
+    title = Title(routes[selected_index]["title"])
+
+    if isinstance(page, ft.UserControl):
+        return ft.Column([title, page], expand=True)
+    return ft.ListView([title, page], expand=True)
+
+
 class CustomNavigation(ft.UserControl):
     def __init__(
         self,
@@ -33,51 +42,11 @@ class CustomNavigation(ft.UserControl):
         )
 
     def navigation(self, index: str):
-        page = self.routes[index]["page"]
-        title = Title(
-            self.routes[index]["title"]
-        )
-
-        if isinstance(page, ft.UserControl):
-            state = ft.Column(
-                [
-                    title,
-                    page
-                ],
-                expand=True,
-            )
-        else:
-            state = ft.ListView(
-                [
-                    title,
-                    page
-                ],
-                expand=True,
-            )
-
-        self.row.controls[2] = state
+        self.row.controls[2] = set_page(self.routes, index)
         self.update()
 
     def build(self):
-        page = self.routes[self.selected_index]["page"]
-        title = Title(self.routes[self.selected_index]["title"])
-
-        if isinstance(page, ft.UserControl):
-            self.state = ft.Column(
-                [
-                    title,
-                    page
-                ],
-                expand=True,
-            )
-        else:
-            self.state = ft.ListView(
-                [
-                    title,
-                    page
-                ],
-                expand=True,
-            )
+        self.state = set_page(self.routes, self.selected_index)
 
         self.rail = ft.NavigationRail(
             selected_index=self.selected_index,
