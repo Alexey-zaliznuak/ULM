@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from peewee import (
     CharField,
     DateTimeField,
@@ -96,7 +97,15 @@ class Task(BaseModel):
 
 
 def init_tables():
-    tables = [Categories, Place, EventTypes, Event, TasksStatuses, WorkType, Task]
+    tables = [
+        Categories,
+        Place,
+        EventTypes,
+        Event,
+        TasksStatuses,
+        WorkType,
+        Task
+    ]
 
     def remake_db():
         print('create')
@@ -117,7 +126,6 @@ def init_tables():
         db.create_tables(tables)
     else:
         remake_db()
-
 
 
 if __name__ == '__main__':

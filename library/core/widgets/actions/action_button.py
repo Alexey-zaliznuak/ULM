@@ -1,7 +1,7 @@
 from typing import Callable
 
-from flet import FloatingActionButton, Container
-from math import pi
+from flet import FloatingActionButton
+
 
 class ActionButton(FloatingActionButton):
     defaults = dict(

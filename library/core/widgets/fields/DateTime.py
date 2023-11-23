@@ -38,7 +38,7 @@ class DateTimeField(ft.UserControl):
             modal=True,
             title=ft.Text("Календарь"),
             actions=[
-                ft.TextButton("Закрыть",on_click=self.cancel_dlg),
+                ft.TextButton("Закрыть", on_click=self.cancel_dlg),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
             actions_padding=5,

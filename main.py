@@ -3,7 +3,15 @@ import flet as ft
 from pages.pages import EntertainmentPage, LearningPage, EducationPage
 # from widgets.CustomNavigation import CustomNavigation
 
-from forms import EventTypesForm, EventForm, PlaceForm, CategoriesForm, WorkTypeForm, TasksForm
+from forms import (
+    EventTypesForm,
+    EventForm,
+    PlaceForm,
+    CategoriesForm,
+    WorkTypeForm,
+    TasksForm
+)
+
 from models import Event, Categories, Place, init_tables
 from library.model_form.filters import FieldValueFilter
 
@@ -17,6 +25,7 @@ events_types_form = EventTypesForm()
 events_form = EventForm()
 work_types_form = WorkTypeForm()
 task_form = TasksForm()
+
 
 def main(page: ft.Page):
     # TODO global context class
@@ -131,7 +140,6 @@ def main(page: ft.Page):
         task_form.DataTable()
     )
     page.datatables.append(task_events_dtRa)
-
 
     t = ft.Tabs(
         selected_index=0,

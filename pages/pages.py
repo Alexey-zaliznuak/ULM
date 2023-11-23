@@ -1,134 +1,67 @@
 import flet as ft
 
-from widgets.CustomNavigation import CustomNavigation
+from library.core.widgets.text import Text
 
 
-def WorkPage(WorkTypesFormDataTable, TaskFormDataTable):
-    return CustomNavigation(
-        selected_index=0,
-        routes=[
-            {
-                "icon": (
-                    ft.icons.REQUEST_QUOTE,
-                    ft.icons.REQUEST_QUOTE_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[TaskFormDataTable]),
-                'title': 'Заявки'
-            },
-            {
-                "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[WorkTypesFormDataTable]),
-                'title': 'Виды работ'
-            },
-        ],
-    )
+class Title(Text):
+    def __init__(self, text):
+        super().__init__(
+            value=text,
+            size=24,
+            weight=ft.FontWeight.W_500
+        )
 
 
-def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkTypesFormDataTable, TaskFormDataTable):
-    return CustomNavigation(
-        selected_index=3,
-        routes=[
-            {
-                "icon": (
-                    ft.icons.EVENT,
-                    ft.icons.EVENT_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventFormDataTable]),
-                'title': 'Мероприятия'
-            },
-            {
-                "icon": (
-                    ft.icons.PLACE,
-                    ft.icons.PLACE_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[PlaceDataTable]),
-                'title': 'Пространства'
-            },
-            {
-                "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventTypesDataTable]),
-                'title': 'Виды мероприятий'
-            },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    WorkPage(WorkTypesFormDataTable, TaskFormDataTable),
-                'title': ''
-            },
-        ],
-    )
+def set_page(routes, selected_index):
+    page = routes[selected_index]["page"]
+    title = Title(routes[selected_index]["title"])
+
+    if isinstance(page, ft.UserControl):
+        return ft.Column([title, page], expand=True)
+    return ft.ListView([title, page], expand=True)
 
 
-def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkTypesFormDataTable, TaskFormDataTable):
-    return CustomNavigation(
-        selected_index=0,
-        routes=[
-            {
-                "icon": (
-                    ft.icons.EVENT,
-                    ft.icons.EVENT_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventFormDataTable]),
-                'title': 'Мероприятия'
-            },
-            {
-                "icon": (
-                    ft.icons.PLACE,
-                    ft.icons.PLACE_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[PlaceDataTable]),
-                'title': 'Пространства'
-            },
-            {
-                "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventTypesDataTable]),
-                'title': 'Виды мероприятий'
-            },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    WorkPage(WorkTypesFormDataTable, TaskFormDataTable),
-                'title': ''
-            },
-        ]
-    )
+class CustomNavigation(ft.UserControl):
+    def __init__(
+        self,
+        *,
+        routes: list = [],
+        selected_index: int = 0,
+    ):
+        super().__init__()
+        self.expand = True
+        self.routes = routes
+        self.selected_index = selected_index
 
+        self.destinations = list(map(self.get_destinations, routes))
 
-def EntertainmentPage(PlaceDataTable):
-    return CustomNavigation(
-        selected_index=0,
-        routes=[
-            {
-                "icon": (
-                    ft.icons.PLACE,
-                    ft.icons.PLACE_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[PlaceDataTable]),
-                'title': 'Пространства'
-            },
-        ]
-    )
+    def get_destinations(self, icons):
+        return ft.NavigationRailDestination(
+            icon=icons["icon"][0],
+            selected_icon=icons["icon"][1],
+        )
+
+    def navigation(self, index: str):
+        self.row.controls[2] = set_page(self.routes, index)
+        self.update()
+
+    def build(self):
+        self.state = set_page(self.routes, self.selected_index)
+
+        self.rail = ft.NavigationRail(
+            selected_index=self.selected_index,
+            label_type=ft.NavigationRailLabelType.ALL,
+            extended=True,
+            width=70,
+            destinations=self.destinations,
+            on_change=lambda e: self.navigation(e.control.selected_index),
+            bgcolor=ft.colors.WHITE,
+        )
+        self.row = ft.Row(
+            controls=[
+                self.rail,
+                ft.VerticalDivider(width=1),
+                self.state
+            ],
+        )
+        return self.row
