@@ -53,13 +53,47 @@ class Event(BaseModel):
         EventTypes, to_field='id', on_delete='CASCADE'
     )
 
-    def validate(self):
-        if self.date < datetime.today() - timedelta(days=1):
-            raise ValidationError('Выбранная дата уже прошла!')
+    def validate(self, create=False):
+        if create:
+            if self.date < datetime.today() - timedelta(days=1):
+                raise ValidationError('Выбранная дата уже прошла!')
+
+
+class WorkType(BaseModel):
+    name = CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class TasksStatuses(BaseModel):
+    status_name = CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.status_name
+
+
+class Task(BaseModel):
+    date_registration = DateTimeField()
+    event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
+    work_type = ForeignKeyField(WorkType, to_field='id', on_delete='CASCADE')
+    place = ForeignKeyField(Place, to_field='id', on_delete='CASCADE')
+    deadline = DateTimeField()
+
+    describe = TextField()
+    status = ForeignKeyField(
+        TasksStatuses, to_field='id', on_delete='CASCADE'
+    )
+
+    def validate(self, create=False):
+        if self.date_registration > self.deadline:
+            raise ValidationError(
+                'Срок должен быть позже даты создания.'
+            )
 
 
 def init_tables():
-    tables = [Categories, Place, EventTypes, Event]
+    tables = [Categories, Place, EventTypes, Event, TasksStatuses, Task]
 
     if os.path.exists('./db.db'):
         db.connect()
