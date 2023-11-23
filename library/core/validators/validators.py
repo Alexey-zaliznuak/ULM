@@ -7,9 +7,9 @@ from library.core.exceptions import ValidationError
 class ValueValidator:
     def __init__(self, mn: int = None, mx: int = None) -> None:
         if not (mn or mx):
-            raise AttributeError('mn or mx must be set.')
+            raise AttributeError('Макс. или мин. должно быть определено')
         if mx and mn and mx < mn:
-            raise ValueError('mx nust be greater than mn')
+            raise ValueError('Макс. должно быть больше мин.')
 
         self.mx = mx
         self.mn = mn
@@ -17,12 +17,12 @@ class ValueValidator:
     def __call__(self, value):
         if self.mx and value > self.mx:
             raise ValidationError(
-                f'Value of this field mustn`t be greater then {self.mx}'
+                f'Длинна не может быть больше {self.mx}'
             )
 
         if self.mn and value < self.mn:
             raise ValidationError(
-                f'Value of this field must be low then {self.mn}'
+                f'Длинна должна быть более {self.mn}'
             )
 
 
@@ -33,12 +33,12 @@ class LengthValidator(ValueValidator):
 
         if self.mx and value > self.mx:
             raise ValidationError(
-                f'Value len of this field mustn`t be greater then {self.mx}'
+                f'Длинна не может быть больше {self.mx}'
             )
 
         if self.mn and value < self.mn:
             raise ValidationError(
-                f'Value len of this field must be low then {self.mn}'
+                f'Длинна должна быть более {self.mn}'
             )
 
         return errors
@@ -49,7 +49,7 @@ class URLValidator():
         try:
             validators.url(value)
         except validators.ValidationError:
-            raise ValidationError('Invalid URL')
+            raise ValidationError('Неверный формат URL')
 
 
 class PhoneValidator():
@@ -62,7 +62,7 @@ class PhoneValidator():
                 c += 1
 
         if c != self.NUMBERS_IN_PHONE_COUNT:
-            raise ValidationError(f'Inalid telephone number length - {c+1}')
+            raise ValidationError(f'Невалидный формат номера - {c+1}')
 
 
 class ForeignKeyValidator():
@@ -73,4 +73,6 @@ class ForeignKeyValidator():
         try:
             self.model_to.get_by_id(pk)
         except peewee.DoesNotExist:
-            raise ValidationError('Object with this id does not exist')
+            raise ValidationError(
+                'Объект с таким идентификатором не существует'
+            )

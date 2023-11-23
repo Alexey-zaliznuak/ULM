@@ -1,11 +1,13 @@
 from typing import Callable
 
-from flet import FloatingActionButton
-
+from flet import FloatingActionButton, Container
+from math import pi
 
 class ActionButton(FloatingActionButton):
     defaults = dict(
         width=80,
+        height=38,
+        bgcolor='#4a92fd',
     )
 
     def __init__(

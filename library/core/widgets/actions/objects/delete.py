@@ -1,5 +1,6 @@
 from flet import (
     icons,
+    colors
 )
 
 
@@ -11,4 +12,5 @@ class DeleteObjectActionButtonWidget(ActionButton):
         super().__init__(
             *args, **kwargs,
             icon=icons.DELETE_OUTLINED,
+            bgcolor=colors.RED
         )

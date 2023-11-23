@@ -9,24 +9,6 @@ def WorkPage(page1):
         routes=[
             {
                 "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[page1]),
-                'title': 'Виды работ'
-            },
-            {
-                "icon": (
-                    ft.icons.ROOM,
-                    ft.icons.ROOM_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[page1]),
-                'title': 'Помещение'
-            },
-            {
-                "icon": (
                     ft.icons.REQUEST_QUOTE,
                     ft.icons.REQUEST_QUOTE_OUTLINED,
                 ),
@@ -34,21 +16,14 @@ def WorkPage(page1):
                     ft.ListView(controls=[page1]),
                 'title': 'Заявки'
             },
-        ],
-    )
-
-def EntertainmentWorkPage(page1):
-    return CustomNavigation(
-        selected_index=0,
-        routes=[
             {
                 "icon": (
-                    ft.icons.ROOM,
-                    ft.icons.ROOM_OUTLINED,
+                    ft.icons.NOW_WIDGETS,
+                    ft.icons.NOW_WIDGETS_OUTLINED,
                 ),
                 'page':
                     ft.ListView(controls=[page1]),
-                'title': 'Помещение'
+                'title': 'Виды работ'
             },
         ],
     )
@@ -65,7 +40,7 @@ def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                 ),
                 'page':
                     ft.ListView(controls=[EventFormDataTable]),
-                'title': 'События'
+                'title': 'Мероприятия'
             },
             {
                 "icon": (
@@ -109,7 +84,7 @@ def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                 ),
                 'page':
                     ft.ListView(controls=[EventFormDataTable]),
-                'title': 'События'
+                'title': 'Мероприятия'
             },
             {
                 "icon": (
@@ -154,15 +129,6 @@ def EntertainmentPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable):
                 'page':
                     ft.ListView(controls=[PlaceDataTable]),
                 'title': 'Пространства'
-            },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    EntertainmentWorkPage(EventTypesDataTable),
-                'title': ''
             },
         ]
     )

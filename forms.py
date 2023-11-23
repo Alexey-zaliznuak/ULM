@@ -15,10 +15,11 @@ class CategoriesForm(UIModelForm):
         model = Categories
         fields = ('id', 'name',)
         objects_actions = (
-            DeleteObjectAction,
+            EditObjectAction,
             DetailObjectAction,
-            EditObjectAction
+            DeleteObjectAction,
         )
+
         table_actions = (CreateObjectAction, )
 
 
@@ -29,10 +30,11 @@ class PlaceForm(UIModelForm):
         model = Place
         fields = ('id', 'name', 'category')
         objects_actions = (
-            DeleteObjectAction,
+            EditObjectAction,
             DetailObjectAction,
-            EditObjectAction
+            DeleteObjectAction,
         )
+
         table_actions = (CreateObjectAction, )
 
 
@@ -41,10 +43,11 @@ class EventTypesForm(UIModelForm):
         model = EventTypes
         fields = ('id', 'name',)
         objects_actions = (
-            DeleteObjectAction,
+            EditObjectAction,
             DetailObjectAction,
-            EditObjectAction
+            DeleteObjectAction,
         )
+
         table_actions = (CreateObjectAction, )
 
 
@@ -57,8 +60,9 @@ class EventForm(UIModelForm):
         # todo create only fields
         fields = ('date', 'event_type', 'describe', 'category')
         objects_actions = (
-            DeleteObjectAction,
+            EditObjectAction,
             DetailObjectAction,
-            EditObjectAction
+            DeleteObjectAction,
         )
+
         table_actions = (CreateObjectAction, )

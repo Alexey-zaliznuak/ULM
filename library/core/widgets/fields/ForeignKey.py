@@ -35,7 +35,7 @@ class ForeignKeyViewer(ft.Container, Viewer):
 class ForeignKeyEditor(ft.Dropdown, InputField):
     defaults = {
         'width': 300,
-        'hint_text': 'Choose object',
+        'hint_text': 'Выберете',
     }
 
     def __init__(self, queryset, default_key=None):  # TODO filters

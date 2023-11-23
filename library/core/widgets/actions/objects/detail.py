@@ -8,6 +8,7 @@ from flet import (
     Control,
     Column,
     Container,
+    colors,
 )
 from library.core.widgets.actions import ActionButton
 
@@ -50,10 +51,10 @@ class DetailObjectActionDialog(AlertDialog):
 
         super().__init__(
             modal=True,
-            title=Text("Details"),
+            title=Text("Детали"),
             content=DetailObjectWidget(obj, fields),
             actions=[
-                ElevatedButton("Close", on_click=self.close_dlg),
+                ElevatedButton("Закрыть", on_click=self.close_dlg),
             ],
             actions_alignment=MainAxisAlignment.END,
             open=True,

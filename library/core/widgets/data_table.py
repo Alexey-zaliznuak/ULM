@@ -73,8 +73,8 @@ class UIModelFormDataTableRow(DataRow):
     def get_default_params(self, obj, row_number: int):
         return {
             'color': (
-                colors.GREY_200 if row_number % 2
-                else colors.GREY_50
+                '#f2f2f2' if row_number % 2
+                else colors.WHITE
             )
         }
 
@@ -96,10 +96,10 @@ class UIModelFormDataTableColumn(DataColumn):
 
 class UIModelFormDataTable(DataTable):
     default = {
-        'border': border.all(0.5, "dark"),
+        'border': border.all(0.5, "transparent"),
         'border_radius': 3,
-        'horizontal_lines': border.BorderSide(1, "dark"),
-        'vertical_lines': border.BorderSide(0.5, "dark")
+        'horizontal_lines': border.BorderSide(1, "transparent"),
+        'vertical_lines': border.BorderSide(0.5, "transparent")
     }
 
     def __init__(

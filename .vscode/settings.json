@@ -5,8 +5,11 @@
 	"python.formatting.provider": "none",
 	"cSpell.words": [
 		"datatable",
+		"datatables",
 		"filterset",
 		"flet",
+		"NMIN",
+		"PMIN",
 		"ymhm"
 	]
 }

@@ -27,11 +27,11 @@ class ConfirmActionDialog(AlertDialog):
 
         super().__init__(
             modal=True,
-            title=Text("Confirmation"),
-            content=Text("Please, confirm this action."),
+            title=Text("Подтверждение"),
+            content=Text("Пожалуйста, подтвердите действие."),
             actions=[
-                ElevatedButton("Yes", on_click=self.ok),
-                ElevatedButton("No", on_click=self.cancel, color='red'),
+                ElevatedButton("Да", on_click=self.ok),
+                ElevatedButton("Нет", on_click=self.cancel, color='red'),
             ],
             actions_alignment=MainAxisAlignment.END,
         )

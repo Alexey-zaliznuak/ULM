@@ -32,8 +32,8 @@ class Field:
     default_validators = []
     # default_empty_value = '' TODO mb delete if useless
     default_error_messages = {
-        'required': 'This field is required.',
-        'null': 'This field may not be null.'
+        'required': 'Это поле обязательно',
+        'null': 'Не может быть пустым'
     }
 
     initial_empty_value = None
@@ -61,16 +61,16 @@ class Field:
 
         # Some combinations of keyword arguments do not make sense.
         assert not (read_only and write_only), (
-            'Invalid combination of fields values: '
-            f'read_only - {read_only} and write_only - {write_only}'
+            'Невалидная комбинация полей: '
+            f'Только чтение - {read_only} и только  запись - {write_only}'
         )
         assert not (read_only and required), (
             'Invalid combination of fields values: read_only and required'
-            f'read_only - {read_only} and required - {required}'
+            f'Только чтение - {read_only} и обязательное - {required}'
         )
         assert not (required and default is not empty), (
             'Invalid combination of fields values: required and default'
-            f'required - {required} and default - {default}'
+            f'обязательно - {required} и по умолчанию - {default}'
         )
 
         self.read_only = read_only
@@ -102,7 +102,7 @@ class Field:
         errors = []
 
         if not value and self.required:
-            errors.append('Required value.')
+            errors.append('Обязательное поле')
 
         for validator in self.validators:
             try:
@@ -134,7 +134,7 @@ class Field:
 
     def _get_edit_value(self, *, value, obj):
         assert not (value is not empty and obj is not empty), (
-            "Only one of 'value' and 'obj' can be specified."
+            "Может быть указано только одно из значений 'поле' и 'объект'."
         )
 
         if obj is not empty:
@@ -222,7 +222,7 @@ class MethodField(Field):
         self.method: FunctionType = method
 
         assert kwargs.get('read_only') is not False, (
-            'MethodField must be read_only'
+            'MethodField должно быть только на чтение'
         )
 
         super().__init__(*args, **kwargs)
@@ -232,30 +232,30 @@ class MethodField(Field):
 
     def _get_db_value(self, obj):
         raise AttributeError(
-            'MethodField doesn`t provide get db values functional.'
+            'MethodField не обеспечивает функционал получения значений.'
         )
 
     def get_editing_default_value(self, obj):
         raise AttributeError(
-            'MethodField doesn`t provide object editing functional.'
+            'MethodField не предоставляет функции редактирования объектов.'
         )
 
     def _editing_form_widget(self, value, action: str = None):
         raise AttributeError(
-            'MethodField doesn`t provide object editing functional.'
+            'MethodField не предоставляет функции редактирования объектов.'
         )
 
 
 class RelatedField(Field):
-    # TODO overriden decorator
+    # TODO override decorator
     def _get_display_value(self, obj):
         raise AttributeError(
-            'displayed value must be override in RelatedField'
+            'отображаемое значение должно быть переопределено в RelatedField'
         )
 
     def display(self, obj) -> Control:
         raise AttributeError(
-            'displayed value must be override in RelatedField'
+            'отображаемое значение должно быть переопределено в RelatedField'
         )
 
 
@@ -304,7 +304,7 @@ class ForeignKeyField(RelatedField):
         return str(self._get_db_value(obj))
 
     def display(self, obj) -> Control:
-        # TODO mb figna
+        # TODO mb bullshit
         label = self._get_display_value(obj)
         return self.display_widget(
             obj=self._get_db_value(obj), fields=self.fields, label=label

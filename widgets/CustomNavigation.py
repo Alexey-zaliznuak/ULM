@@ -1,6 +1,15 @@
 import flet as ft
 
 
+class Title(ft.Text):
+    def __init__(self, text):
+        super().__init__(
+            value=text,
+            size=24,
+            weight=ft.FontWeight.W_500
+        )
+
+
 class CustomNavigation(ft.UserControl):
     def __init__(
         self,
@@ -23,27 +32,32 @@ class CustomNavigation(ft.UserControl):
 
     def navigation(self, index: str):
         page = self.routes[index]["page"]
-        page.expand = True
-        title = ft.Text(self.routes[index]["title"])
+        title = Title(
+            self.routes[index]["title"]
+        )
 
-        state = ft.Column([
+        state = ft.Column(
+            [
                 title,
                 page
-            ])
-        
+            ],
+            expand=True
+        )
+
         self.row.controls[2] = state
-        self.row.controls[2].expand = True
         self.update()
 
     def build(self):
         page = self.routes[self.selected_index]["page"]
-        page.expand = True
-        title = ft.Text(self.routes[self.selected_index]["title"])
+        title = Title(self.routes[self.selected_index]["title"])
 
-        self.state = ft.Column([
+        self.state = ft.Column(
+            [
                 title,
                 page
-            ])
+            ],
+            expand=True
+        )
 
         self.rail = ft.NavigationRail(
             selected_index=self.selected_index,

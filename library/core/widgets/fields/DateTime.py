@@ -36,9 +36,9 @@ class DateTimeField(ft.UserControl):
 
         self.dlg_modal = ft.AlertDialog(
             modal=True,
-            title=ft.Text("Date picker"),
+            title=ft.Text("Календарь"),
             actions=[
-                ft.TextButton("Cancel", on_click=self.cancel_dlg),
+                ft.TextButton("Закрыть",on_click=self.cancel_dlg),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
             actions_padding=5,

@@ -69,7 +69,7 @@ class ObjectErrorBottomSheet(BottomSheet):
                 Column([
                     Container(
                         Column([
-                            TitleText("Invalid data:"),
+                            TitleText("Данные невалидны:"),
                             Text(error_text)
                         ]),
                         padding=8,
@@ -136,17 +136,17 @@ class EditObjectActionDialog(AlertDialog):
             content=Container(
                 content=ListView(
                     [
-                        TitleText("Create new."),
+                        TitleText("Создать новый"),
                         Column(self.fields_widgets),
                         Container(
                             content=Row(
                                 [
                                     ElevatedButton(
-                                        "Cancel",
+                                        "Закрыть",
                                         on_click=self._close_dlg,
                                     ),
                                     ElevatedButton(
-                                        "Save",
+                                        "Сохранить",
                                         on_click=self._save_obj,
                                     ),
                                 ],
@@ -234,4 +234,5 @@ class EditObjectActionButton(ActionButton):
         super().__init__(
             *args, **kwargs,
             icon=icons.EDIT,
+            bgcolor=colors.GREY_100
         )
