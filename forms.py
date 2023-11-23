@@ -8,6 +8,7 @@ from library.model_form.actions.objects import (
 )
 from library.model_form.actions.table import CreateObjectAction
 
+from filtersets import TasksFilterSet
 from models import (
     Categories,
     Place,
@@ -109,7 +110,7 @@ class TasksForm(UIModelForm):
 
     class Meta:
         model = Task
-        # todo create only fields
+        filterset = TasksFilterSet
         fields = (
             'date_registration',
             'event',

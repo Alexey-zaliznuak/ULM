@@ -1,3 +1,5 @@
+import flet as ft
+
 from typing import Sequence
 from functools import cached_property
 from .filter import Filter
@@ -5,6 +7,16 @@ from .filter_widget import FilterWidget
 
 
 class FilterSet:
+    def widget(self) -> ft.Control:
+        return ft.Container(
+            content=ft.Column(
+                [
+                    ft.Text('Фильтрация'),
+                    *[f.widget() for f in self.filters]
+                ]
+            )
+        )
+
     def filter(self, queryset):
         for f in self.Meta.default_filters:
             queryset = f.filter(queryset)
