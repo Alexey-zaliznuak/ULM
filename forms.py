@@ -1,3 +1,4 @@
+from flet import colors
 from library.model_form import UIModelForm
 from library.model_form.fields import ForeignKeyField
 from library.model_form.actions.objects import (
@@ -7,7 +8,15 @@ from library.model_form.actions.objects import (
 )
 from library.model_form.actions.table import CreateObjectAction
 
-from models import Categories, Place, EventTypes, Event
+from models import (
+    Categories,
+    Place,
+    EventTypes,
+    Event,
+    WorkType,
+    TasksStatuses,
+    Task,
+)
 
 
 class CategoriesForm(UIModelForm):
@@ -66,3 +75,57 @@ class EventForm(UIModelForm):
         )
 
         table_actions = (CreateObjectAction, )
+
+
+class WorkTypeForm(UIModelForm):
+    class Meta:
+        model = WorkType
+        fields = ('id', 'name',)
+        objects_actions = (
+            EditObjectAction,
+            DetailObjectAction,
+            DeleteObjectAction,
+        )
+        table_actions = (CreateObjectAction, )
+
+
+class TasksForm(UIModelForm):
+    event = ForeignKeyField('event', Event)
+    work_type = ForeignKeyField('work_type', WorkType)
+    place = ForeignKeyField('place', Place)
+    status = ForeignKeyField('status', TasksStatuses)
+
+    class Meta:
+        model = Task
+        # todo create only fields
+        fields = (
+            'date_registration',
+            'event',
+            'work_type',
+            'place',
+            'deadline',
+            'describe',
+            'status',
+        )
+        objects_actions = (
+            EditObjectAction,
+            DetailObjectAction,
+            DeleteObjectAction,
+        )
+        table_actions = (CreateObjectAction,)
+
+    def get_row_params(self, obj, form, datatable) -> dict:
+        colours = {
+            TasksStatuses.get(
+                TasksStatuses.status_name == 'Создано (черновик)'
+            ): colors.WHITE,
+            TasksStatuses.get(
+                TasksStatuses.status_name == 'К выполнеию'
+            ): colors.PINK_ACCENT_100,
+            TasksStatuses.get(
+                TasksStatuses.status_name == 'Выполнено'
+            ): colors.GREEN_300,
+        }
+        return {
+            'color': colours[obj.status]
+        }

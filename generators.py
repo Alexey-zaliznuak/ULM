@@ -1,6 +1,14 @@
 from datetime import date, timedelta
 from library.utils.model_data_generator import ModelDataGenerator
-from models import Categories, Place, EventTypes, Event
+from models import (
+    Categories,
+    Place,
+    EventTypes,
+    Event,
+    WorkType,
+    TasksStatuses,
+    Task,
+)
 
 
 class CategoriesGenerator(ModelDataGenerator):
@@ -25,6 +33,32 @@ class EventGenerator(ModelDataGenerator):
     class Meta:
         model = Event
         fields = ('date', 'event_type', 'describe', 'category')
+
+
+class WorkTypeGenerator(ModelDataGenerator):
+    class Meta:
+        model = WorkType
+        fields = ('name',)
+
+
+class TasksStatusesGenerator(ModelDataGenerator):
+    class Meta:
+        model = TasksStatuses
+        fields = ('status_name',)
+
+
+class TasksGenerator(ModelDataGenerator):
+    class Meta:
+        model = Task
+        fields = (
+            'date_registration',
+            'event',
+            'work_type',
+            'place',
+            'deadline',
+            'describe',
+            'status',
+        )
 
 
 def generate():
@@ -89,3 +123,75 @@ def generate():
         },
     ]
     EventGenerator.save()
+
+    WorkTypeGenerator.generated_objects = [
+        {'name': 'Принести стулья'},
+        {'name': 'Принести плокаты'},
+        {'name': 'Помыть полы'},
+        {'name': 'Подгодовить помещение'},
+    ]
+    WorkTypeGenerator.save()
+
+    TasksStatusesGenerator.generated_objects = [
+        {'status_name': 'Создано (черновик)'},
+        {'status_name': 'К выполнеию'},
+        {'status_name': 'Выполнено'},
+    ]
+    TasksStatusesGenerator.save()
+
+    TasksGenerator.generated_objects = [
+        {
+            'date-registration': date.today() - timedelta(days=4),
+            'event': Event.get_by_id(1),
+            'work_type': WorkType.get_by_id(1),
+            'place': Place.get_by_id(1),
+            'deadline': date.today() + timedelta(days=2),
+            'describe': 'Лучшая заявка в мире',
+            'status': TasksStatuses.get_by_id(1)
+        },
+        {
+            'date-registration': date.today() - timedelta(days=1),
+            'event': Event.get_by_id(1),
+            'work_type': WorkType.get_by_id(1),
+            'place': Place.get_by_id(1),
+            'deadline': date.today() + timedelta(days=12),
+            'describe': 'Лучшая заявка в мире',
+            'status': TasksStatuses.get_by_id(1)
+        },
+        {
+            'date-registration': date.today() - timedelta(days=2),
+            'event': Event.get_by_id(2),
+            'work_type': WorkType.get_by_id(2),
+            'place': Place.get_by_id(2),
+            'deadline': date.today() + timedelta(days=5),
+            'describe': 'Лучшая заявка в мире',
+            'status': TasksStatuses.get_by_id(2)
+        },
+        {
+            'date-registration': date.today() - timedelta(days=10),
+            'event': Event.get_by_id(2),
+            'work_type': WorkType.get_by_id(2),
+            'place': Place.get_by_id(2),
+            'deadline': date.today() + timedelta(days=25),
+            'describe': 'Лучшая заявка в мире',
+            'status': TasksStatuses.get_by_id(2)
+        },
+        {
+            'date-registration': date.today() - timedelta(days=6),
+            'event': Event.get_by_id(3),
+            'work_type': WorkType.get_by_id(3),
+            'place': Place.get_by_id(3),
+            'deadline': date.today() + timedelta(days=5),
+            'describe': 'Лучшая заявка в мире',
+            'status': TasksStatuses.get_by_id(3)
+        },
+        {
+            'date-registration': date.today() - timedelta(days=6),
+            'event': Event.get_by_id(3),
+            'work_type': WorkType.get_by_id(3),
+            'place': Place.get_by_id(4),
+            'deadline': date.today() + timedelta(days=4),
+            'describe': 'Лучшая заявка в мире',
+            'status': TasksStatuses.get_by_id(3)
+        },
+    ]

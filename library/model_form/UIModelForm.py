@@ -133,7 +133,7 @@ class UIModelForm(metaclass=Singleton):
         obj = self.clear(obj)
         created = False
 
-        object_error, fields_errors = self._run_validators(obj)
+        object_error, fields_errors = self._run_validators(obj, create=True)
 
         if not (object_error or fields_errors):
             self.Meta.model.create(**obj)
@@ -147,7 +147,9 @@ class UIModelForm(metaclass=Singleton):
         update = self.clear(update)
         success = False
 
-        object_error, fields_errors = self._run_validators(update)
+        object_error, fields_errors = self._run_validators(
+            update, create=False
+        )
 
         if not (object_error or fields_errors):
             self.Meta.model.update(
@@ -170,7 +172,9 @@ class UIModelForm(metaclass=Singleton):
     def get_row_params(self, obj, form, datatable) -> dict:
         return {}
 
-    def _run_validators(self, obj: dict) -> tuple[str, dict[str, list[str]]]:
+    def _run_validators(
+        self, obj: dict, create: bool = False
+    ) -> tuple[str, dict[str, list[str]]]:
         fields_errors = {}
 
         for field_name, field in self._form_fields(read_only=False).items():
@@ -178,7 +182,7 @@ class UIModelForm(metaclass=Singleton):
             if e:
                 fields_errors[field_name] = e
 
-        object_error = self.validate(obj)
+        object_error = self.validate(obj, create=create)
 
         if not object_error:
             try:
