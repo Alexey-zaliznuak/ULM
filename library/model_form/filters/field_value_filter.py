@@ -29,3 +29,6 @@ class FieldValueFilter(Filter):
 class FieldValueFilterWidget(FilterWidget):
     filter_class_ = FieldValueFilter
     widget_ = FilterValueFieldWidget
+
+    def __init__(self, field):
+        self.filter_class_ = self.filter_class_(field)
