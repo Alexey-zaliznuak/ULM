@@ -2,20 +2,27 @@ import flet as ft
 from .filter_field import FilterField
 
 
-class FilterValueFieldWidget(ft.Container, FilterField):
+# todo multiple select
+class FilterValueFieldWidget(ft.UserControl, FilterField):
     def __init__(self, form, datatable):
         self.objects_ids: list[int] = []
         self.checkboxes = []
+        self.form = form
 
-        for obj in form.Meta.model.select():
+    def build(self):
+        return ft.Container(
+            content=ft.Column(controls=self.checkboxes)
+        )
+
+    def update(self):
+        # todo filters updates
+        for obj in self.form.Meta.model.select():
             self.objects_ids.append(obj.id)
             self.checkboxes = [
                 ft.Checkbox(label=str(obj), value=True)
             ]
 
-        super().__init__(
-            content=ft.Column(controls=self.checkboxes)
-        )
+        return super().update()
 
     @property
     def value(self) -> list[int]:

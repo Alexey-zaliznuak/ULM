@@ -8,13 +8,16 @@ class FilterWidget:
     widget_: FilterField = ...
 
     def __init__(self, *args, **kwargs):
-        pass
+        self.filter_widget: ft.Control = None
 
     def widget(self, form, datatable) -> ft.Control:
         self.filter_widget = self.widget_(form, datatable)
         return self.filter_widget
 
     def filter(self, queryset):
-        queryset = self.filter_class_.filter(
-            queryset, filter_widget=self.filter_widget
-        )
+        if self.filter_widget:
+            queryset = self.filter_class_.filter(
+                queryset, filter_widget=self.filter_widget
+            )
+
+        return queryset

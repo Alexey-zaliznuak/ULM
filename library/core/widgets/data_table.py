@@ -118,7 +118,10 @@ class UIModelFormDataTable(DataTable):
         **kwargs,
     ):
         self.fields = fields
-        self.filterset = filterset
+        self.filterset = None
+        if filterset:
+            self.filterset = filterset(form, self)
+
         self.default_filters = default_filters
         self.form = form
         self.model = model

@@ -7,18 +7,25 @@ from .filter_widget import FilterWidget
 
 
 class FilterSet:
+    def __init__(self, form, datatable):
+        self.form = form
+        self.datatable = datatable
+
     def widget(self) -> ft.Control:
         return ft.Container(
             content=ft.Column(
                 [
                     ft.Text('Фильтрация'),
-                    *[f.widget() for f in self.filters]
+                    *[
+                        f.widget(self.form, self.datatable)
+                        for f in self.filters
+                    ]
                 ]
             )
         )
 
     def filter(self, queryset):
-        for f in self.Meta.default_filters:
+        for f in getattr(self.Meta, 'default_filters', ()):
             queryset = f.filter(queryset)
 
         for f in self.filters:
