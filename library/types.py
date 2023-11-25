@@ -10,5 +10,12 @@ class empty:
     """
     pass
 
+class AllPossibleValues:
+    """
+    class for filters, use instead when:
+    queryset.where(value.in_(all_possible_values)) == queryset
+    """
+    pass
+
 
 InitValue = Union[empty, Any]

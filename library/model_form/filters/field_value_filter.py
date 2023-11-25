@@ -2,28 +2,29 @@ from typing import Iterable
 from .filter import Filter
 from .filter_widget import FilterWidget
 from library.core.widgets.filters import FilterField, FilterValueFieldWidget
+from library.types import AllPossibleValues
 
 
 class FieldValueFilter(Filter):
-    def __init__(self, field, value=None):
+    def __init__(self, field, value=AllPossibleValues):
         self.field = field
         self.value = value
 
     def filter(self, queryset: Iterable, filter_widget: FilterField = None):
-        value = []
-
-        if self.value:
-            value.append(self.value)
+        values = [self.value]
 
         if filter_widget:
-            value = filter_widget.value
+            filter_value = filter_widget.value
 
-            if isinstance(value, list):
-                value.extend(value)
+            if isinstance(filter_value, list):
+                values.extend(filter_value)
             else:
-                value.append(self.value)
+                values.append(filter_value)
 
-        return queryset.where(self.field.in_(value))
+        if len(values) == values.count(AllPossibleValues):
+            return queryset
+
+        return queryset.where(self.field.in_(values))
 
 
 class FieldValueFilterWidget(FilterWidget):
