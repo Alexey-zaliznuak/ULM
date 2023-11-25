@@ -67,6 +67,7 @@ class UIModelForm(metaclass=Singleton):
         queryset = self.get_queryset(queryset)
         fields = self._form_fields(write_only=False)
         filterset = getattr(self.Meta, 'filterset', filterset)
+
         default_filters = getattr(
             self.Meta, 'default_filters', default_filters
         )
@@ -101,12 +102,9 @@ class UIModelForm(metaclass=Singleton):
             get_row_params=self.get_row_params,
             **kwargs,
         )
+        # todo review cringe filterset move
         data_table_actions_row = Row(
-            [
-                action()(datatable=data_table, form=self)
-                for action in table_actions
-            ]
-            + [filterset.w]
+            self._get_datatable_actions_row_content(data_table, table_actions)
         )
 
         return Column(
@@ -172,6 +170,20 @@ class UIModelForm(metaclass=Singleton):
 
     def get_row_params(self, obj, form, datatable) -> dict:
         return {}
+
+    def _get_datatable_actions_row_content(
+        self,
+        data_table,
+        datatable_actions: Sequence[DataTableAction] = (),
+    ):
+        content = [
+            action()(datatable=data_table, form=self)
+            for action in datatable_actions
+        ]
+        if data_table.filterset:
+            content.append(data_table.filterset.widget())
+
+        return content
 
     def _run_validators(
         self, obj: dict, create: bool = False

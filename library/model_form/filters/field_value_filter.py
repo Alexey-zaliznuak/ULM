@@ -10,20 +10,20 @@ class FieldValueFilter(Filter):
         self.value = value
 
     def filter(self, queryset: Iterable, filter_widget: FilterField = None):
-        values = []
+        value = []
 
         if self.value:
-            values.append(self.value)
+            value.append(self.value)
 
         if filter_widget:
             value = filter_widget.value
 
             if isinstance(value, list):
-                values.extend(value)
+                value.extend(value)
             else:
-                values.append(self.value)
+                value.append(self.value)
 
-        return queryset.where(self.field._in(values))
+        return queryset.where(self.field.in_(value))
 
 
 class FieldValueFilterWidget(FilterWidget):
@@ -32,3 +32,4 @@ class FieldValueFilterWidget(FilterWidget):
 
     def __init__(self, field):
         self.filter_class_ = self.filter_class_(field)
+        super().__init__()
