@@ -29,7 +29,13 @@ def WorkPage(WorkTypesFormDataTable, TaskFormDataTable):
     )
 
 
-def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkTypesFormDataTable, TaskFormDataTable):
+def EducationPage(
+    EventFormDataTable,
+    PlaceDataTable,
+    EventTypesDataTable,
+    WorkTypesFormDataTable,
+    TaskFormDataTable
+):
     return CustomNavigation(
         selected_index=3,
         routes=[
@@ -73,7 +79,13 @@ def EducationPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkT
     )
 
 
-def LearningPage(EventFormDataTable, PlaceDataTable, EventTypesDataTable, WorkTypesFormDataTable, TaskFormDataTable):
+def LearningPage(
+    EventFormDataTable,
+    PlaceDataTable,
+    EventTypesDataTable,
+    WorkTypesFormDataTable,
+    TaskFormDataTable
+):
     return CustomNavigation(
         selected_index=0,
         routes=[

@@ -13,12 +13,16 @@ class Title(Text):
 
 
 def set_page(routes, selected_index):
-    page = routes[selected_index]["page"]
+    FormData = routes[selected_index]["page"]
     title = Title(routes[selected_index]["title"])
 
-    if isinstance(page, ft.UserControl):
-        return ft.Column([title, page], expand=True)
-    return ft.ListView([title, page], expand=True)
+    page = [FormData]
+    if not title:
+        page = [title, FormData]
+
+    if isinstance(FormData, ft.UserControl):
+        return ft.Column(page, expand=True)
+    return ft.ListView(page, expand=True)
 
 
 class CustomNavigation(ft.UserControl):
