@@ -18,6 +18,9 @@ class ForeignKeyViewer(ft.Container, Viewer):
         self.obj = obj
         self.fields = fields
 
+        if len(label) > 25:
+            label = label[:22] + "..."
+
         super().__init__(
             content=ft.TextButton(text=label, on_click=self.open_detail_modal),
         )

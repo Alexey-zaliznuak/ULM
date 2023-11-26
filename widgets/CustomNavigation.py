@@ -15,9 +15,9 @@ class Title(Text):
 def set_page(routes, selected_index):
     FormData = routes[selected_index]["page"]
     title = Title(routes[selected_index]["title"])
-
     page = [FormData]
-    if not title:
+
+    if title.value:
         page = [title, FormData]
 
     if isinstance(FormData, ft.UserControl):

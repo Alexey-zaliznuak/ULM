@@ -18,6 +18,7 @@ from .actions import DataTableAction, ObjectAction
 from .fields import (
     BooleanField,
     CharField,
+    TextField,
     ForeignKeyField,
     FloatField,
     DateTimeField
@@ -36,7 +37,7 @@ class UIModelForm(metaclass=Singleton):
         peewee.AutoField: IntegerField,
         peewee.BooleanField: BooleanField,
         peewee.CharField: CharField,
-        peewee.TextField: CharField,
+        peewee.TextField: TextField,
         peewee.DateTimeField: DateTimeField,
         peewee.IntegerField: IntegerField,
         peewee.ForeignKeyField: ForeignKeyField,

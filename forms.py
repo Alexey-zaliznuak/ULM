@@ -110,7 +110,6 @@ class TasksForm(UIModelForm):
 
     class Meta:
         model = Task
-        filterset = TasksFilterSet
         fields = (
             'date_registration',
             'event',

@@ -16,6 +16,7 @@ from library.core.widgets.fields import (
     DateTimePicker,
     ForeignKeyViewer,
     ForeignKeyEditor,
+    MultiLineTextViewer,
     PhoneInput,
     PhoneViewer,
     TextViewer,
@@ -211,6 +212,10 @@ class RegexField(Field):
 
 class TimeField(Field):
     ...
+
+
+class TextField(CharField):
+    display_widget = MultiLineTextViewer
 
 
 class URLField(Field):

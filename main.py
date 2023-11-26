@@ -1,4 +1,5 @@
 import flet as ft
+from filtersets import TasksFilterSet
 
 from pages.pages import EntertainmentPage, LearningPage, EducationPage
 # from widgets.CustomNavigation import CustomNavigation
@@ -12,7 +13,7 @@ from forms import (
     TasksForm
 )
 
-from models import Event, Categories, Place, init_tables
+from models import Event, Categories, Place, init_tables, TasksStatuses, Task
 from library.model_form.filters import FieldValueFilter
 
 
@@ -141,6 +142,20 @@ def main(page: ft.Page):
     )
     page.datatables.append(task_events_dtRa)
 
+     # ---------------WorkTableData---------------
+    WorkTableFormDataTable, work_table_dt = (
+        task_form.DataTable(
+            default_filters=[
+                FieldValueFilter(
+                    Task.status,
+                    TasksStatuses.get(status_name='К выполнению')
+                )
+            ],
+            filterset=TasksFilterSet
+        )
+    )
+    page.datatables.append(work_table_dt)
+
     t = ft.Tabs(
         selected_index=0,
         animation_duration=50,
@@ -175,6 +190,14 @@ def main(page: ft.Page):
                 content=ft.Container(
                     content=EntertainmentPage(
                         PlaceDataTableOb,
+                    )
+                ),
+            ),
+            ft.Tab(
+                text="Активные заявки",
+                content=ft.Container(
+                    content=EntertainmentPage(
+                        WorkTableFormDataTable,
                     )
                 ),
             ),

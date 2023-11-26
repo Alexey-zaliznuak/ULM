@@ -144,3 +144,20 @@ def EntertainmentPage(PlaceDataTable):
             },
         ]
     )
+
+
+def WorkTablePage(WorkTable):
+    return CustomNavigation(
+        selected_index=0,
+        routes=[
+            {
+                "icon": (
+                    ft.icons.WORK,
+                    ft.icons.WORK_OUTLINED,
+                ),
+                'page':
+                    ft.ListView(controls=[WorkTable]),
+                'title': 'Заявки'
+            },
+        ]
+    )
