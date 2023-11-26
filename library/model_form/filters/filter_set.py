@@ -3,7 +3,6 @@ import flet as ft
 from typing import Sequence
 from functools import cached_property
 from .filter import Filter
-from .filter_widget import FilterWidget
 
 
 class FilterSet:
@@ -31,7 +30,7 @@ class FilterSet:
         return queryset
 
     @cached_property
-    def filters(self) -> list[FilterWidget]:
+    def filters(self) -> list[Filter]:
         return [getattr(self, f_name) for f_name in self.Meta.filters]
 
     class Meta:

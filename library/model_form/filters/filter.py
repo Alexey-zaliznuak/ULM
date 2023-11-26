@@ -1,10 +1,18 @@
 import flet as ft
-from typing import Iterable
+
+import flet as ft
+from library.core.widgets.filters import FilterField
 
 
 class Filter:
-    def __init__(self, *args, **kwargs):
-        pass
+    widget_: FilterField = ...
 
-    def filter(self, queryset: Iterable, filter_widget: ft.Control = None):
-        pass
+    def __init__(self, *args, **kwargs):
+        self.filter_widget: ft.Control = None
+
+    def widget(self, form, datatable) -> ft.Control:
+        self.filter_widget = self.widget_(form, datatable)
+        return self.filter_widget
+
+    def filter(self, queryset):
+        ...

@@ -10,6 +10,7 @@ class empty:
     """
     pass
 
+
 class AllPossibleValues:
     """
     class for filters, use instead when:
