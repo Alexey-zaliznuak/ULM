@@ -5,6 +5,7 @@ from typing import Callable, Sequence, Optional
 import peewee
 from flet import Control, DataColumn, Text, Column, Row, ScrollMode
 
+from library.model_form.actions.table import FilterAction
 from library.core.validators import LengthValidator
 from library.utils import Singleton
 from library.core.exceptions import ValidationError
@@ -176,12 +177,15 @@ class UIModelForm(metaclass=Singleton):
         data_table,
         datatable_actions: Sequence[DataTableAction] = (),
     ):
-        content = [
+        content = []
+
+        if data_table.filterset:
+            content.append(FilterAction()(datatable=data_table, form=self))
+
+        content.extend((
             action()(datatable=data_table, form=self)
             for action in datatable_actions
-        ]
-        if data_table.filterset:
-            content.append(data_table.filterset.widget())
+        ))
 
         return content
 

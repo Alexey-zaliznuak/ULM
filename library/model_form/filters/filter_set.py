@@ -15,11 +15,8 @@ class FilterSet:
         return ft.Container(
             content=ft.Column(
                 [
-                    ft.Text('Фильтрация'),
-                    *[
-                        f.widget(self.form, self.datatable)
-                        for f in self.filters
-                    ]
+                    f.widget(self.form, self.datatable)
+                    for f in self.filters
                 ]
             )
         )
