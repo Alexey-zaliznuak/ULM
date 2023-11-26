@@ -60,7 +60,7 @@ class UIModelFormDataTableRow(DataRow):
 
         if actions:
             cells.append(DataCell(Row([
-                action()(
+                action(
                     obj=obj,
                     datatable=datatable,
                     page=LazyAttribute(self, 'page'),

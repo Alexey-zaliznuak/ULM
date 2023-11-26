@@ -51,7 +51,7 @@ class UIModelForm(metaclass=Singleton):
         'choices': 'choices',
     }
 
-    # TODO Filter Widget
+    # TODO Fix bug with super filters
     # choose displaying fields
 
     def DataTable(

@@ -1,6 +1,7 @@
 import os
 import sys
 from peewee import (
+    # BooleanField,
     CharField,
     DateTimeField,
     DateTimeField,
@@ -34,6 +35,10 @@ class Categories(BaseModel):
 class Place(BaseModel):
     name = CharField(max_length=100)
     category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
+    # big = BooleanField(
+    #     default=False,
+    #     help_text='Может вместить 2 мероприятия одновременно'
+    # )
 
     def __str__(self) -> str:
         return self.name
@@ -99,6 +104,20 @@ class Task(BaseModel):
         return f"Task at {self.date_registration}"
 
 
+class Booking(BaseModel):
+    date_creation = DateTimeField()
+    event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
+
+    def validate(self, create=False):
+        if self.date_creation > self.deadline:
+            raise ValidationError(
+                'Срок должен быть позже даты создания.'
+            )
+
+    def __str__(self) -> str:
+        return f"Task at {self.date_registration}"
+
+
 def init_tables():
     tables = [
         Categories,
@@ -123,7 +142,10 @@ def init_tables():
         return
 
     if os.path.exists('./db.db'):
-        db.connect()
+        try:
+            db.connect()
+        except Exception:
+            pass
         if __name__ == '__main__':
             db.drop_tables(tables)
         db.create_tables(tables)
