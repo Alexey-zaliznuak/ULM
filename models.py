@@ -95,6 +95,9 @@ class Task(BaseModel):
                 'Срок должен быть позже даты создания.'
             )
 
+    def __str__(self) -> str:
+        return f"Task at {self.date_registration}"
+
 
 def init_tables():
     tables = [

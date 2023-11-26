@@ -1,4 +1,7 @@
-from library.core.widgets.actions.table import FilterActionButton, FilterActionDialog
+from library.core.widgets.actions.table import (
+    FilterActionButton,
+    FilterActionDialog
+)
 
 from .table_action import DataTableAction
 
