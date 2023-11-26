@@ -19,7 +19,7 @@ class ObjectAction():
         datatable=None
     ) -> Control:
         return self.action_widget(
-            partial(self.on_click_method, obj, page, datatable)
+            on_click=partial(self.on_click_method, obj, page, datatable)
         )
 
     def on_click_method(self, *args, **kwargs):

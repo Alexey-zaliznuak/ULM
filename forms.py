@@ -5,6 +5,7 @@ from library.model_form.actions.objects import (
     DeleteObjectAction,
     DetailObjectAction,
     EditObjectAction,
+    SetValueObjectAction,
 )
 from library.model_form.actions.table import CreateObjectAction
 
@@ -25,9 +26,9 @@ class CategoriesForm(UIModelForm):
         model = Categories
         fields = ('id', 'name',)
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
         )
 
         table_actions = (CreateObjectAction, )
@@ -40,9 +41,9 @@ class PlaceForm(UIModelForm):
         model = Place
         fields = ('id', 'name', 'category')
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
         )
 
         table_actions = (CreateObjectAction, )
@@ -53,9 +54,9 @@ class EventTypesForm(UIModelForm):
         model = EventTypes
         fields = ('id', 'name',)
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
         )
 
         table_actions = (CreateObjectAction, )
@@ -70,9 +71,9 @@ class EventForm(UIModelForm):
         # todo create only fields
         fields = ('date', 'event_type', 'describe', 'category')
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
         )
 
         table_actions = (CreateObjectAction, )
@@ -83,9 +84,9 @@ class WorkTypeForm(UIModelForm):
         model = WorkType
         fields = ('id', 'name',)
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
         )
         table_actions = (CreateObjectAction, )
 
@@ -95,9 +96,9 @@ class TasksStatusesForm(UIModelForm):
         model = TasksStatuses
         fields = ('id', 'status_name',)
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
         )
         table_actions = (CreateObjectAction, )
 
@@ -120,9 +121,12 @@ class TasksForm(UIModelForm):
             'status',
         )
         objects_actions = (
-            EditObjectAction,
-            DetailObjectAction,
-            DeleteObjectAction,
+            EditObjectAction(),
+            DetailObjectAction(),
+            DeleteObjectAction(),
+            SetValueObjectAction(
+                Task.status, TasksStatuses.get(status_name='Выполнено')
+            )
         )
         table_actions = (CreateObjectAction,)
 

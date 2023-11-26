@@ -72,19 +72,21 @@ def generate():
     PlaceGenerator.generated_objects = [
         {
             'name': 'Музей № 1',
-            'category': Categories.get(name='Просветительское')
+            'category': Categories.get(name='Просветительское'),
         },
         {
             'name': 'Музей № 2',
-            'category': Categories.get(name='Просветительское')
+            'category': Categories.get(name='Просветительское'),
         },
         {
             'name': 'Татр № 1',
-            'category': Categories.get(name='Развлекательное')
+            'category': Categories.get(name='Развлекательное'),
+            # 'big': True
         },
         {
             'name': 'Секция Пения № 1',
-            'category': Categories.get(name='Образовательное')
+            'category': Categories.get(name='Образовательное'),
+            # 'big': True
         },
     ]
     PlaceGenerator.save()
