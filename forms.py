@@ -11,6 +11,7 @@ from library.model_form.actions.table import CreateObjectAction
 
 from filtersets import TasksFilterSet
 from models import (
+    Booking,
     Categories,
     Place,
     EventTypes,
@@ -146,3 +147,21 @@ class TasksForm(UIModelForm):
         return {
             'color': colours[obj.status]
         }
+
+
+class BoookingForm(UIModelForm):
+    # todo queryset
+    place = ForeignKeyField('place', PlaceForm)
+    event = ForeignKeyField('event', EventForm)
+
+    class Meta:
+        model = Booking
+        fields = (
+            'place',
+            'book_full',
+            'event',
+            'start_booking_time',
+            'end_booking_time',
+            'comment',
+            'date_creation',
+        )

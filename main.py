@@ -13,10 +13,10 @@ from forms import (
 )
 
 from models import Event, Categories, Place, init_tables
-from library.model_form.filters import FieldValueFilter
-
 
 init_tables()
+
+from library.model_form.filters import FieldValueFilter
 
 
 place_catagories_form = CategoriesForm()

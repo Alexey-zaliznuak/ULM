@@ -31,18 +31,23 @@ from peewee import Model
 class EditFieldWidget(Container):
     def __init__(
         self,
-        label,
+        label: str,
         editing_field: Control = None,
-        errors: Callable[[], list[str]] = None
+        errors: Callable[[], list[str]] = None,
+        help_text: str = None
     ):
         self.label = label
         self._get_errors = errors
         self.column_errors = Column(self._get_column_errors())
 
+        labels = [Text(label)]
+        if help_text:
+            labels.append(Text(help_text))
+
         super().__init__(
             content=Column(
                 [
-                    Text(label),
+                    *labels,
                     editing_field,
                     self.column_errors
                 ]
@@ -182,16 +187,18 @@ class EditObjectActionDialog(AlertDialog):
 
             edit_field = field.edit(value=value)
             self.fields[field] = edit_field
-
             controls.append(
                 EditFieldWidget(
-                    field.label, edit_field, LazyAttribute(
+                    field.label,
+                    edit_field,
+                    LazyAttribute(
                         obj=self,
                         attr='errors.get',
                         args=(field.label, []),
-                    ))
+                    ),
+                    help_text=field.help_text
+                )
             )
-
         return controls
 
     def _close_dlg(self, e=None):

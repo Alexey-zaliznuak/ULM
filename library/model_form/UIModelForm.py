@@ -127,6 +127,9 @@ class UIModelForm(metaclass=Singleton):
             if hasattr(self, f'clear_{field_name}'):
                 new_obj[field_name] = getattr(self, f'clear_{field_name}')(obj)
 
+            if hasattr(self.Meta.model, f'clear_{field_name}'):
+                new_obj[field_name] = getattr(self, f'clear_{field_name}')(obj)
+
         return new_obj
 
     def create(self, obj: dict) -> tuple[bool, str, dict[str, list[str]]]:
@@ -136,6 +139,8 @@ class UIModelForm(metaclass=Singleton):
         object_error, fields_errors = self._run_validators(obj, create=True)
 
         if not (object_error or fields_errors):
+            # todo
+            # new_id = User.insert({User.username: 'admin'}).execute()
             self.Meta.model.create(**obj)
             created = True
 
@@ -247,7 +252,6 @@ class UIModelForm(metaclass=Singleton):
 
         for db_attr_name in db_field_attrs:
             ui_attr_name = self.fields_attrs_mapping.get(db_attr_name)
-
             if ui_attr_name and ui_attr_name in ui_field_attrs:
                 attrs[ui_attr_name] = getattr(model_field, db_attr_name)
 
@@ -269,6 +273,9 @@ class UIModelForm(metaclass=Singleton):
             attrs['read_only'] = True
         if field_name in getattr(self.Meta, 'write_only_fields', ()):
             attrs['write_only'] = True
+
+        # todo always check default base peewee 'Field' attrs
+        attrs['help_text'] = model_field.help_text
 
         return attrs
 
