@@ -1,7 +1,7 @@
 import os
 import sys
 from peewee import (
-    # BooleanField,
+    BooleanField,
     CharField,
     DateTimeField,
     DateTimeField,
@@ -33,12 +33,12 @@ class Categories(BaseModel):
 
 
 class Place(BaseModel):
-    name = CharField(max_length=100)
+    name = CharField(max_length=100, help_text='Наименование пространства')
     category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
-    # big = BooleanField(
-    #     default=False,
-    #     help_text='Может вместить 2 мероприятия одновременно'
-    # )
+    big = BooleanField(
+        default=False,
+        help_text='Может вместить 2 мероприятия одновременно'
+    )
 
     def __str__(self) -> str:
         return self.name
@@ -105,17 +105,64 @@ class Task(BaseModel):
 
 
 class Booking(BaseModel):
-    date_creation = DateTimeField()
+    date_creation = DateTimeField(default=datetime.now)
     event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
+    start_booking_time = DateTimeField()
+    end_booking_time = DateTimeField()
+
+    # todo filter by queryset
+    place = ForeignKeyField(Place, to_field='id', on_delete='CASCADE')
+    book_full = BooleanField(
+        help_text=(
+            'Забронировать все помещение'
+            '(если помещение может вместить только одно мероприятие, '
+            'то можете проигнорировать этот параметр)'
+        )
+    )
+    comment = TextField()
 
     def validate(self, create=False):
-        if self.date_creation > self.deadline:
+        if self.start_booking_time > self.end_booking_time:
             raise ValidationError(
-                'Срок должен быть позже даты создания.'
+                'Начало бронирование должно быть позже его конца.'
             )
 
+        if self.date_creation > self.start_booking_time:
+            raise ValidationError(
+                'Указанная начальная дата бронирования уже прошла.'
+            )
+
+        # todo make normal algorithm
+        bookings = Booking.select().where(
+            Booking.place == self.place,
+            Booking.start_booking_time < self.end_booking_time,
+            Booking.end_booking_time > self.start_booking_time,
+        )
+
+        if bookings.count > 1:
+            raise ValidationError(
+                'Помещение уже полностью забронировано на это время'
+            )
+        if bookings.count == 1:
+            if bookings[0].book_full:
+                raise ValidationError(
+                    'Помещение было полностью забронировано на это время'
+                )
+            if self.book_full:
+                raise ValidationError(
+                    'Невозможно забронировать полностью - '
+                    'помещение уже частично забронировано.'
+                )
+
+    # todo check that it work)
+    def clear_book_full(self, value):
+        if not self.place.big:
+            value = False
+
+        return value
+
     def __str__(self) -> str:
-        return f"Task at {self.date_registration}"
+        return f"Booking at {self.date_creation}"
 
 
 def init_tables():
@@ -126,12 +173,16 @@ def init_tables():
         Event,
         TasksStatuses,
         WorkType,
-        Task
+        Task,
+        Booking,
     ]
 
     def remake_db():
-        print('create',flush=True)
-        db.connect()
+        print('create')
+        try:
+            db.connect()
+        except Exception:
+            pass
         db.drop_tables(tables)
         db.create_tables(tables)
         from generators import generate
@@ -154,4 +205,5 @@ def init_tables():
 
 
 if __name__ == '__main__':
-    init_tables()
+    print(Place.__name__)
+    # init_tables()

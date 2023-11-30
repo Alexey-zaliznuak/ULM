@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from library.utils.model_data_generator import ModelDataGenerator
 from models import (
+    Booking,
     Categories,
     Place,
     EventTypes,
@@ -47,6 +48,20 @@ class TasksStatusesGenerator(ModelDataGenerator):
         fields = ('status_name',)
 
 
+class BookingGenerator(ModelDataGenerator):
+    class Meta:
+        model = Booking
+        fields = (
+            'place',
+            'book_full',
+            'event',
+            'start_booking_time',
+            'end_booking_time',
+            'comment',
+            'date_creation',
+        )
+
+
 class TasksGenerator(ModelDataGenerator):
     class Meta:
         model = Task
@@ -81,12 +96,12 @@ def generate():
         {
             'name': 'Татр № 1',
             'category': Categories.get(name='Развлекательное'),
-            # 'big': True
+            'big': True
         },
         {
             'name': 'Секция Пения № 1',
             'category': Categories.get(name='Образовательное'),
-            # 'big': True
+            'big': True
         },
     ]
     PlaceGenerator.save()
@@ -199,3 +214,43 @@ def generate():
     ]
 
     TasksGenerator.save()
+
+    BookingGenerator.generated_objects = [
+        {
+            'place': Place.get_by_id(1),
+            'book_full': False,
+            'event': Place.get_by_id(1),
+            'start_booking_time': date() + timedelta(hours=2),
+            'end_booking_time': date() + timedelta(hours=4),
+            'comment': 'Без комментариев',
+            'date_creation': date() + timedelta(hours=1),
+        },
+        {
+            'place': Place.get_by_id(4),
+            'book_full': True,
+            'event': Event.get_by_id(2),
+            'start_booking_time': date() + timedelta(hours=5),
+            'end_booking_time': date() + timedelta(hours=15),
+            'comment': 'Без комментариев',
+            'date_creation': date() + timedelta(hours=1),
+        },
+        {
+            'place': Place.get_by_id(3),
+            'book_full': False,
+            'event': Event.get_by_id(3),
+            'start_booking_time': date() + timedelta(hours=2),
+            'end_booking_time': date() + timedelta(hours=3),
+            'comment': 'Без комментариев',
+            'date_creation': date() + timedelta(hours=1),
+        },
+        {
+            'place': Place.get_by_id(3),
+            'book_full': False,
+            'event': Event.get_by_id(4),
+            'start_booking_time': date() + timedelta(hours=5),
+            'end_booking_time': date() + timedelta(hours=8),
+            'comment': 'Без комментариев',
+            'date_creation': date() + timedelta(hours=1),
+        }
+    ]
+    BookingGenerator.save()

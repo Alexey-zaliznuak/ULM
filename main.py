@@ -16,6 +16,9 @@ from forms import (
     TasksForm
 )
 
+from models import Event, Categories, Place, init_tables
+init_tables()
+
 from library.model_form.filters import FieldValueFilter
 
 
