@@ -140,7 +140,7 @@ class TasksForm(UIModelForm):
             ): colors.PINK_ACCENT_100,
             TasksStatuses.get(
                 TasksStatuses.status_name == 'Выполнено'
-            ): colors.GREEN_300,
+            ): colors.GREY_300,
         }
         return {
             'color': colours[obj.status]

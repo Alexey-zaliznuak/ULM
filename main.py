@@ -4,6 +4,9 @@ from filtersets import TasksFilterSet
 from pages.pages import EntertainmentPage, LearningPage, EducationPage
 # from widgets.CustomNavigation import CustomNavigation
 
+from models import Event, Categories, Place, init_tables, TasksStatuses, Task
+init_tables()
+
 from forms import (
     EventTypesForm,
     EventForm,
@@ -13,11 +16,9 @@ from forms import (
     TasksForm
 )
 
-from models import Event, Categories, Place, init_tables, TasksStatuses, Task
 from library.model_form.filters import FieldValueFilter
 
 
-init_tables()
 
 
 place_catagories_form = CategoriesForm()

@@ -143,6 +143,14 @@ class DateTimeField(ft.UserControl):
 class DateTimeViewer(DateTimeField, Viewer):
     pass
 
+class TimeViewer(DateTimeViewer):
+    defaults = {
+        'hour_minute': True,
+    }
+
+    def __init__(self, *args, **kwargs):
+        kwargs = kwargs | self.defaults
+        super().__init__(*args, **kwargs)
 
 class DateTimePicker(DateTimeField, InputField):
     def __init__(
@@ -182,11 +190,6 @@ class DateTimePicker(DateTimeField, InputField):
         )
 
     def build(self):
-        # self.widget = ft.Container(
-        #     content=self.st,
-        # )
-        # return self.widget
-
         self.datepicker = DatePicker(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
@@ -194,9 +197,6 @@ class DateTimePicker(DateTimeField, InputField):
             selected_date=[self.tf.value] if self.tf.value else None,
             selection_type=self.datepicker_type,
             holidays=self.holidays,
-            # disable_to=self._to_datetime(self.tf1.value),
-            # disable_from=self._to_datetime(self.tf2.value),
-            # locale=self.selected_locale,
         )
 
         return self.datepicker
@@ -204,3 +204,12 @@ class DateTimePicker(DateTimeField, InputField):
     @property
     def clear_value(self):
         return self.datepicker.selected_data[0]
+
+class TimePicker(DateTimePicker):
+    defaults = {
+        'hour_minute': True,
+    }
+
+    def __init__(self, *args, **kwargs):
+        kwargs = kwargs | self.defaults
+        super().__init__(*args, **kwargs)

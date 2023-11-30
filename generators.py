@@ -128,9 +128,9 @@ def generate():
 
     WorkTypeGenerator.generated_objects = [
         {'name': 'Принести стулья'},
-        {'name': 'Принести плокаты'},
+        {'name': 'Принести плакаты'},
         {'name': 'Помыть полы'},
-        {'name': 'Подгодовить помещение'},
+        {'name': 'Подготовить помещение'},
     ]
     WorkTypeGenerator.save()
 

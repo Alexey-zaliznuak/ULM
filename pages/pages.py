@@ -135,12 +135,12 @@ def EntertainmentPage(PlaceDataTable):
         routes=[
             {
                 "icon": (
-                    ft.icons.PLACE,
-                    ft.icons.PLACE_OUTLINED,
+                    ft.icons.WORK,
+                    ft.icons.WORK_OUTLINED,
                 ),
                 'page':
                     ft.ListView(controls=[PlaceDataTable]),
-                'title': 'Пространства'
+                'title': 'К выполнению'
             },
         ]
     )

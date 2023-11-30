@@ -11,6 +11,15 @@ class TextViewer(Text, Viewer):
 class TextEditor(TextField, InputField):
     pass
 
+class MultiLineTextEditor(TextField, InputField):
+    defaults = {
+        'multiline': True,
+    }
+
+    def __init__(self, *args, **kwargs):
+        kwargs = kwargs | self.defaults
+        super().__init__(*args, **kwargs)
+
 
 class MultiLineTextViewer(Text, Viewer):
     defaults = {

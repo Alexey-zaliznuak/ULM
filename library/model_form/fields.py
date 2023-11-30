@@ -17,6 +17,7 @@ from library.core.widgets.fields import (
     ForeignKeyViewer,
     ForeignKeyEditor,
     MultiLineTextViewer,
+    MultiLineTextEditor,
     PhoneInput,
     PhoneViewer,
     TextViewer,
@@ -216,6 +217,7 @@ class TimeField(Field):
 
 class TextField(CharField):
     display_widget = MultiLineTextViewer
+    edit_widget = MultiLineTextEditor
 
 
 class URLField(Field):

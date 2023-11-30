@@ -130,7 +130,7 @@ def init_tables():
     ]
 
     def remake_db():
-        print('create')
+        print('create',flush=True)
         db.connect()
         db.drop_tables(tables)
         db.create_tables(tables)
