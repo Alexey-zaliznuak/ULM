@@ -267,6 +267,7 @@ class ForeignKeyField(RelatedField):
         self,
         source: str,
         foreign_form,  # form for getting fields for display object
+        # queryset: Callable = None,
         read_only=False,
         write_only=False,
         required: bool = None,
@@ -281,6 +282,7 @@ class ForeignKeyField(RelatedField):
     ):
         self.fields = foreign_form()._form_fields(write_only=False).values()
         self.foreign_form = foreign_form
+        # self.queryset = queryset
         self.default_validators = self.default_validators.copy()
         self.default_validators.append(
             ForeignKeyValidator(foreign_form().Meta.model)

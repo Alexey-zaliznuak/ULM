@@ -162,7 +162,7 @@ class Booking(BaseModel):
         return value
 
     def __str__(self) -> str:
-        return f"Book at {self.date_creation}"
+        return f"Booking at {self.date_creation}"
 
 
 def init_tables():
@@ -205,4 +205,5 @@ def init_tables():
 
 
 if __name__ == '__main__':
-    init_tables()
+    print(Place.__name__)
+    # init_tables()

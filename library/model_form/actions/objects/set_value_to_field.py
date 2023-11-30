@@ -6,7 +6,7 @@ from library.core.widgets.actions.objects.set_value import (
 )
 from library.utils import LazyAttribute
 from library.core.widgets import ConfirmActionDialog
-from flet import Page, icons
+from flet import Page
 
 from .object_action import ObjectAction
 
@@ -20,7 +20,6 @@ class SetValueObjectAction(ObjectAction):
         value,
         *,
         request_confirm: bool = True,
-        icon=icons.EDIT_ATTRIBUTES
     ):
         """
         request_confirm: - call ConfirmDialog for action confirm

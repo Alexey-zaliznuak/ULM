@@ -119,14 +119,21 @@ class ObjectErrorBottomSheet(BottomSheet):
 class EditObjectActionDialog(AlertDialog):
     def __init__(
         self,
+        form,
         obj: dict = {},
         datatable=None,
-        form=None,
         *args,
+        create=None,
         **kwargs
     ):
         self.obj = obj
-        self.create = not self.obj  # if not obj we create it
+        self.create = False
+        self.is_force_action = False
+
+        if create is not None:
+            self.create = create
+            self.is_force_action = True
+
         self.form = form
         self.datatable = datatable
         self.errors: dict[str, list[str]] = {}
@@ -141,7 +148,7 @@ class EditObjectActionDialog(AlertDialog):
             content=Container(
                 content=ListView(
                     [
-                        TitleText("Создать новый"),
+                        TitleText(self.title_text),
                         Column(self.fields_widgets),
                         Container(
                             content=Row(
@@ -165,7 +172,10 @@ class EditObjectActionDialog(AlertDialog):
                 ),
                 border_radius=26,
                 padding=30,
-                # image_src='https://huivpizde.com/uploads/posts/2023-02/thumbs/1677017462_huivpizde-com-p-porno-guan-yui-3.jpg',
+                image_src=(
+                    'https://huivpizde.com/uploads/posts/2023-02/'
+                    'thumbs/1677017462_huivpizde-com-p-porno-guan-yui-3.jpg'
+                ),
                 image_fit=ImageFit.COVER,
             ),
             title_padding=0,
@@ -182,6 +192,10 @@ class EditObjectActionDialog(AlertDialog):
         for field in self.form._form_fields(read_only=False).values():
             if isinstance(self.obj, dict):
                 value = self.obj.get(field.label, empty)
+                # create action if no field value
+                if not self.force_action and value is empty:
+                    self.create = True
+
             else:
                 value = getattr(self.obj, field.label, empty)
 
@@ -200,6 +214,13 @@ class EditObjectActionDialog(AlertDialog):
                 )
             )
         return controls
+
+    @property
+    def title_text(self):
+        if self.create:
+            return f"Создать {self.form.Meta.model.__name__}"
+
+        return f"Отредактировать {self.form.Meta.model.__name__}"
 
     def _close_dlg(self, e=None):
         self.open = False
