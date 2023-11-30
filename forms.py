@@ -2,6 +2,7 @@ from flet import colors
 from library.model_form import UIModelForm
 from library.model_form.fields import ForeignKeyField
 from library.model_form.actions.objects import (
+    CreateForeignObjectAction,
     DeleteObjectAction,
     DetailObjectAction,
     EditObjectAction,
@@ -22,16 +23,18 @@ from models import (
 )
 
 
+RUDActions = [
+    EditObjectAction(),
+    DetailObjectAction(),
+    DeleteObjectAction(),
+]
+
+
 class CategoriesForm(UIModelForm):
     class Meta:
         model = Categories
         fields = ('id', 'name',)
-        objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
-        )
-
+        objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
 
@@ -41,11 +44,7 @@ class PlaceForm(UIModelForm):
     class Meta:
         model = Place
         fields = ('id', 'name', 'category')
-        objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
-        )
+        objects_actions = RUDActions
 
         table_actions = (CreateObjectAction, )
 
@@ -54,12 +53,7 @@ class EventTypesForm(UIModelForm):
     class Meta:
         model = EventTypes
         fields = ('id', 'name',)
-        objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
-        )
-
+        objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
 
@@ -71,12 +65,7 @@ class EventForm(UIModelForm):
         model = Event
         # todo create only fields
         fields = ('date', 'event_type', 'describe', 'category')
-        objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
-        )
-
+        objects_actions = (RUDActions,)
         table_actions = (CreateObjectAction, )
 
 
@@ -84,11 +73,7 @@ class WorkTypeForm(UIModelForm):
     class Meta:
         model = WorkType
         fields = ('id', 'name',)
-        objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
-        )
+        objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
 
@@ -96,11 +81,7 @@ class TasksStatusesForm(UIModelForm):
     class Meta:
         model = TasksStatuses
         fields = ('id', 'status_name',)
-        objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
-        )
+        objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
 
@@ -123,9 +104,7 @@ class TasksForm(UIModelForm):
             'status',
         )
         objects_actions = (
-            EditObjectAction(),
-            DetailObjectAction(),
-            DeleteObjectAction(),
+            *RUDActions,
             SetValueObjectAction(
                 Task.status, TasksStatuses.get(status_name='Выполнено')
             )
@@ -165,3 +144,10 @@ class BoookingForm(UIModelForm):
             'comment',
             'date_creation',
         )
+        objects_actions = RUDActions
+        table_actions = (CreateObjectAction, )
+
+
+EventForm.Meta.objects_actions = EventForm.Meta.objects_actions + [
+    CreateForeignObjectAction(BoookingForm, Booking.event)
+]
