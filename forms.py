@@ -10,7 +10,6 @@ from library.model_form.actions.objects import (
 )
 from library.model_form.actions.table import CreateObjectAction
 
-from filtersets import TasksFilterSet
 from models import (
     Booking,
     Categories,
