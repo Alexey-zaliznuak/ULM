@@ -126,7 +126,7 @@ class TasksForm(UIModelForm):
         }
 
 
-class BoookingForm(UIModelForm):
+class BookingForm(UIModelForm):
     # todo queryset
     place = ForeignKeyField('place', PlaceForm)
     event = ForeignKeyField('event', EventForm)
@@ -147,5 +147,5 @@ class BoookingForm(UIModelForm):
 
 EventForm.Meta.objects_actions = [
     *EventForm.Meta.objects_actions,
-    CreateForeignObjectAction(BoookingForm(), Booking.event, icon=icons.FACT_CHECK_OUTLINED)
+    CreateForeignObjectAction(BookingForm(), Booking.event, icon=icons.FACT_CHECK_OUTLINED)
 ]
