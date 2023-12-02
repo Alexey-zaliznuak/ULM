@@ -50,7 +50,7 @@ class Place(BaseModel):
 
 
 class EventTypes(BaseModel):
-    name = CharField(max_length=100, help_text='Наименование мероприятия')
+    name = CharField(max_length=100, help_text='Наименование типа мероприятия')
 
     def __str__(self) -> str:
         return self.name
@@ -66,7 +66,10 @@ class Event(BaseModel):
     date = DateField(help_text='Дата проведения')
     describe = TextField(help_text='Описание')
     event_type = ForeignKeyField(
-        EventTypes, to_field='id', on_delete='CASCADE', help_text='Тип мероприятия'
+        EventTypes,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Тип мероприятия'
     )
 
     def validate(self, create=False):
@@ -86,22 +89,25 @@ class WorkType(BaseModel):
 
 
 class TasksStatuses(BaseModel):
-    status_name = CharField(max_length=100)
+    status_name = CharField(max_length=100, help_text='Нименование статуса')
 
     def __str__(self) -> str:
         return self.status_name
 
 
 class Task(BaseModel):
-    date_registration = DateField()
+    date_registration = DateTimeField()
     event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
     work_type = ForeignKeyField(WorkType, to_field='id', on_delete='CASCADE')
     place = ForeignKeyField(Place, to_field='id', on_delete='CASCADE')
-    deadline = DateField()
+    deadline = DateTimeField()
 
-    describe = TextField()
+    describe = TextField(help_text='описание')
     status = ForeignKeyField(
-        TasksStatuses, to_field='id', on_delete='CASCADE'
+        TasksStatuses,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Статус'
     )
 
     def validate(self, create=False):
@@ -115,13 +121,18 @@ class Task(BaseModel):
 
 
 class Booking(BaseModel):
-    date_creation = DateField(default=datetime.now)
+    date_creation = DateTimeField(default=datetime.now)
     event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
     start_booking_time = DateTimeField()
     end_booking_time = DateTimeField()
 
     # todo filter by queryset
-    place = ForeignKeyField(Place, to_field='id', on_delete='CASCADE')
+    place = ForeignKeyField(
+        Place,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Помешение'
+    )
     book_full = BooleanField(
         help_text=(
             'Забронировать все помещение'
@@ -129,7 +140,7 @@ class Booking(BaseModel):
             'то можете проигнорировать этот параметр)'
         )
     )
-    comment = TextField()
+    comment = TextField(help_text='Комментарий')
 
     def validate(self, create=False):
         if self.start_booking_time >= self.end_booking_time:

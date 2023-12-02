@@ -158,6 +158,7 @@ class DateTimeField(ft.UserControl):
 class DateTimeViewer(DateTimeField, Viewer):
     pass
 
+
 class TimeViewer(DateTimeViewer):
     defaults = {
         'hour_minute': True,
@@ -166,6 +167,7 @@ class TimeViewer(DateTimeViewer):
     def __init__(self, *args, **kwargs):
         kwargs = kwargs | self.defaults
         super().__init__(*args, **kwargs)
+
 
 class DateTimePicker(DateTimeField, InputField):
     def __init__(
@@ -223,6 +225,7 @@ class DateTimePicker(DateTimeField, InputField):
     @property
     def clear_value(self):
         return self.datepicker.selected_data[0]
+
 
 class TimePicker(DateTimePicker):
     defaults = {

@@ -146,7 +146,12 @@ class BookingForm(UIModelForm):
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
+
 EventForm.Meta.objects_actions = [
     *EventForm.Meta.objects_actions,
-    CreateForeignObjectAction(BookingForm(), Booking.event, icon=icons.FACT_CHECK_OUTLINED)
+    CreateForeignObjectAction(
+        BookingForm(),
+        Booking.event,
+        icon=icons.FACT_CHECK_OUTLINED
+    )
 ]

@@ -22,7 +22,6 @@ from forms import (
 from library.model_form.filters import FieldValueFilter
 
 
-
 place_catagories_form = CategoriesForm()
 place_form = PlaceForm()
 events_types_form = EventTypesForm()
