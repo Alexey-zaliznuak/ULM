@@ -1,73 +1,59 @@
 import flet as ft
+from datetime import datetime
+from core.TimeLineTable.TimeLine import TimeLine
+from core.TimeLineTable.TimeLineDataFormatter import TimeLineDataFormatter
 
-CELL_WIDTH = 60
-FIRST_COLUMN_WIDTH = 100
+from library.core.widgets.fields.DateTime import DateTimePicker
 
 
 class TimeLineTable(ft.UserControl):
     def __init__(
         self,
-        matrix,
+        get_bookings,
+        get_places
     ):
+        self.bookings = get_bookings
+        self.places = get_places
+
+        self.datepicker = DateTimePicker(
+            value=datetime.now(),
+            on_change=self.on_change
+        )
+
+        self.time_line_data_formatter = TimeLineDataFormatter(
+            get_bookings=get_bookings,
+            get_places=get_places
+        )
+
+        self.TimeLine = TimeLine(
+            self.get_matrix()
+        )
         super().__init__()
-        self.matrix = matrix
 
-    def make_rectangles(self, data):
-        row = []
-        for rect in data:
-            row.append(
-                ft.cv.Rect(
-                    rect['start'], 
-                    rect['floor'],
-                    rect['end'], 
-                    rect['height']
-                )
-            )
-        return row      
+    def get_matrix(self):
+        return self.time_line_data_formatter.get_rows()
 
-    def make_rows(self):
-        rows = []
-        for row in self.matrix:
-            rows.append(
-                ft.Row(
-                    [
-                        ft.Container(
-                            content=ft.Text(row['name']),
-                            width=FIRST_COLUMN_WIDTH,
-                        ),
-                        ft.Container(
-                            content=ft.canvas.Canvas(
-                                self.make_rectangles(row['data']),
-                                width=float("inf"),
-                                expand=True,
-                            ),
-                            height=40,
-                            bgcolor=ft.colors.BLUE_400
-                        ),
-                    ],
-                    vertical_alignment=ft.CrossAxisAlignment.CENTER
-                )
-            )
-        return rows
+    def on_change(self, value):
+        self.time_line_data_formatter.select_day = value
+
+        self.TimeLine = TimeLine(
+            self.get_matrix()
+        )
+        self.controls[0].content.controls[1].content = self.TimeLine
+        self.update()
 
 
     def build(self):
-        return ft.ListView(
-            [
-                ft.Column([
-                    ft.Row(
-                        [
-                            ft.Container(
-                                content=ft.Text(f'Помещение'),
-                                width=FIRST_COLUMN_WIDTH,
-                                alignment=ft.alignment.center
-                            ),
-                            *[ft.Container(content=ft.Text(f'{hour:02}:00'), width=CELL_WIDTH) for hour in range(24)]
-                        ],
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER
-                    ),
-                    ft.Column(self.make_rows())
-                ])
-            ],
-            horizontal=True
+        return(
+            ft.Container(
+                content=ft.Column(
+                    
+                    [
+                        self.datepicker,
+                        ft.Container(
+                            content=self.TimeLine
+                        )
+                    ]
+                )
+            )
         )

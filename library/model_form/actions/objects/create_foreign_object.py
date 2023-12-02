@@ -34,6 +34,7 @@ class CreateForeignObjectAction(ObjectAction):
         page.dialog = EditObjectActionDialog(
             form=self.foreign_form,
             obj={self.foreign_field.name: obj},
+            datatable=datatable
         )
         page.dialog.open = True
         page.update()

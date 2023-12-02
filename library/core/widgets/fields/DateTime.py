@@ -45,9 +45,18 @@ class DateTimeField(ft.UserControl):
             content_padding=0
         )
 
+        if value is None:
+            value = datetime.now()
+
+        if not isinstance(value, str):
+            if self.hour_minute:
+                value = datetime.strftime(value, "%Y-%m-%d\n%H:%M")
+            else:
+                value = datetime.strftime(value, "%Y-%m-%d")
+
         self.tf = ft.Container(
             content=ft.Text(
-                value=self.value.strftime("%Y-%m-%d"),
+                value=value,
             ),
             width=120,
             height=50,
@@ -127,14 +136,20 @@ class DateTimeField(ft.UserControl):
         self.page.update()
         self.update()
 
-    def _to_datetime(self, dt=None):
-        if not dt:
-            return None
-
+    def _to_datetime(self, dt):
         if isinstance(dt, (datetime, date)):
             return dt
 
-        return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
+        if not dt:
+            if getattr(self, 'hour_minute', False):
+                return datetime.now()
+            else:
+                return date.today()
+    
+        if getattr(self, 'hour_minute', False):
+            return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
+
+        return datetime.strptime(dt, "%Y-%m-%d")
 
     def set_locale(self, e):
         self.selected_locale = self.dd.value or None
@@ -160,7 +175,9 @@ class DateTimePicker(DateTimeField, InputField):
         show_three_months: bool = False,
         hide_no_month: bool = False,
         datepicker_type: int = 0,
+        on_change = None
     ):
+        
         super().__init__(value=value)
 
         self.value = self._to_datetime(value)
@@ -168,6 +185,7 @@ class DateTimePicker(DateTimeField, InputField):
         self.hour_minute = hour_minute
         self.show_three_months = show_three_months
         self.hide_no_month = hide_no_month
+        self.on_change = on_change
 
         self.dlg_modal.actions = [
             ft.TextButton("Cancel", on_click=self.cancel_dlg),
@@ -197,6 +215,7 @@ class DateTimePicker(DateTimeField, InputField):
             selected_date=[self.tf.value] if self.tf.value else None,
             selection_type=self.datepicker_type,
             holidays=self.holidays,
+            on_change=self.on_change
         )
 
         return self.datepicker

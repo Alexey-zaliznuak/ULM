@@ -51,7 +51,8 @@ class DatePicker(ft.UserControl):
         hide_prev_next_month_days: bool = False,
         first_weekday: int = 0,
         show_three_months: bool = False,
-        locale: str = 'ru_RU.UTF-8'
+        locale: str = 'ru_RU.UTF-8',
+        on_change = None
     ):
         super().__init__()
         self.selected = selected_date or []
@@ -63,6 +64,7 @@ class DatePicker(ft.UserControl):
         self.hide_prev_next_month_days = hide_prev_next_month_days
         self.first_weekday = first_weekday
         self.show_three_months = show_three_months
+        self.on_change = on_change
 
         if locale:
             loc.setlocale(loc.LC_ALL, locale)
@@ -461,9 +463,7 @@ class DatePicker(ft.UserControl):
                     )
                 self.selected.append(result)
         else:
-            if len(self.selected) == 1 and result in self.selected:
-                self.selected.remove(result)
-            else:
+            if not (len(self.selected) == 1 and result in self.selected):
                 self.selected = []
                 if self.hour_minute:
                     result = datetime(result.year, result.month,
@@ -531,6 +531,8 @@ class DatePicker(ft.UserControl):
             self._create_layout(self.yy, self.mm, self.hour, self.minute))
         cal_height = self._calculate_height(self.yy, self.mm)
         self.cal_container.height = self._cal_height(cal_height)
+        if self.on_change:
+            self.on_change(value = self.selected_data[0])
         self.update()
 
     def _cal_height(self, weeks_number):

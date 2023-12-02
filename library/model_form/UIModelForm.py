@@ -18,6 +18,7 @@ from .actions import DataTableAction, ObjectAction
 from .fields import (
     BooleanField,
     CharField,
+    DateField,
     TextField,
     ForeignKeyField,
     FloatField,
@@ -39,6 +40,7 @@ class UIModelForm(metaclass=Singleton):
         peewee.CharField: CharField,
         peewee.TextField: TextField,
         peewee.DateTimeField: DateTimeField,
+        peewee.DateField: DateField,
         peewee.IntegerField: IntegerField,
         peewee.ForeignKeyField: ForeignKeyField,
         peewee.FloatField: FloatField
@@ -120,16 +122,22 @@ class UIModelForm(metaclass=Singleton):
         pass
 
     def clear(self, obj: dict) -> dict:
+        # todo check clear/validate logic
         new_obj = {}
 
         for field_name, field in self._form_fields(read_only=False).items():
-            new_obj[field_name] = field.clear(obj[field_name])
+            value = obj[field_name]
+            new_obj[field_name] = field.clear(value)
+
+            if value is None:
+                continue
 
             if hasattr(self, f'clear_{field_name}'):
-                new_obj[field_name] = getattr(self, f'clear_{field_name}')(obj)
+                new_obj[field_name] = getattr(self, f'clear_{field_name}')(value, obj)
 
             if hasattr(self.Meta.model, f'clear_{field_name}'):
-                new_obj[field_name] = getattr(self, f'clear_{field_name}')(obj)
+                # print(f'clear_{field_name}', flush=True)
+                new_obj[field_name] = getattr(self.Meta.model, f'clear_{field_name}')(obj, value)
 
         return new_obj
 
