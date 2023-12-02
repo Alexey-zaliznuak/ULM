@@ -1,4 +1,4 @@
-from flet import colors
+from flet import colors, icons
 from library.model_form import UIModelForm
 from library.model_form.fields import ForeignKeyField
 from library.model_form.actions.objects import (
@@ -43,7 +43,7 @@ class PlaceForm(UIModelForm):
 
     class Meta:
         model = Place
-        fields = ('id', 'name', 'category')
+        fields = ('id', 'name', 'category', 'big')
         objects_actions = RUDActions
 
         table_actions = (CreateObjectAction, )
@@ -65,7 +65,7 @@ class EventForm(UIModelForm):
         model = Event
         # todo create only fields
         fields = ('date', 'event_type', 'describe', 'category')
-        objects_actions = (RUDActions,)
+        objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
 
@@ -146,7 +146,7 @@ class BoookingForm(UIModelForm):
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 
-
-EventForm.Meta.objects_actions = EventForm.Meta.objects_actions + [
-    CreateForeignObjectAction(BoookingForm, Booking.event)
+EventForm.Meta.objects_actions = [
+    *EventForm.Meta.objects_actions,
+    CreateForeignObjectAction(BoookingForm, Booking.event, icon=icons.FACT_CHECK_OUTLINED)
 ]

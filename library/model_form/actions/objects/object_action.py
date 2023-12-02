@@ -26,8 +26,8 @@ class ObjectAction():
                 obj,
                 page,
                 datatable,
-                **self.params
-            )
+            ),
+            **self.params
         )
 
     def on_click_method(self, *args, **kwargs):

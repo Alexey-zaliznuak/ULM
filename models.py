@@ -205,5 +205,5 @@ def init_tables():
 
 
 if __name__ == '__main__':
-    print(Place.__name__)
+    print(Booking.event.name)
     # init_tables()
