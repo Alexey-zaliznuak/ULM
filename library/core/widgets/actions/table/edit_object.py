@@ -172,10 +172,6 @@ class EditObjectActionDialog(AlertDialog):
                 ),
                 border_radius=26,
                 padding=30,
-                image_src=(
-                    'https://huivpizde.com/uploads/posts/2023-02/'
-                    'thumbs/1677017462_huivpizde-com-p-porno-guan-yui-3.jpg'
-                ),
                 image_fit=ImageFit.COVER,
             ),
             title_padding=0,
