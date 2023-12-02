@@ -26,7 +26,7 @@ class BaseModel(Model):
 
 
 class Categories(BaseModel):
-    name = CharField(max_length=100)
+    name = CharField(max_length=100, help_text='Наименование категории')
 
     def __str__(self) -> str:
         return self.name
@@ -34,7 +34,12 @@ class Categories(BaseModel):
 
 class Place(BaseModel):
     name = CharField(max_length=100, help_text='Наименование пространства')
-    category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
+    category = ForeignKeyField(
+        Categories,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Категория'
+    )
     big = BooleanField(
         default=False,
         help_text='Может вместить 2 мероприятия одновременно'
@@ -45,18 +50,23 @@ class Place(BaseModel):
 
 
 class EventTypes(BaseModel):
-    name = CharField(max_length=100)
+    name = CharField(max_length=100, help_text='Наименование мероприятия')
 
     def __str__(self) -> str:
         return self.name
 
 
 class Event(BaseModel):
-    category = ForeignKeyField(Categories, to_field='id', on_delete='CASCADE')
-    date = DateTimeField()
-    describe = TextField()
+    category = ForeignKeyField(
+        Categories,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Категория'
+    )
+    date = DateTimeField(help_text='Дата проведения')
+    describe = TextField(help_text='Описание')
     event_type = ForeignKeyField(
-        EventTypes, to_field='id', on_delete='CASCADE'
+        EventTypes, to_field='id', on_delete='CASCADE', help_text='Тип мероприятия'
     )
 
     def validate(self, create=False):
@@ -69,7 +79,7 @@ class Event(BaseModel):
 
 
 class WorkType(BaseModel):
-    name = CharField(max_length=100)
+    name = CharField(max_length=100, help_text='Дата проведения')
 
     def __str__(self) -> str:
         return self.name
