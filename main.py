@@ -19,7 +19,6 @@ from forms import (
 from library.model_form.filters import FieldValueFilter
 
 
-
 place_catagories_form = CategoriesForm()
 place_form = PlaceForm()
 events_types_form = EventTypesForm()
@@ -142,7 +141,7 @@ def main(page: ft.Page):
     )
     page.datatables.append(task_events_dtRa)
 
-     # ---------------WorkTableData---------------
+    # ---------------WorkTableData---------------
     WorkTableFormDataTable, work_table_dt = (
         task_form.DataTable(
             default_filters=[

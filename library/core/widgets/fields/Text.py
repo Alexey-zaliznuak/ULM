@@ -11,6 +11,7 @@ class TextViewer(Text, Viewer):
 class TextEditor(TextField, InputField):
     pass
 
+
 class MultiLineTextEditor(TextField, InputField):
     defaults = {
         'multiline': True,
