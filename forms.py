@@ -147,5 +147,5 @@ class BoookingForm(UIModelForm):
 
 EventForm.Meta.objects_actions = [
     *EventForm.Meta.objects_actions,
-    CreateForeignObjectAction(BoookingForm, Booking.event, icon=icons.FACT_CHECK_OUTLINED)
+    CreateForeignObjectAction(BoookingForm(), Booking.event, icon=icons.FACT_CHECK_OUTLINED)
 ]

@@ -185,7 +185,7 @@ class EditObjectActionDialog(AlertDialog):
         # TODO normal annotate - list of widget[column(fields)], list fields
         controls = []
 
-        for field in self.form()._form_fields(read_only=False).values():
+        for field in self.form._form_fields(read_only=False).values():
             if isinstance(self.obj, dict):
                 value = self.obj.get(field.label, empty)
                 # create action if no field value
