@@ -106,7 +106,7 @@ class Field:
         errors = []
 
         # rodo mb feature wu=ith required
-        if not value:
+        if value is None and not self.allow_null:
             errors.append('Обязательное поле')
 
         for validator in self.validators:

@@ -138,7 +138,6 @@ class UIModelForm(metaclass=Singleton):
                 )(value, obj)
 
             if hasattr(self.Meta.model, f'clear_{field_name}'):
-                # print(f'clear_{field_name}', flush=True)
                 new_obj[field_name] = getattr(
                     self.Meta.model, f'clear_{field_name}'
                 )(obj, value)
@@ -149,14 +148,14 @@ class UIModelForm(metaclass=Singleton):
         obj = self.clear(obj)
         created = False
 
-        obj, object_error, fields_errors = self._run_validators(
+        instance, object_error, fields_errors = self._run_validators(
             obj, create=True
         )
 
         if not (object_error or fields_errors):
             # todo
             # new_id = User.insert({User.username: 'admin'}).execute()
-            self.Meta.model.create(**obj)
+            instance.save()
             created = True
 
         return created, object_error, fields_errors
@@ -171,13 +170,14 @@ class UIModelForm(metaclass=Singleton):
             update, create=False
         )
 
-        if not (object_error or fields_errors):
-            self.Meta.model.update(
-                **update
-            ).where(
-                self.Meta.model.id == obj.id
-            ).execute()
-            success = True
+        for field_name in self._form_fields(read_only=False).keys():
+            setattr(
+                obj,
+                field_name,
+                getattr(update, field_name, getattr(obj, field_name))
+            )
+
+        obj.save()
 
         return success, object_error, fields_errors
 
@@ -211,7 +211,7 @@ class UIModelForm(metaclass=Singleton):
 
     def _run_validators(
         self, obj: dict, create: bool = False
-    ) -> tuple[str, dict[str, list[str]]]:
+    ) -> tuple[peewee.Model, str, dict[str, list[str]]]:
         fields_errors = {}
 
         for field_name, field in self._form_fields(read_only=False).items():
@@ -221,13 +221,16 @@ class UIModelForm(metaclass=Singleton):
 
         object_error = self.validate(obj, create=create)
 
-        if not object_error:
+        if not (object_error or fields_errors):
             try:
                 if hasattr(self.Meta.model, 'validate'):
-                    obj = self.Meta.model(**obj)
-                    obj.validate()
+                    if create:
+                        obj = self.Meta.model(**obj)
+                        obj.validate(create)
             except ValidationError as e:
                 object_error = str(e)
+        else:
+            object_error = 'Исправьте ошибки в отельных полях обьекта!'
 
         return obj, object_error, fields_errors
 
