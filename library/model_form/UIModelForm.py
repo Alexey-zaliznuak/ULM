@@ -133,11 +133,15 @@ class UIModelForm(metaclass=Singleton):
                 continue
 
             if hasattr(self, f'clear_{field_name}'):
-                new_obj[field_name] = getattr(self, f'clear_{field_name}')(value, obj)
+                new_obj[field_name] = getattr(
+                    self, f'clear_{field_name}'
+                )(value, obj)
 
             if hasattr(self.Meta.model, f'clear_{field_name}'):
                 # print(f'clear_{field_name}', flush=True)
-                new_obj[field_name] = getattr(self.Meta.model, f'clear_{field_name}')(obj, value)
+                new_obj[field_name] = getattr(
+                    self.Meta.model, f'clear_{field_name}'
+                )(obj, value)
 
         return new_obj
 
@@ -145,7 +149,9 @@ class UIModelForm(metaclass=Singleton):
         obj = self.clear(obj)
         created = False
 
-        obj, object_error, fields_errors = self._run_validators(obj, create=True)
+        obj, object_error, fields_errors = self._run_validators(
+            obj, create=True
+        )
 
         if not (object_error or fields_errors):
             # todo

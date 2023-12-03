@@ -182,6 +182,7 @@ class DateField(Field):
     edit_widget = DateTimePicker
     initial_empty_value = datetime.today
 
+
 class DateTimeField(Field):
     display_widget = TimeViewer
     edit_widget = TimePicker
