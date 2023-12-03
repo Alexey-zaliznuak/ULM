@@ -5,6 +5,7 @@ from peewee import (
     CharField,
     DateTimeField,
     DateField,
+    TimeField,
     ForeignKeyField,
     Model,
     SqliteDatabase,
@@ -161,7 +162,7 @@ class Booking(BaseModel):
             'Забронировать все помещение'
             '(если помещение может вместить только одно мероприятие, '
             'то значение будет установлено автоматически)'
-        )
+        ),
     )
     comment = TextField(help_text='Комментарий')
 
@@ -205,6 +206,55 @@ class Booking(BaseModel):
 
     def __str__(self) -> str:
         return f"Booking at {self.date_creation}"
+
+
+class Teacher(BaseModel):
+    full_name = CharField(max_length=100, help_text='ФИО Преподавателя')
+
+    def __str__(self) -> str:
+        return self.full_name
+
+
+class ClubType(BaseModel):
+    name = CharField(max_length=100, help_text='Наименование вида кружка')
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Club(BaseModel):
+    name = CharField(max_length=100, help_text='Наименование кружка')
+    teacher = ForeignKeyField(
+        Teacher,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Преподаватель'
+    )
+    club_type = ForeignKeyField(
+        ClubType,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Вид кружка'
+    )
+    place = ForeignKeyField(
+        Place,
+        to_field='id',
+        on_delete='CASCADE',
+        help_text='Помещение'
+    )
+    date_start_working = DateField(help_text = 'Дата начала работы кружка')
+    working_days = ...
+    start_lesson_time = TimeField(help_text = 'Время конца занятия')
+    end_lesson_time = TimeField(help_text = 'Время начала занятия')
+
+    def __str__(self) -> str:
+        return (
+            self.name
+            + ': '
+            + str(self.start_lesson_time)
+            + ' - '
+            + str(self.end_lesson_time)
+        )
 
 
 def init_tables():
