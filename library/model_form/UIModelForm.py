@@ -137,7 +137,7 @@ class UIModelForm(metaclass=Singleton):
         obj = self.clear(obj)
         created = False
 
-        object_error, fields_errors = self._run_validators(obj, create=True)
+        obj, object_error, fields_errors = self._run_validators(obj, create=True)
 
         if not (object_error or fields_errors):
             # todo
@@ -153,7 +153,7 @@ class UIModelForm(metaclass=Singleton):
         update = self.clear(update)
         success = False
 
-        object_error, fields_errors = self._run_validators(
+        update, object_error, fields_errors = self._run_validators(
             update, create=False
         )
 
@@ -210,11 +210,12 @@ class UIModelForm(metaclass=Singleton):
         if not object_error:
             try:
                 if hasattr(self.Meta.model, 'validate'):
-                    self.Meta.model(**obj).validate()
+                    obj = self.Meta.model(**obj)
+                    obj.validate()
             except ValidationError as e:
                 object_error = str(e)
 
-        return object_error, fields_errors
+        return obj, object_error, fields_errors
 
     def _form_fields(
         self,

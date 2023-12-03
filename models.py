@@ -160,12 +160,15 @@ class Booking(BaseModel):
         help_text=(
             'Забронировать все помещение'
             '(если помещение может вместить только одно мероприятие, '
-            'то можете проигнорировать этот параметр)'
+            'то значение будет установлено автоматически)'
         )
     )
     comment = TextField(help_text='Комментарий')
 
     def validate(self, create=False):
+        if not self.place.big:
+            self.book_full = False
+
         if self.start_booking_time > self.end_booking_time:
             raise ValidationError(
                 'Начало бронирование должно быть позже его конца.'
@@ -197,13 +200,6 @@ class Booking(BaseModel):
                     'Невозможно забронировать полностью - '
                     'помещение уже частично забронировано.'
                 )
-
-    # todo check that it work)
-    def clear_book_full(self, value):
-        if not self.place.big:
-            value = False
-
-        return value
 
     def __str__(self) -> str:
         return f"Booking at {self.date_creation}"
