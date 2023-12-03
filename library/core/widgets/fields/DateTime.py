@@ -181,7 +181,6 @@ class DateTimePicker(DateTimeField, InputField):
     ):
         
         super().__init__(value=value)
-
         self.value = self._to_datetime(value)
         self.datepicker_type = datepicker_type
         self.hour_minute = hour_minute
@@ -189,32 +188,13 @@ class DateTimePicker(DateTimeField, InputField):
         self.hide_no_month = hide_no_month
         self.on_change = on_change
 
-        self.dlg_modal.actions = [
-            ft.TextButton("Cancel", on_click=self.cancel_dlg),
-            ft.TextButton("Confirm", on_click=self.confirm_dlg),
-        ]
-
-        self.tf = ft.TextField(
-            value=self.value,
-            label="Select Date",
-            dense=True,
-            hint_text="yyyy-mm-ddThh:mm:ss",
-            width=260,
-            height=60
-        )
-        self.st = ft.Stack(
-            [
-                self.tf,
-                self.cal_ico,
-            ]
-        )
-
     def build(self):
+        
         self.datepicker = DatePicker(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
             hide_prev_next_month_days=False,
-            selected_date=[self.tf.value] if self.tf.value else None,
+            selected_date=[self.value] if self.value else None,
             selection_type=self.datepicker_type,
             holidays=self.holidays,
             on_change=self.on_change
