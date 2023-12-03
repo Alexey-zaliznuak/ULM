@@ -1,10 +1,12 @@
 import flet as ft
+from core.TimeLineTable.TimeLineDataFormatter import TimeLineDataFormatter
+from core.TimeLineTable.TimeLineTable import TimeLineTable
 from filtersets import TasksFilterSet
 
 from pages.pages import EntertainmentPage, LearningPage, EducationPage
 # from widgets.CustomNavigation import CustomNavigation
 
-from models import Event, Categories, Place, init_tables, TasksStatuses, Task
+from models import Event, Categories, Place, init_tables, TasksStatuses, Task, Booking
 init_tables()
 
 from forms import (
@@ -13,7 +15,8 @@ from forms import (
     PlaceForm,
     CategoriesForm,
     WorkTypeForm,
-    TasksForm
+    TasksForm,
+    BookingForm
 )
 
 from library.model_form.filters import FieldValueFilter
@@ -25,6 +28,7 @@ events_types_form = EventTypesForm()
 events_form = EventForm()
 work_types_form = WorkTypeForm()
 task_form = TasksForm()
+booking_form = BookingForm()
 
 
 def main(page: ft.Page):
@@ -155,6 +159,28 @@ def main(page: ft.Page):
     )
     page.datatables.append(work_table_dt)
 
+    # ---------------BookingTableData---------------
+    BookingFormDataTableRa, booking_events_dtRa = (
+        booking_form.DataTable()
+    )
+    page.datatables.append(booking_events_dtRa)
+
+    BookingFormDataTablePr, booking_events_dtPr = (
+        booking_form.DataTable()
+    )
+    page.datatables.append(booking_events_dtPr)
+
+    # ---------------TimeLineTableData---------------
+
+    TimeLineTableRa = TimeLineTablePr = TimeLineTable(
+        get_bookings=Booking.select,
+        get_places=Place.select
+    )
+    # TimeLineTablePr = TimeLineTable(
+    #     get_bookings=Booking.select,
+    #     get_places=Place.select
+    # )
+
     t = ft.Tabs(
         selected_index=0,
         animation_duration=50,
@@ -167,7 +193,9 @@ def main(page: ft.Page):
                         PlaceDataTablePr,
                         EventTypesDataTablePr,
                         WorkTypesFormDataTablePr,
-                        TaskFormDataTablePr
+                        TaskFormDataTablePr,
+                        BookingFormDataTablePr,
+                        TimeLineTablePr
                     ),
                 ),
 
@@ -180,7 +208,9 @@ def main(page: ft.Page):
                         PlaceDataTableRa,
                         EventTypesDataTableRa,
                         WorkTypesFormDataTableRa,
-                        TaskFormDataTableRa
+                        TaskFormDataTableRa,
+                        BookingFormDataTableRa,
+                        TimeLineTableRa
                     )
                 ),
             ),

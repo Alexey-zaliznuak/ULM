@@ -1,5 +1,8 @@
 import flet.canvas as cv
 from peewee import Model
+from core.TimeLineTable.TimeLine import CELL_WIDTH
+from datetime import datetime, timedelta
+from models import Booking
 
 CELL_HEIGHT = 40
 
@@ -7,15 +10,27 @@ CELL_HEIGHT = 40
 class TimeLineDataFormatter():
     def __init__(
             self,
-            bookings,
-            places
+            get_bookings,
+            get_places,
+            select_day = datetime.now()
         ) -> list:
-        self.bookings = sorted(bookings, key=lambda x: x['start_booking_time'])
-        self.places = places
+
+        self.get_bookings = get_bookings
+        self.places = get_places()
+
+        self.select_day = select_day
+        self.select_day = datetime(year=self.select_day.year, month=self.select_day.month, day=self.select_day.day)
+        tomorrow = self.select_day + timedelta(hours=23, minutes=59)
+    
 
     def time_to_pixels(self, start_booking_time, end_booking_time):
-        start = start_booking_time.hour * 60 + start_booking_time.minute
-        end = end_booking_time.hour * 60 + end_booking_time.minute - start
+        tomorrow = self.select_day + timedelta(hours=23, minutes=59)
+        start = max(self.select_day, start_booking_time)
+        end = min(tomorrow, end_booking_time)
+        
+        start = start.hour * CELL_WIDTH + start.minute * CELL_WIDTH / 60
+        end = end.hour * CELL_WIDTH + end.minute * CELL_WIDTH / 60 - start
+
         return {
             'start': start,
             'end': end,
@@ -24,19 +39,18 @@ class TimeLineDataFormatter():
     def get_row(self, bookings):
         books = []
         prev_on_top = False
-
         for i in range(len(bookings)):
             booking = bookings[i]
 
-            start = booking['start_booking_time']
-            end = booking['end_booking_time']
-            height = CELL_HEIGHT if booking['book_full'] else CELL_HEIGHT / 2
+            start = booking.start_booking_time
+            end = booking.end_booking_time
+            height = CELL_HEIGHT if booking.book_full else CELL_HEIGHT / 2
 
             top = prev_on_top
 
             if (
                 i != 0 and
-                start < bookings[i-1]['end_booking_time']
+                start < bookings[i-1].end_booking_time
             ):
                 top = not top
 
@@ -58,8 +72,12 @@ class TimeLineDataFormatter():
     def get_rows(self):
         rows = []
         for place in self.places:
-            Book:Model = None
-            books = Book.select().where(Book.place == place)
+            books = self.get_bookings().where(
+                Booking.place == place,
+                Booking.start_booking_time <= datetime(year=self.select_day.year, month=self.select_day.month, day=self.select_day.day) + timedelta(days=1),
+                Booking.end_booking_time >= datetime(year=self.select_day.year, month=self.select_day.month, day=self.select_day.day)
+            )
+            books = sorted(books, key=lambda x: x.start_booking_time)
             rows.append(
                 { 
                     'data': [*self.get_row(books)], 

@@ -142,6 +142,7 @@ class BookingForm(UIModelForm):
             'comment',
             'date_creation',
         )
+        read_only_fields = ('date_creation', )
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
 

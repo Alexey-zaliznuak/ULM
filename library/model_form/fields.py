@@ -22,6 +22,8 @@ from library.core.widgets.fields import (
     PhoneViewer,
     TextViewer,
     TextEditor,
+    TimePicker,
+    TimeViewer,
     IntegerInput,
 )
 
@@ -103,7 +105,8 @@ class Field:
     def validate(self, value) -> list[str]:
         errors = []
 
-        if not value and self.required:
+        # rodo mb feature wu=ith required
+        if not value:
             errors.append('Обязательное поле')
 
         for validator in self.validators:
@@ -174,10 +177,15 @@ class DateField(Field):
     ...
 
 
-class DateTimeField(Field):
+class DateField(Field):
     display_widget = DateTimeViewer
     edit_widget = DateTimePicker
-    initial_empty_value = datetime.now
+    initial_empty_value = datetime.today
+
+class DateTimeField(Field):
+    display_widget = TimeViewer
+    edit_widget = TimePicker
+    # initial_empty_value = datetime.date
 
 
 class DecimalField(Field):  # not in priority

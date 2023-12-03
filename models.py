@@ -4,7 +4,7 @@ from peewee import (
     BooleanField,
     CharField,
     DateTimeField,
-    DateTimeField,
+    DateField,
     ForeignKeyField,
     Model,
     SqliteDatabase,
@@ -63,7 +63,7 @@ class Event(BaseModel):
         on_delete='CASCADE',
         help_text='Категория'
     )
-    date = DateTimeField(help_text='Дата проведения')
+    date = DateField(help_text='Дата проведения')
     describe = TextField(help_text='Описание')
     event_type = ForeignKeyField(
         EventTypes,
@@ -96,26 +96,11 @@ class TasksStatuses(BaseModel):
 
 
 class Task(BaseModel):
-    date_registration = DateTimeField(help_text='Дата создания заявки')
-    event = ForeignKeyField(
-        Event,
-        to_field='id',
-        on_delete='CASCADE',
-        help_text='Мероприятик'
-    )
-    work_type = ForeignKeyField(
-        WorkType,
-        to_field='id',
-        on_delete='CASCADE',
-        help_text='Вид работы'
-    )
-    place = ForeignKeyField(
-        Place,
-        to_field='id',
-        on_delete='CASCADE',
-        help_text='Помещение'
-    )
-    deadline = DateTimeField(help_text='Дедлайн')
+    date_registration = DateTimeField()
+    event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
+    work_type = ForeignKeyField(WorkType, to_field='id', on_delete='CASCADE')
+    place = ForeignKeyField(Place, to_field='id', on_delete='CASCADE')
+    deadline = DateTimeField()
 
     describe = TextField(help_text='описание')
     status = ForeignKeyField(
@@ -136,18 +121,10 @@ class Task(BaseModel):
 
 
 class Booking(BaseModel):
-    date_creation = DateTimeField(
-        default=datetime.now,
-        help_text='Дата создания'
-    )
-    event = ForeignKeyField(
-        Event,
-        to_field='id',
-        on_delete='CASCADE',
-        help_text='Мероприятие'
-    )
-    start_booking_time = DateTimeField(help_text='Начало бронирования')
-    end_booking_time = DateTimeField(help_text='Конец бронирования')
+    date_creation = DateTimeField(default=datetime.now)
+    event = ForeignKeyField(Event, to_field='id', on_delete='CASCADE')
+    start_booking_time = DateTimeField()
+    end_booking_time = DateTimeField()
 
     # todo filter by queryset
     place = ForeignKeyField(
@@ -169,12 +146,12 @@ class Booking(BaseModel):
         if not self.place.big:
             self.book_full = False
 
-        if self.start_booking_time > self.end_booking_time:
+        if self.start_booking_time >= self.end_booking_time:
             raise ValidationError(
-                'Начало бронирование должно быть позже его конца.'
+                'Начало бронирование должно быть раньше его конца.'
             )
 
-        if self.date_creation > self.start_booking_time:
+        if self.date_creation.day > self.start_booking_time.day:
             raise ValidationError(
                 'Указанная начальная дата бронирования уже прошла.'
             )
@@ -186,12 +163,12 @@ class Booking(BaseModel):
             Booking.end_booking_time > self.start_booking_time,
         )
 
-        if bookings.count > 1:
+        if bookings.count() > 1:
             raise ValidationError(
                 'Помещение уже полностью забронировано на это время'
             )
-        if bookings.count == 1:
-            if bookings[0].book_full:
+        if bookings.count() == 1:
+            if bookings[0].book_full or not self.place.big:
                 raise ValidationError(
                     'Помещение было полностью забронировано на это время'
                 )
@@ -245,5 +222,6 @@ def init_tables():
 
 
 if __name__ == '__main__':
-    print(Booking.event.name)
+    pass
+    # print(Booking.event.name)
     # init_tables()
