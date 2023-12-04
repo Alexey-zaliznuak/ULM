@@ -169,6 +169,11 @@ class PhoneField(Field):
     default_validators = [PhoneValidator()]
 
 
+class DaysField(CharField):
+    display_widget = ...
+    edit_widget = ...
+
+
 class ChooseField(Field):  # ???? ValueValidator?
     ...
 
