@@ -11,6 +11,7 @@ from peewee import (
     TextField,
 )
 from library.core.exceptions import ValidationError
+from utils.intersections import segments_do_not_intersect
 from datetime import datetime, timedelta
 
 import settings
@@ -72,9 +73,9 @@ class Event(BaseModel):
         help_text='Тип мероприятия'
     )
 
-    def validate(self, create=False):
+    def validate(obj, create=False, id_=None):
         if create:
-            if self.date < datetime.today() - timedelta(days=1):
+            if obj['date'] < datetime.today() - timedelta(days=1):
                 raise ValidationError('Выбранная дата уже прошла!')
 
     def __str__(self) -> str:
@@ -82,7 +83,7 @@ class Event(BaseModel):
 
 
 class WorkType(BaseModel):
-    name = CharField(max_length=100, help_text='Дата проведения')
+    name = CharField(max_length=100, help_text='Наименование вида работы')
 
     def __str__(self) -> str:
         return self.name
@@ -96,7 +97,7 @@ class TasksStatuses(BaseModel):
 
 
 class Task(BaseModel):
-    date_registration = DateTimeField()
+    date_registration = DateField()
     event = ForeignKeyField(
         Event,
         to_field='id',
@@ -115,7 +116,7 @@ class Task(BaseModel):
         on_delete='CASCADE',
         help_text='Помещение'
     )
-    deadline = DateTimeField(help_text='Дедлайн')
+    deadline = DateField(help_text='Дедлайн')
 
     describe = TextField(help_text='описание')
     status = ForeignKeyField(
@@ -125,8 +126,8 @@ class Task(BaseModel):
         help_text='Статус'
     )
 
-    def validate(self, create=False):
-        if self.date_registration > self.deadline:
+    def validate(obj, create=False, id_=None):
+        if obj['date_registration'] > obj['deadline']:
             raise ValidationError(
                 'Срок должен быть позже даты создания.'
             )
@@ -154,7 +155,7 @@ class Booking(BaseModel):
         Place,
         to_field='id',
         on_delete='CASCADE',
-        help_text='Помешение'
+        help_text='Помещение'
     )
     book_full = BooleanField(
         help_text=(
@@ -165,43 +166,62 @@ class Booking(BaseModel):
     )
     comment = TextField(help_text='Комментарий')
 
-    def validate(self, create=False):
-        if not self.place.big:
-            self.book_full = False
+    def validate(obj, create=False, id_=None):
+        if not Place.get_by_id(obj['place']).big:
+            obj['book_full'] = False
 
-        if self.start_booking_time >= self.end_booking_time:
+        if obj['start_booking_time'] >= obj['end_booking_time']:
             raise ValidationError(
                 'Начало бронирование должно быть раньше его конца.'
             )
 
-        if self.date_creation.day > self.start_booking_time.day:
-            raise ValidationError(
-                'Указанная начальная дата бронирования уже прошла.'
-            )
+        if create:
+            if obj['start_booking_time'] < datetime.today():
+                raise ValidationError(
+                    'Указанная начальная дата и время бронирования уже прошла.'
+                )
 
         # todo make normal algorithm
+        filters = [
+            Booking.place == obj['place'],
+            Booking.start_booking_time <= obj['end_booking_time'],
+            Booking.end_booking_time >= obj['start_booking_time'],
+        ]
+        if id_:
+            filters.append(Booking.id != id_)
+
         bookings = Booking.select().where(
-            Booking.place == self.place,
-            Booking.start_booking_time <= self.end_booking_time,
-            Booking.end_booking_time >= self.start_booking_time,
+            *filters
         )
 
-        if bookings.count() > 1:
+        if bookings.count() and not Place.get_by_id(obj['place']).big:
             raise ValidationError(
                 'Помещение уже полностью забронировано на это время'
             )
 
-        if bookings.count() == 1:
-            if bookings[0].book_full or not self.place.big:
-                raise ValidationError(
-                    'Помещение было полностью забронировано на это время'
-                )
+        segments = []
+        for segment in bookings:
+            segments.append((
+                segment.start_booking_time,
+                segment.end_booking_time
+            ))
+        if not segments_do_not_intersect(segments):
+            raise ValidationError(
+                'Помещение было полностью забронировано на это время'
+            )
 
-            if self.book_full:
-                raise ValidationError(
-                    'Невозможно забронировать полностью - '
-                    'помещение уже частично забронировано.'
-                )
+        # if bookings.count() == 1:
+        #     if bookings[0].book_full
+        # or not Place.get_by_id(obj['place']).big:
+        #         raise ValidationError(
+        #             'Помещение было полностью забронировано на это время'
+        #         )
+
+        #     if obj['book_full']:
+        #         raise ValidationError(
+        #             'Невозможно забронировать полностью - '
+        #             'помещение уже частично забронировано.'
+        #         )
 
     def __str__(self) -> str:
         return f"Booking at {self.date_creation}"
@@ -248,5 +268,4 @@ def init_tables():
 
 if __name__ == '__main__':
     pass
-    # print(Booking.event.name)
     # init_tables()

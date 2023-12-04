@@ -145,7 +145,7 @@ class DateTimeField(ft.UserControl):
                 return datetime.now()
             else:
                 return date.today()
-    
+
         if getattr(self, 'hour_minute', False):
             return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
 
@@ -177,9 +177,9 @@ class DateTimePicker(DateTimeField, InputField):
         show_three_months: bool = False,
         hide_no_month: bool = False,
         datepicker_type: int = 0,
-        on_change = None
+        on_change=None
     ):
-        
+
         super().__init__(value=value)
         self.value = self._to_datetime(value)
         self.datepicker_type = datepicker_type
@@ -189,7 +189,6 @@ class DateTimePicker(DateTimeField, InputField):
         self.on_change = on_change
 
     def build(self):
-        
         self.datepicker = DatePicker(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,

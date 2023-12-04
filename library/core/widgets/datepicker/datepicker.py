@@ -2,7 +2,7 @@ import locale as loc
 import flet as ft
 import calendar
 from typing import Optional, Union
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 
 from .selection_type import SelectionType
 
@@ -52,18 +52,25 @@ class DatePicker(ft.UserControl):
         first_weekday: int = 0,
         show_three_months: bool = False,
         locale: str = 'ru_RU.UTF-8',
-        on_change = None
+        on_change=None
     ):
         super().__init__()
 
         self.selected = selected_date
-        if (not hour_minute) or (not isinstance(selected_date[0], datetime) and hour_minute):
-
-            print(not hour_minute)
-            print(isinstance(selected_date[0], date))
-            print(hour_minute)
-            print(type(selected_date[0]))
-            self.selected = list(map(lambda n_date: datetime.combine(n_date, datetime.min.time()), selected_date))  or []
+        if (
+            (not hour_minute)
+            or (not isinstance(selected_date[0], datetime) and hour_minute)
+        ):
+            self.selected = list(
+                map(
+                    lambda n_date:
+                        datetime.combine(
+                            n_date,
+                            datetime.min.time()
+                        ),
+                    selected_date
+                )
+            ) or []
 
         self.selection_type = SelectionType(selection_type)
         self.hour_minute = hour_minute
@@ -77,7 +84,7 @@ class DatePicker(ft.UserControl):
 
         if locale:
             loc.setlocale(loc.LC_ALL, locale)
-        
+
         self.now = datetime.combine(datetime.now(), datetime.min.time())
         self.yy = self.now.year
         self.mm = self.now.month
@@ -207,12 +214,17 @@ class DatePicker(ft.UserControl):
 
                 # selected days
                 datepicker_date = d.date()
-                selected_date = list(map( lambda day: day.date(), self.selected))
+                selected_date = list(
+                    map(lambda day: day.date(), self.selected)
+                )
 
                 selected_numbers = len(selected_date)
 
                 if (self.selection_type != SelectionType.RANGE):
-                    if selected_numbers > 0 and datepicker_date in selected_date:
+                    if (
+                        selected_numbers > 0
+                        and datepicker_date in selected_date
+                    ):
                         bg = ft.colors.BLUE_400
                         text_color = ft.colors.WHITE
                 else:
@@ -228,7 +240,10 @@ class DatePicker(ft.UserControl):
                     self.selection_type == SelectionType.RANGE
                     and selected_numbers > 1
                 ):
-                    if datepicker_date > selected_date[0] and datepicker_date < selected_date[-1]:
+                    if (
+                        datepicker_date > selected_date[0]
+                        and datepicker_date < selected_date[-1]
+                    ):
                         bg = ft.colors.BLUE_300
                         text_color = ft.colors.WHITE
 
@@ -541,6 +556,10 @@ class DatePicker(ft.UserControl):
 
         self.hour = self.now.hour
         self.minute = self.now.minute
+
+        self.selected_data[0] = datetime.combine(
+            self.selected_data[0], self.now.time()
+        )
         self._update_calendar()
 
     def _update_calendar(self):
@@ -549,7 +568,7 @@ class DatePicker(ft.UserControl):
         cal_height = self._calculate_height(self.yy, self.mm)
         self.cal_container.height = self._cal_height(cal_height)
         if self.on_change:
-            self.on_change(value = self.selected_data[0])
+            self.on_change(value=self.selected_data[0])
         self.update()
 
     def _cal_height(self, weeks_number):

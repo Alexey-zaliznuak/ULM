@@ -2,7 +2,7 @@ from functools import partial
 from typing import Any, List, Optional, Union
 
 from flet import Text as FletText
-from flet import TextOverflow, TextThemeStyle
+from flet import TextOverflow, TextThemeStyle, colors
 from flet_core.control import OptionalNumber
 from flet_core.ref import Ref
 from flet_core.text_span import TextSpan
@@ -116,3 +116,8 @@ class Text(FletText):
 
 
 TitleText = partial(Text, size=TITLE_TEXT_SIZE)
+
+
+class ErrorText(FletText):
+    def __init__(self, text: str, *args, **kwargs):
+        super().__init__(text, color=colors.RED_400)

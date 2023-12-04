@@ -119,8 +119,7 @@ def generate():
             'date': date.today() + timedelta(days=2),
             'event_type': EventTypes.get(name='Спектакль'),
             'describe': (
-                'Театральное зрелище, представление, '
-                'произведение театрального, сценического искусства'
+                'Театральное зрелище'
             ),
             'category': Categories.get(name='Развлекательное')
         },
@@ -234,42 +233,23 @@ def generate():
             'comment': 'Без комментариев',
             'date_creation': datetime.now() + timedelta(hours=1),
         },
-        # {
-        #     'place': Place.get_by_id(3),
-        #     'book_full': False,
-        #     'event': Event.get_by_id(3),
-        #     'start_booking_time': datetime.now() + timedelta(hours=2),
-        #     'end_booking_time': datetime.now() + timedelta(hours=3),
-        #     'comment': 'Без комментариев',
-        #     'date_creation': datetime.now() + timedelta(hours=1),
-        # },
-        # {
-        #     'place': Place.get_by_id(3),
-        #     'book_full': False,
-        #     'event': Event.get_by_id(3),
-        #     'start_booking_time': datetime.now() + timedelta(hours=5),
-        #     'end_booking_time': datetime.now() + timedelta(hours=8),
-        #     'comment': 'Без комментариев',
-        #     'date_creation': datetime.now() + timedelta(hours=1),
-        # },
-        # to delete
         {
             'place': Place.get_by_id(3),
             'book_full': False,
             'event': Event.get_by_id(3),
-            'start_booking_time': datetime.now() - timedelta(days=2),
-            'end_booking_time': datetime.now() + timedelta(hours=2),
+            'start_booking_time': datetime.now() + timedelta(hours=2),
+            'end_booking_time': datetime.now() + timedelta(hours=7),
             'comment': 'Без комментариев',
-            'date_creation': datetime.now() - timedelta(days=4),
+            'date_creation': datetime.now() + timedelta(hours=1),
         },
         {
             'place': Place.get_by_id(3),
             'book_full': False,
             'event': Event.get_by_id(3),
-            'start_booking_time': datetime.now() - timedelta(days=2),
-            'end_booking_time': datetime.now() + timedelta(days=2),
+            'start_booking_time': datetime.now() + timedelta(hours=5),
+            'end_booking_time': datetime.now() + timedelta(hours=8),
             'comment': 'Без комментариев',
-            'date_creation': datetime.now() - timedelta(days=10),
+            'date_creation': datetime.now() + timedelta(hours=1),
         },
     ]
     BookingGenerator.save()

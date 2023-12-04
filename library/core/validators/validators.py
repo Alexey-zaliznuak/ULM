@@ -29,7 +29,11 @@ class ValueValidator:
 class LengthValidator(ValueValidator):
     def __call__(self, value):
         errors = []
-        value = len(value)
+
+        if value is None:
+            value = 0
+        else:
+            value = len(value)
 
         if self.mx and value > self.mx:
             raise ValidationError(

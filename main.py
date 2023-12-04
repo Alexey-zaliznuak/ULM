@@ -1,12 +1,20 @@
 import flet as ft
-from core.TimeLineTable.TimeLineDataFormatter import TimeLineDataFormatter
 from core.TimeLineTable.TimeLineTable import TimeLineTable
 from filtersets import TasksFilterSet
 
 from pages.pages import EntertainmentPage, LearningPage, EducationPage
 # from widgets.CustomNavigation import CustomNavigation
 
-from models import Event, Categories, Place, init_tables, TasksStatuses, Task, Booking
+from models import (
+    Event,
+    Categories,
+    Place,
+    init_tables,
+    TasksStatuses,
+    Task,
+    Booking
+)
+
 init_tables()
 
 from forms import (
@@ -35,7 +43,7 @@ def main(page: ft.Page):
     # TODO global context class
     page.theme_mode = ft.ThemeMode.LIGHT
     page.datatables = []
-
+    page.title = 'Fletty birds'
     # ---------------PlaceData---------------
     PlaceDataTablePr, place_dtPr = place_form.DataTable(
         default_filters=[

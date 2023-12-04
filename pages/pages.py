@@ -28,6 +28,7 @@ def WorkPage(WorkTypesFormDataTable, TaskFormDataTable):
         ],
     )
 
+
 def BookingPage(BookingFormDataTable, TimeLineTable):
     return CustomNavigation(
         selected_index=0,

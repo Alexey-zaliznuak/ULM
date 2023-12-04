@@ -9,7 +9,13 @@ class TextViewer(Text, Viewer):
 
 
 class TextEditor(TextField, InputField):
-    pass
+    @property
+    def clear_value(self) -> str | None:
+        value = super().clear_value
+        if value == '':
+            return None
+
+        return value
 
 
 class MultiLineTextEditor(TextField, InputField):

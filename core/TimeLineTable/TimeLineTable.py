@@ -25,9 +25,6 @@ class TimeLineTable(ft.UserControl):
             get_places=get_places
         )
 
-        self.TimeLine = TimeLine(
-            self.get_matrix()
-        )
         super().__init__()
 
     def get_matrix(self):
@@ -42,12 +39,14 @@ class TimeLineTable(ft.UserControl):
         self.controls[0].content.controls[1].content = self.TimeLine
         self.update()
 
-
     def build(self):
-        return(
+        self.TimeLine = TimeLine(
+            self.get_matrix()
+        )
+
+        return (
             ft.Container(
                 content=ft.Column(
-                    
                     [
                         self.datepicker,
                         ft.Container(
