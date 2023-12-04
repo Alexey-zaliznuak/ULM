@@ -19,6 +19,9 @@ from models import (
     WorkType,
     TasksStatuses,
     Task,
+    Teacher,
+    ClubType,
+    Club,
 )
 
 
@@ -155,3 +158,40 @@ EventForm.Meta.objects_actions = [
         icon=icons.FACT_CHECK_OUTLINED
     )
 ]
+
+
+class TeacherForm(UIModelForm):
+    class Meta:
+        model = Teacher
+        fields = ('id', 'full_name',)
+        objects_actions = RUDActions
+        table_actions = (CreateObjectAction, )
+
+
+class ClubTypeForm(UIModelForm):
+    class Meta:
+        model = ClubType
+        fields = ('id', 'name',)
+        objects_actions = RUDActions
+        table_actions = (CreateObjectAction, )
+
+
+class ClubForm(UIModelForm):
+    teacher = ForeignKeyField('teacher', TeacherForm)
+    club_type = ForeignKeyField('club_type', ClubTypeForm)
+    place = ForeignKeyField('place', PlaceForm)
+
+    class Meta:
+        model = Club
+        fields = (
+            'name',
+            'teacher',
+            'club_type',
+            'place',
+            'date_start_working',
+            'working_days',
+            'start_lesson_time',
+            'end_lesson_time',
+        )
+        objects_actions = RUDActions
+        table_actions = (CreateObjectAction, )
