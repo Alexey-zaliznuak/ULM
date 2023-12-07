@@ -10,7 +10,7 @@ class TextViewer(Text, Viewer):
 
 class TextEditor(TextField, InputField):
     @property
-    def clear_value(self) -> str | None:
+    def clear_value(self) -> str:
         value = super().clear_value
         if value == '':
             return None

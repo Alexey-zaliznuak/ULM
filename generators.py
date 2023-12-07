@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from library.utils.model_data_generator import ModelDataGenerator
 from models import (
     Booking,
@@ -9,6 +9,9 @@ from models import (
     WorkType,
     TasksStatuses,
     Task,
+    Teacher,
+    ClubType,
+    Club,
 )
 
 
@@ -76,6 +79,33 @@ class TasksGenerator(ModelDataGenerator):
         )
 
 
+class TeachersGenerator(ModelDataGenerator):
+    class Meta:
+        model = Teacher
+        fields = ('full_name',)
+
+
+class ClubTypesGenerator(ModelDataGenerator):
+    class Meta:
+        model = ClubType
+        fields = ('name',)
+
+
+class ClubsGenerators(ModelDataGenerator):
+    class Meta:
+        model = Club
+        fields = (
+            'name',
+            'tacher',
+            'club_type',
+            'place',
+            'date_start_working',
+            'working_days',
+            'start_lesson_time',
+            'start_lesson_time',
+        )
+
+
 def generate():
     CategoriesGenerator.generated_objects = [
         {'name': 'Развлекательное'},
@@ -102,6 +132,24 @@ def generate():
             'name': 'Секция Пения № 1',
             'category': Categories.get(name='Образовательное'),
             'big': True
+        },
+
+        # for clubs
+        {
+            'name': 'Секция Пения № 2',  # пение
+            'category': Categories.get(name='Образовательное'),
+        },
+        {
+            'name': 'Секция Пения № 3',  # гитара
+            'category': Categories.get(name='Образовательное'),
+        },
+        {
+            'name': 'Зал Звездной ночи',  # рисование
+            'category': Categories.get(name='Образовательное'),
+        },
+        {
+            'name': 'Помещение 0-08',  # шахматы
+            'category': Categories.get(name='Образовательное'),
         },
     ]
     PlaceGenerator.save()
@@ -253,3 +301,63 @@ def generate():
         },
     ]
     BookingGenerator.save()
+
+    TeachersGenerator.generated_objects = [
+        {'full_name': 'Луна Шарон Мариковна'},
+        {'full_name': 'Митчел Леонард Клейнович'},
+        {'full_name': 'Шейлина Анастасия Филиповна'},
+        {'full_name': 'Логран Каземир Иоаннович'},
+    ]
+    TeachersGenerator.save()
+
+    ClubTypesGenerator.generated_objects = [
+        {'name': 'Кружок пения'},
+        {'name': 'Кружок игры на гитаре'},
+        {'name': 'Кружок рисования'},
+        {'name': 'Кружок шахмат'},
+    ]
+    ClubTypesGenerator.save()
+
+    ClubsGenerators.generated_objects = [
+        {
+            'name': 'Ангельн',
+            'teacher': Teacher.get_by_id(1),
+            'club_type': ClubType.get_by_id(1),
+            'place': Place.get_by_id(5),
+            'date_start_working': date.today() - timedelta(days=20),
+            'working_days': '3:пн;ср;пт',
+            'start_lesson_time': time(14, 30),
+            'end_lesson_time': time(17)
+        },
+        {
+            'name': 'Ночной хор',
+            'teacher': Teacher.get_by_id(2),
+            'club_type': ClubType.get_by_id(2),
+            'place': Place.get_by_id(6),
+            'date_start_working': date.today() - timedelta(days=120),
+            'working_days': '2:пн;пт',
+            'start_lesson_time': time(16, 30),
+            'end_lesson_time': time(17, 30)
+        },
+        {
+            'name': 'Звездное полотно',
+            'teacher': Teacher.get_by_id(3),
+            'club_type': ClubType.get_by_id(3),
+            'place': Place.get_by_id(7),
+            'date_start_working': date.today() - timedelta(days=10),
+            'working_days': '3:пн;вт;сб',
+            'start_lesson_time': time(11),
+            'end_lesson_time': time(13, 15)
+        },
+        {
+            'name': 'Дебют',
+            'teacher': Teacher.get_by_id(4),
+            'club_type': ClubType.get_by_id(4),
+            'place': Place.get_by_id(8),
+            'date_start_working': date.today() - timedelta(days=300),
+            'working_days': '2:пн;сб',
+            'start_lesson_time': time(18, 30),
+            'end_lesson_time': time(20)
+        }
+    ]
+    ClubsGenerators.save()

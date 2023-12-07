@@ -12,6 +12,7 @@ from peewee import (
     TextField,
 )
 from library.core.exceptions import ValidationError
+from library.model_form.db.fields import DaysField
 from utils.intersections import segments_do_not_intersect
 from datetime import datetime, timedelta
 
@@ -79,6 +80,8 @@ class Event(BaseModel):
             if obj['date'] < datetime.today() - timedelta(days=1):
                 raise ValidationError('Выбранная дата уже прошла!')
 
+        return obj
+
     def __str__(self) -> str:
         return self.describe
 
@@ -132,6 +135,8 @@ class Task(BaseModel):
             raise ValidationError(
                 'Срок должен быть позже даты создания.'
             )
+
+        return obj
 
     def __str__(self) -> str:
         return f"Task at {self.date_registration}"
@@ -224,6 +229,8 @@ class Booking(BaseModel):
         #             'помещение уже частично забронировано.'
         #         )
 
+        return obj
+
     def __str__(self) -> str:
         return f"Booking at {self.date_creation}"
 
@@ -262,10 +269,10 @@ class Club(BaseModel):
         on_delete='CASCADE',
         help_text='Помещение'
     )
-    date_start_working = DateField(help_text = 'Дата начала работы кружка')
-    working_days = ...
-    start_lesson_time = TimeField(help_text = 'Время конца занятия')
-    end_lesson_time = TimeField(help_text = 'Время начала занятия')
+    date_start_working = DateField(help_text='Дата начала работы кружка')
+    working_days = DaysField(help_text='Дни занятий')
+    start_lesson_time = TimeField(help_text='Время конца занятия')
+    end_lesson_time = TimeField(help_text='Время начала занятия')
 
     def __str__(self) -> str:
         return (
@@ -275,6 +282,14 @@ class Club(BaseModel):
             + ' - '
             + str(self.end_lesson_time)
         )
+
+    def validate(obj, create=False, id_=None):
+        if obj['start_lesson_time'] >= obj['end_lesson_time']:
+            raise ValidationError(
+                'Начало занятия должно быть раньше его конца'
+            )
+
+        return obj
 
 
 def init_tables():
@@ -287,6 +302,9 @@ def init_tables():
         WorkType,
         Task,
         Booking,
+        Teacher,
+        ClubType,
+        Club,
     ]
 
     def remake_db():

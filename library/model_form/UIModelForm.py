@@ -15,9 +15,11 @@ from library.core.widgets.data_table import (
 )
 
 from .actions import DataTableAction, ObjectAction
+from .db.fields import DaysField as DataBaseDaysField
 from .fields import (
     BooleanField,
     CharField,
+    DaysField,
     DateField,
     TextField,
     ForeignKeyField,
@@ -43,7 +45,8 @@ class UIModelForm(metaclass=Singleton):
         peewee.DateField: DateField,
         peewee.IntegerField: IntegerField,
         peewee.ForeignKeyField: ForeignKeyField,
-        peewee.FloatField: FloatField
+        peewee.FloatField: FloatField,
+        DataBaseDaysField: DaysField,
     }
     # db_attr_name: ui_attr_name
     fields_attrs_mapping: dict[str, str] = {
@@ -214,7 +217,7 @@ class UIModelForm(metaclass=Singleton):
 
     def _run_validators(
         self, obj: dict, create: bool = False, id_=None
-    ) -> tuple[peewee.Model, str, dict[str, list[str]]]:
+    ) -> tuple[dict, str, dict[str, list[str]]]:
         fields_errors = {}
 
         for field_name, field in self._form_fields(read_only=False).items():
@@ -233,7 +236,7 @@ class UIModelForm(metaclass=Singleton):
                     # todo fix govnocode
                     if id_:
                         obj = obj | {'id': id_}
-                    self.Meta.model.validate(obj, create, id_)
+                    obj = self.Meta.model.validate(obj, create, id_)
                 # print('no errors', obj)
             except ValidationError as e:
                 # print('errors by eee')
