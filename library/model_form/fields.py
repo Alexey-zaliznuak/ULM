@@ -9,7 +9,7 @@ from library.core.validators import (
 )
 from library.core.exceptions import ValidationError
 from library.core.widgets.fields.DateTime import TimePicker
-from library.core.widgets.fields.DaysPicker import DaysAndCounterPicker
+from library.core.widgets.fields.DaysPicker import DaysAndCounterPicker, DaysViewer
 from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
@@ -173,7 +173,7 @@ class PhoneField(Field):
 
 
 class DaysField(CharField):
-    # display_widget = ...
+    display_widget = DaysViewer
     edit_widget = DaysAndCounterPicker
 
 

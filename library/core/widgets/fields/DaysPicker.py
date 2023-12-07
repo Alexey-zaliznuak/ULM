@@ -1,6 +1,11 @@
+from typing import Any, List, Optional, Union
 import flet as ft
+from flet_core.control import Control, OptionalNumber
+from flet_core.ref import Ref
+from flet_core.types import AnimationValue, CrossAxisAlignment, MainAxisAlignment, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue, ScrollMode
 
 from library.core.widgets.fields.BaseInput import InputField
+from library.core.widgets.fields.BaseViewer import Viewer
 
 
 class DayButton(ft.ElevatedButton):
@@ -188,3 +193,18 @@ class DaysAndCounterPicker(ft.UserControl, InputField):
         days = ';'.join(ret['buttons'])
         count = ret['count']
         return f'{count}:{days}'
+
+class DaysViewer(ft.Row, Viewer):
+    def __init__(self, value=''):
+
+        
+        cnt_vlu = value.split(':') if value else '0:'
+        self.value = cnt_vlu[1].split(';')
+
+        super().__init__(
+            [
+                ft.ElevatedButton(
+                    text=text.upper()
+                ) for text in self.value
+            ]
+        )
