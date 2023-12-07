@@ -184,10 +184,6 @@ def main(page: ft.Page):
         get_bookings=Booking.select,
         get_places=Place.select
     )
-    # TimeLineTablePr = TimeLineTable(
-    #     get_bookings=Booking.select,
-    #     get_places=Place.select
-    # )
 
     t = ft.Tabs(
         selected_index=0,

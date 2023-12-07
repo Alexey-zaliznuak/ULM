@@ -12,8 +12,8 @@ from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
     BooleanInput,
-    DateTimeViewer,
-    DateTimePicker,
+    DateViewer,
+    DatePicker,
     ForeignKeyViewer,
     ForeignKeyEditor,
     MultiLineTextViewer,
@@ -22,8 +22,8 @@ from library.core.widgets.fields import (
     PhoneViewer,
     TextViewer,
     TextEditor,
-    TimePicker,
-    TimeViewer,
+    DateTimePicker,
+    DateTimeViewer,
     IntegerInput,
 )
 
@@ -178,14 +178,14 @@ class DateField(Field):
 
 
 class DateField(Field):
-    display_widget = DateTimeViewer
-    edit_widget = DateTimePicker
+    display_widget = DateViewer
+    edit_widget = DatePicker
     initial_empty_value = datetime.today
 
 
 class DateTimeField(Field):
-    display_widget = TimeViewer
-    edit_widget = TimePicker
+    display_widget = DateTimeViewer
+    edit_widget = DateTimePicker
     # initial_empty_value = datetime.date
 
 

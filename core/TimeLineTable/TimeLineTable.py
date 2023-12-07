@@ -3,7 +3,7 @@ from datetime import datetime
 from core.TimeLineTable.TimeLine import TimeLine
 from core.TimeLineTable.TimeLineDataFormatter import TimeLineDataFormatter
 
-from library.core.widgets.fields.DateTime import DateTimePicker
+from library.core.widgets.fields.DateTime import DatePicker
 
 
 class TimeLineTable(ft.UserControl):
@@ -15,7 +15,7 @@ class TimeLineTable(ft.UserControl):
         self.bookings = get_bookings
         self.places = get_places
 
-        self.datepicker = DateTimePicker(
+        self.datepicker = DatePicker(
             value=datetime.now(),
             on_change=self.on_change
         )

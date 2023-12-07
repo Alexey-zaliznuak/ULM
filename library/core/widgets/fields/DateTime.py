@@ -1,12 +1,17 @@
+from typing import Any, Optional, Union
 import flet as ft
+from flet_core.buttons import ButtonStyle
+from flet_core.control import Control, OptionalNumber
+from flet_core.ref import Ref
+from flet_core.types import AnimationValue, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue
 from ..datepicker.datepicker import DatePicker
 from ..datepicker.selection_type import SelectionType
-from datetime import datetime, date
+from datetime import datetime, date, time
 from .BaseViewer import Viewer
 from .BaseInput import InputField
 
 
-class DateTimeField(ft.UserControl):
+class DateTimeClass(ft.UserControl):
     holidays = [
         datetime(2023, 4, 25),
         datetime(2023, 5, 1),
@@ -155,11 +160,11 @@ class DateTimeField(ft.UserControl):
         self.selected_locale = self.dd.value or None
 
 
-class DateTimeViewer(DateTimeField, Viewer):
+class DateViewer(DateTimeClass, Viewer):
     pass
 
 
-class TimeViewer(DateTimeViewer):
+class DateTimeViewer(DateViewer):
     defaults = {
         'hour_minute': True,
     }
@@ -169,7 +174,7 @@ class TimeViewer(DateTimeViewer):
         super().__init__(*args, **kwargs)
 
 
-class DateTimePicker(DateTimeField, InputField):
+class DatePicker(DateTimeClass, InputField):
     def __init__(
         self,
         value: datetime,
@@ -206,7 +211,7 @@ class DateTimePicker(DateTimeField, InputField):
         return self.datepicker.selected_data[0]
 
 
-class TimePicker(DateTimePicker):
+class DateTimePicker(DatePicker):
     defaults = {
         'hour_minute': True,
     }
@@ -214,3 +219,34 @@ class TimePicker(DateTimePicker):
     def __init__(self, *args, **kwargs):
         kwargs = kwargs | self.defaults
         super().__init__(*args, **kwargs)
+
+class TimePicker(ft.ElevatedButton):
+    def __init__(
+        self,
+        value: str
+    ):
+        h, m = value.split(':')
+        self.value = time(hour=h, minute=m)
+        self.text = value
+
+        self.time_picker = ft.TimePicker(
+            confirm_text="Готово",
+            cancel_text="Отмена",
+            error_invalid_text="Неправильно время",
+            help_text="Выбери время",
+            on_change=self.change_time,
+            on_dismiss=self.dismissed,
+            value=self.value
+        )
+        super().__init__(
+            self.text,
+            icon=ft.icons.TIME_TO_LEAVE,
+            on_click=lambda _: self.time_picker.pick_time(),
+        )
+
+    def change_time(self, e):
+        # date_button.text = time_picker.value
+        print(f"Time picker changed, value (minute) is {self.time_picker.value.minute}")
+
+    def dismissed(self, e):
+        print(f"Time picker dismissed, value is {self.time_picker.value}")
