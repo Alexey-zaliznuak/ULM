@@ -226,7 +226,8 @@ class RegexField(Field):
 
 
 class TimeField(Field):
-    ...
+    display_widget = ...
+    edit_widget = ...
 
 
 class TextField(CharField):
