@@ -271,8 +271,8 @@ class Club(BaseModel):
     )
     date_start_working = DateField(help_text='Дата начала работы кружка')
     working_days = DaysField(help_text='Дни занятий')
-    start_lesson_time = TimeField(help_text='Время конца занятия')
-    end_lesson_time = TimeField(help_text='Время начала занятия')
+    start_lesson_time = TimeField(help_text='Время начала занятия')
+    end_lesson_time = TimeField(help_text='Время конца занятия')
 
     def __str__(self) -> str:
         return (
@@ -284,6 +284,7 @@ class Club(BaseModel):
         )
 
     def validate(obj, create=False, id_=None):
+        print(obj, flush=True)
         if obj['start_lesson_time'] >= obj['end_lesson_time']:
             raise ValidationError(
                 'Начало занятия должно быть раньше его конца'

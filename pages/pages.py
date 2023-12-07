@@ -177,18 +177,50 @@ def LearningPage(
     )
 
 
-def EntertainmentPage(PlaceDataTable):
+def EntertainmentPage(
+    PlaceDataTable,
+    TeacherFormDataTable,
+    ClubFormDataTable,
+    ClubTypeFormDataTable,
+):
     return CustomNavigation(
-        selected_index=0,
+        selected_index=2,
         routes=[
             {
                 "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
+                    ft.icons.PLACE,
+                    ft.icons.PLACE_OUTLINED,
                 ),
                 'page':
                     ft.ListView(controls=[PlaceDataTable]),
-                'title': 'К выполнению'
+                'title': 'Пространства'
+            },
+            {
+                "icon": (
+                    ft.icons.MAN,
+                    ft.icons.MAN_OUTLINED,
+                ),
+                'page':
+                    ft.ListView(controls=[TeacherFormDataTable]),
+                'title': 'Учителя'
+            },
+            {
+                "icon": (
+                    ft.icons.THEATER_COMEDY,
+                    ft.icons.THEATER_COMEDY_OUTLINED,
+                ),
+                'page':
+                    ft.ListView(controls=[ClubFormDataTable]),
+                'title': 'Кружки'
+            },
+            {
+                "icon": (
+                    ft.icons.NOW_WIDGETS,
+                    ft.icons.NOW_WIDGETS_OUTLINED,
+                ),
+                'page':
+                    ft.ListView(controls=[ClubTypeFormDataTable]),
+                'title': 'Виды кружков'
             },
         ]
     )

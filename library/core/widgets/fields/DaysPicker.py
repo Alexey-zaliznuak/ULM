@@ -1,35 +1,43 @@
-from typing import Any, List, Optional, Union
 import flet as ft
-from flet_core.control import Control, OptionalNumber
-from flet_core.ref import Ref
-from flet_core.types import AnimationValue, ClipBehavior, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue
+
+from library.core.widgets.fields.BaseInput import InputField
 
 
-class WeekButton(ft.ElevatedButton):
-    def __init__(self, text, select = False, weekend = False, check = lambda : ...):
+class DayButton(ft.ElevatedButton):
+    def __init__(
+            self,
+            text,
+            select=False,
+            weekend=False,
+            check=lambda: ...
+    ):
         self.select = select
         self.weekend = weekend
         self.check = check
         self.style = self.change_style()
 
-        super().__init__(style=self.style, text=text, on_click=self.change_select_click)
-    
+        super().__init__(
+            style=self.style,
+            text=text,
+            on_click=self.change_select_click
+        )
+
     def change_style(self):
         style = ft.ButtonStyle(
-            bgcolor = {
+            bgcolor={
                 "": None if not self.select else ft.colors.BLUE_400
             },
-            color = {
+            color={
                 "": ft.colors.BLACK
             }
         )
 
         if self.weekend:
             style = ft.ButtonStyle(
-                bgcolor = {
+                bgcolor={
                     "": None if not self.select else ft.colors.YELLOW_800
                 },
-                color = {
+                color={
                     "": ft.colors.BLACK
                 }
             )
@@ -43,21 +51,32 @@ class WeekButton(ft.ElevatedButton):
         e.control.update()
 
 
-
-class WeekField(ft.UserControl):
+class DaysField(ft.UserControl):
     def __init__(
         self,
-        value: str = '0',
-        check = lambda: ...
+        value: str,
+        check=lambda: ...
     ):
-        self.value = value.split(';')
-        self.count = self.value.pop(0)
+        cnt_vlu = '0:'
+        if value:
+            cnt_vlu = value.split(':')
+        self.count = cnt_vlu[0]
+        self.value = cnt_vlu[1].split(';')
         self.check = check
 
-        days = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС']
+        days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
         weekends = ['ВС']
 
-        self.buttons = list(map(lambda day: WeekButton(text=day, check=self.check_all, weekend=day in weekends), days))
+        self.buttons = list(
+            map(
+                lambda day: DayButton(
+                    text=day.upper(),
+                    check=self.check_all,
+                    weekend=day in weekends
+                ),
+                days
+            )
+        )
 
         super().__init__()
 
@@ -70,7 +89,13 @@ class WeekField(ft.UserControl):
 
     @property
     def clear_value(self):
-        return '0'
+        return {
+            'buttons': [
+                button.text.lower()
+                for button in self.buttons if button.select
+            ],
+            'count': self.check()
+        }
 
     def build(self):
         return ft.Row(
@@ -93,8 +118,9 @@ class WeekField(ft.UserControl):
             ]
         )
 
+
 class GetMaximum(ft.Row):
-    def __init__(self, value = 1):
+    def __init__(self, value=1):
         self.value = value
 
         txt_number = ft.Text(
@@ -111,6 +137,7 @@ class GetMaximum(ft.Row):
             ],
             alignment=ft.MainAxisAlignment.CENTER
         )
+
     def minus_click(self, e):
         self.value = int(self.controls[1].value) - 1
         if self.value < 1:
@@ -126,23 +153,25 @@ class GetMaximum(ft.Row):
 
         self.controls[1].value = str(self.value)
         self.update()
-    
+
     @property
     def clear_value(self):
         return self.value
 
-class AllWeekDayAndCounter(ft.UserControl):
-    def __init__(self):
-        self.WeekField = WeekField(check=self.check_if_maximum)
+
+class DaysAndCounterPicker(ft.UserControl, InputField):
+    def __init__(
+        self,
+        value: str
+    ):
+        self.WeekField = DaysField(check=self.check_if_maximum, value=value)
         self.GetMaximum = GetMaximum()
 
         super().__init__()
 
     def check_if_maximum(self):
-
         return self.GetMaximum.clear_value
 
-    
     def build(self):
         return ft.Column(
             [
@@ -151,3 +180,11 @@ class AllWeekDayAndCounter(ft.UserControl):
             ],
             width=220
         )
+
+    @property
+    def clear_value(self):
+        ret = self.WeekField.clear_value
+        print(ret)
+        days = ';'.join(ret['buttons'])
+        count = ret['count']
+        return f'{count}:{days}'

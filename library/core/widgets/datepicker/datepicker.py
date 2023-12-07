@@ -34,7 +34,7 @@ LAYOUT_DT_MIN_HEIGHT = 320
 LAYOUT_DT_MAX_HEIGHT = 360
 
 
-class DatePicker(ft.UserControl):
+class DateWidget(ft.UserControl):
 
     @property
     def selected_data(self):

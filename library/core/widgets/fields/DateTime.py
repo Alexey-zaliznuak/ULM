@@ -1,12 +1,8 @@
-from typing import Any, Optional, Union
 import flet as ft
-from flet_core.buttons import ButtonStyle
-from flet_core.control import Control, OptionalNumber
-from flet_core.ref import Ref
-from flet_core.types import AnimationValue, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue
-from ..datepicker.datepicker import DatePicker
+from ..datepicker.datepicker import DateWidget
 from ..datepicker.selection_type import SelectionType
 from datetime import datetime, date, time
+from .Text import TextViewer
 from .BaseViewer import Viewer
 from .BaseInput import InputField
 
@@ -123,7 +119,7 @@ class DateTimeClass(ft.UserControl):
         self.page.update()
 
     def open_dlg_modal(self, e):
-        self.datepicker = DatePicker(
+        self.datepicker = DateWidget(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
             hide_prev_next_month_days=False,
@@ -194,7 +190,7 @@ class DatePicker(DateTimeClass, InputField):
         self.on_change = on_change
 
     def build(self):
-        self.datepicker = DatePicker(
+        self.datepicker = DateWidget(
             hour_minute=self.hour_minute,
             show_three_months=self.show_three_months,
             hide_prev_next_month_days=False,
@@ -211,7 +207,7 @@ class DatePicker(DateTimeClass, InputField):
         return self.datepicker.selected_data[0]
 
 
-class DateTimePicker(DatePicker):
+class DateTimePicker(DateWidget):
     defaults = {
         'hour_minute': True,
     }
@@ -220,33 +216,55 @@ class DateTimePicker(DatePicker):
         kwargs = kwargs | self.defaults
         super().__init__(*args, **kwargs)
 
-class TimePicker(ft.ElevatedButton):
+
+class TimePicker(ft.ElevatedButton, InputField):
     def __init__(
         self,
         value: str
     ):
+        value = value or '0:0'
         h, m = value.split(':')
-        self.value = time(hour=h, minute=m)
-        self.text = value
+        value = time(hour=int(h), minute=int(m))
 
+        self.flag = False
         self.time_picker = ft.TimePicker(
             confirm_text="Готово",
             cancel_text="Отмена",
             error_invalid_text="Неправильно время",
             help_text="Выбери время",
-            on_change=self.change_time,
-            on_dismiss=self.dismissed,
-            value=self.value
+            on_change=self.time_change,
+            value=value
         )
+
         super().__init__(
-            self.text,
-            icon=ft.icons.TIME_TO_LEAVE,
-            on_click=lambda _: self.time_picker.pick_time(),
+            self.time_to_text(value),
+            icon=ft.icons.ACCESS_TIME,
+            on_click=lambda _: self.pick_time(),
         )
 
-    def change_time(self, e):
-        # date_button.text = time_picker.value
-        print(f"Time picker changed, value (minute) is {self.time_picker.value.minute}")
+    def time_change(self, e):
+        self.text = self.time_to_text(self.time_picker.value)
+        self.update()
 
-    def dismissed(self, e):
-        print(f"Time picker dismissed, value is {self.time_picker.value}")
+    def time_to_text(self, time):
+        return f"{time.hour:02}:{time.minute:02}"
+
+    def pick_time(self):
+        if not self.flag:
+            self.page.overlay.append(self.time_picker)
+            self.page.update()
+        self.flag = True
+
+        self.time_picker.pick_time()
+
+    @property
+    def clear_value(self):
+        return self.time_picker.value
+
+
+class TimeViewer(TextViewer, Viewer):
+    def __init__(self, value):
+        value = str(value).split(':')
+        value = f"{value[0]:02}:{value[1]:02}"
+
+        super().__init__(value=value)

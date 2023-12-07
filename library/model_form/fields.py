@@ -8,6 +8,8 @@ from library.core.validators import (
     ForeignKeyValidator
 )
 from library.core.exceptions import ValidationError
+from library.core.widgets.fields.DateTime import TimePicker
+from library.core.widgets.fields.DaysPicker import DaysAndCounterPicker
 from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
@@ -22,6 +24,7 @@ from library.core.widgets.fields import (
     PhoneViewer,
     TextViewer,
     TextEditor,
+    TimeViewer,
     DateTimePicker,
     DateTimeViewer,
     IntegerInput,
@@ -170,16 +173,17 @@ class PhoneField(Field):
 
 
 class DaysField(CharField):
-    display_widget = ...
-    edit_widget = ...
+    # display_widget = ...
+    edit_widget = DaysAndCounterPicker
 
 
 class ChooseField(Field):  # ???? ValueValidator?
     ...
 
 
-class DateField(Field):
-    ...
+class TimeField(Field):
+    display_widget = TimeViewer
+    edit_widget = TimePicker
 
 
 class DateField(Field):
@@ -223,11 +227,6 @@ class MultipleChoiceField(Field):
 
 class RegexField(Field):
     ...
-
-
-class TimeField(Field):
-    display_widget = ...
-    edit_widget = ...
 
 
 class TextField(CharField):

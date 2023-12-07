@@ -22,6 +22,7 @@ from .fields import (
     DaysField,
     DateField,
     TextField,
+    TimeField,
     ForeignKeyField,
     FloatField,
     DateTimeField
@@ -41,6 +42,7 @@ class UIModelForm(metaclass=Singleton):
         peewee.BooleanField: BooleanField,
         peewee.CharField: CharField,
         peewee.TextField: TextField,
+        peewee.TimeField: TimeField,
         peewee.DateTimeField: DateTimeField,
         peewee.DateField: DateField,
         peewee.IntegerField: IntegerField,

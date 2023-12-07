@@ -2,7 +2,12 @@ import flet as ft
 from core.TimeLineTable.TimeLineTable import TimeLineTable
 from filtersets import TasksFilterSet
 
-from pages.pages import EntertainmentPage, LearningPage, EducationPage
+from pages.pages import (
+    EntertainmentPage,
+    LearningPage,
+    EducationPage,
+    WorkTablePage
+)
 # from widgets.CustomNavigation import CustomNavigation
 
 from models import (
@@ -12,7 +17,7 @@ from models import (
     init_tables,
     TasksStatuses,
     Task,
-    Booking
+    Booking,
 )
 
 init_tables()
@@ -24,7 +29,10 @@ from forms import (
     CategoriesForm,
     WorkTypeForm,
     TasksForm,
-    BookingForm
+    BookingForm,
+    TeacherForm,
+    ClubForm,
+    ClubTypeForm
 )
 
 from library.model_form.filters import FieldValueFilter
@@ -37,6 +45,9 @@ events_form = EventForm()
 work_types_form = WorkTypeForm()
 task_form = TasksForm()
 booking_form = BookingForm()
+teacher_form = TeacherForm()
+club_form = ClubForm()
+club_type_form = ClubTypeForm()
 
 
 def main(page: ft.Page):
@@ -185,8 +196,26 @@ def main(page: ft.Page):
         get_places=Place.select
     )
 
+    # ---------------TeacherTableData---------------
+    TeacherFormDataTableOb, teacher_events_dtOb = (
+        teacher_form.DataTable()
+    )
+    page.datatables.append(teacher_events_dtOb)
+
+    # ---------------ClubTableData---------------
+    ClubFormDataTableOb, club_events_dtOb = (
+        club_form.DataTable()
+    )
+    page.datatables.append(club_events_dtOb)
+
+    # ---------------ClubTypeTableData---------------
+    ClubTypeFormDataTableOb, club_type_events_dtOb = (
+        club_type_form.DataTable()
+    )
+    page.datatables.append(club_type_events_dtOb)
+
     t = ft.Tabs(
-        selected_index=0,
+        selected_index=2,
         animation_duration=50,
         tabs=[
             ft.Tab(
@@ -223,13 +252,16 @@ def main(page: ft.Page):
                 content=ft.Container(
                     content=EntertainmentPage(
                         PlaceDataTableOb,
+                        TeacherFormDataTableOb,
+                        ClubFormDataTableOb,
+                        ClubTypeFormDataTableOb,
                     )
                 ),
             ),
             ft.Tab(
                 text="Активные заявки",
                 content=ft.Container(
-                    content=EntertainmentPage(
+                    content=WorkTablePage(
                         WorkTableFormDataTable,
                     )
                 ),

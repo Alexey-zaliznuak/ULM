@@ -5,6 +5,7 @@ from .BaseInput import InputField
 
 
 class TextViewer(Text, Viewer):
+    # TODO init for settings
     "View content as Text."
 
 
