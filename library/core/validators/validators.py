@@ -80,3 +80,17 @@ class ForeignKeyValidator():
             raise ValidationError(
                 'Объект с таким идентификатором не существует'
             )
+
+
+class DaysFieldDefaultValidator:
+    COUNT_DAYS_SEPARATOR = ':'
+    DAYS_SEPARATOR = ';'
+
+    def __call__(self, value: str):
+        if not (1 <= value[0] <= 7):
+            raise ValidationError(f'Некорректное количество дней - {value}')
+
+        count, days = value.split(self.COUNT_DAYS_SEPARATOR)
+
+        if len(days.split(self.DAYS_SEPARATOR)) != int(count):
+            raise ValidationError('Некорректное количество выбранных дней')

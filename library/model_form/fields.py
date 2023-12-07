@@ -5,7 +5,8 @@ from types import FunctionType
 from library.core.validators import (
     URLValidator,
     PhoneValidator,
-    ForeignKeyValidator
+    ForeignKeyValidator,
+    DaysFieldDefaultValidator,
 )
 from library.core.exceptions import ValidationError
 from library.core.widgets.fields.DateTime import TimePicker
@@ -173,6 +174,34 @@ class PhoneField(Field):
 
 
 class DaysField(CharField):
+    def __init__(
+        self,
+        source: str,
+        read_only=False,
+        write_only=False,
+        required: bool = None,
+        default=empty,
+        label: str = '',
+        help_text: str = None,
+        style=None,
+        error_messages: dict = None,
+        validators: list = [],
+        allow_null=False
+    ):
+        super().__init__(
+            source,
+            read_only,
+            write_only,
+            required,
+            default,
+            label,
+            help_text,
+            style,
+            error_messages,
+            validators,
+            allow_null
+        )
+        self.default_validators = [DaysFieldDefaultValidator()]
     display_widget = DaysViewer
     edit_widget = DaysAndCounterPicker
 
@@ -303,11 +332,13 @@ class ForeignKeyField(RelatedField):
     ):
         self.fields = foreign_form()._form_fields(write_only=False).values()
         self.foreign_form = foreign_form
+        self.default_validators = [ForeignKeyValidator(foreign_form().Meta.model)]
+
         # self.queryset = queryset
-        self.default_validators = self.default_validators.copy()
-        self.default_validators.append(
-            ForeignKeyValidator(foreign_form().Meta.model)
-        )
+        # self.default_validators = self.default_validators.copy()
+        # self.default_validators.append(
+        #     ForeignKeyValidator(foreign_form().Meta.model)
+        # )
 
         super().__init__(
             source=source,
