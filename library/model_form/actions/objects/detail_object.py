@@ -7,10 +7,10 @@ from library.core.widgets.actions.objects.detail import (
 from library.utils import LazyAttribute
 from flet import Page
 
-from .object_action import ObjectAction
+from .object_action import DataTableObjectAction
 
 
-class DetailObjectAction(ObjectAction):
+class DataTableDetailObjectAction(DataTableObjectAction):
     action_widget = DetailObjectActionButtonWidget
 
     def on_click_method(
@@ -24,5 +24,23 @@ class DetailObjectAction(ObjectAction):
             page = page()
 
         page.dialog = DetailObjectActionDialog(obj, datatable.fields)
+        page.dialog.open = True
+        page.update()
+
+
+class DetailObjectAction(DataTableObjectAction):
+    action_widget = DetailObjectActionButtonWidget
+
+    def on_click_method(
+        self,
+        obj,
+        page: Union[Page, LazyAttribute[Page]],
+        fields,
+        e
+    ):
+        if isinstance(page, LazyAttribute):
+            page = page()
+
+        page.dialog = DetailObjectActionDialog(obj, fields)
         page.dialog.open = True
         page.update()

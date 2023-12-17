@@ -43,7 +43,6 @@ class TimeLineTable(ft.UserControl):
         self.TimeLine = TimeLine(
             self.get_matrix()
         )
-
         return (
             ft.Container(
                 content=ft.Column(

@@ -9,12 +9,17 @@ from library.model_form.actions.table import FilterAction
 from library.core.validators import LengthValidator
 from library.utils import Singleton
 from library.core.exceptions import ValidationError
+from library.core.widgets.actions.objects.detail import (
+    DetailObjectActionDialog
+)
 from library.core.widgets.data_table import (
     UIModelFormDataTable,
     UIModelFormDataTableColumn
 )
 
-from .actions import DataTableAction, ObjectAction
+
+from .actions import DataTableAction, DataTableObjectAction
+from .actions.objects import DetailObjectAction
 from .db.fields import DaysField as DataBaseDaysField
 from .fields import (
     BooleanField,
@@ -66,7 +71,7 @@ class UIModelForm(metaclass=Singleton):
         self,
         queryset: Callable = None,
         table_actions: list[DataTableAction] = [],
-        objects_actions: list[ObjectAction] = [],
+        objects_actions: list[DataTableObjectAction] = [],
         filterset: FilterSet = None,
         default_filters: Sequence[Filter] = (),
         **kwargs,
@@ -123,8 +128,26 @@ class UIModelForm(metaclass=Singleton):
             ]
         ), data_table
 
-    def EditWindow(self, pk) -> Control:
+    def EditWindow(self, obj) -> Control:
         pass
+
+    def DetailWindow(self, obj, *, page=None, action_button=False):
+        assert bool(page) == bool(action_button)
+
+        if isinstance(obj, int):
+            obj = self.Meta.model.get_by_id(obj)
+
+        if action_button:
+            return DetailObjectAction()(
+                obj,
+                page,
+                self._form_fields(write_only=False).values()
+            )
+
+        return DetailObjectActionDialog(
+            obj,
+            self._form_fields(write_only=False).values()
+        )
 
     def clear(self, obj: dict) -> dict:
         # todo check clear/validate logic
@@ -168,7 +191,7 @@ class UIModelForm(metaclass=Singleton):
     def update(
         self, obj: peewee.Model, update: dict
     ) -> tuple[bool, str, dict[str, list[str]]]:
-        # todo fignya with copying mv with ine to one and any spec.
+        # todo bullshit with copying mv with ine to one and any spec.
         update = self.clear(update)
         success = False
 
@@ -231,11 +254,11 @@ class UIModelForm(metaclass=Singleton):
         # print('errors: ', object_error, fields_errors)
 
         if not (object_error or fields_errors):
-            # print('not object error orfield errors')
+            # print('not object error or field errors')
             try:
                 # print('errors by 231')
                 if hasattr(self.Meta.model, 'validate'):
-                    # todo fix govnocode
+                    # todo fix bd code
                     if id_:
                         obj = obj | {'id': id_}
                     obj = self.Meta.model.validate(obj, create, id_)
@@ -245,7 +268,7 @@ class UIModelForm(metaclass=Singleton):
                 object_error = str(e)
         else:
             # print('errors by 241')
-            object_error = 'Исправьте ошибки в отельных полях обьекта!'
+            object_error = 'Исправьте ошибки в отельных полях объекта!'
 
         # print('errors: ', object_error, fields_errors)
         return obj, object_error, fields_errors
@@ -335,10 +358,11 @@ class UIModelForm(metaclass=Singleton):
 
     class Meta:
         model: peewee.Model = None
+        model_title: str = None
         fields: Sequence[str] = ()
         read_only_fields: Sequence[str] = ''
         write_only_fields: Sequence[str] = ''
         table_actions: list[DataTableAction] = []
-        objects_actions: list[ObjectAction] = []
+        objects_actions: list[DataTableObjectAction] = []
         filterset: FilterSet = None
         default_filters: Sequence[Filter] = ()

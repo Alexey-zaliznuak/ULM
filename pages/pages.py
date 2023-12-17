@@ -241,3 +241,20 @@ def WorkTablePage(WorkTable):
             },
         ]
     )
+
+
+def ScheduleTablePage(ScheduleTable):
+    return CustomNavigation(
+        selected_index=0,
+        routes=[
+            {
+                "icon": (
+                    ft.icons.CALENDAR_MONTH,
+                    ft.icons.CALENDAR_MONTH_OUTLINED,
+                ),
+                'page':
+                    ft.ListView(controls=[ScheduleTable]),
+                'title': 'Расписание'
+            }
+        ]
+    )

@@ -10,7 +10,10 @@ from library.core.validators import (
 )
 from library.core.exceptions import ValidationError
 from library.core.widgets.fields.DateTime import TimePicker
-from library.core.widgets.fields.DaysPicker import DaysAndCounterPicker, DaysViewer
+from library.core.widgets.fields.DaysPicker import (
+    DaysAndCounterPicker,
+    DaysViewer
+)
 from library.types import empty
 from library.core.widgets.fields import (
     BooleanViewer,
@@ -57,6 +60,7 @@ class Field:
         default=empty,
         label: str = '',
         help_text: str = None,
+        datatable_column_title: str = None,
         style=None,
         error_messages: dict = None,
         validators: list = [],
@@ -87,6 +91,7 @@ class Field:
         self.source = source
         self.label = label or source
         self.help_text = help_text
+        self.datatable_column_title = datatable_column_title
         self.style = style or {}
         self.allow_null = allow_null
         self.validators = validators.copy()
@@ -109,7 +114,7 @@ class Field:
     def validate(self, value) -> list[str]:
         errors = []
 
-        # rodo mb feature wu=ith required
+        # TODO mb feature wu=ith required
         if value is None and not self.allow_null:
             errors.append('Обязательное поле')
 
@@ -183,25 +188,29 @@ class DaysField(CharField):
         default=empty,
         label: str = '',
         help_text: str = None,
+        datatable_column_title: str = None,
         style=None,
         error_messages: dict = None,
         validators: list = [],
         allow_null=False
     ):
+        self.default_validators = [DaysFieldDefaultValidator(), ]
+
         super().__init__(
-            source,
-            read_only,
-            write_only,
-            required,
-            default,
-            label,
-            help_text,
-            style,
-            error_messages,
-            validators,
-            allow_null
+            source=source,
+            read_only=read_only,
+            write_only=write_only,
+            required=required,
+            default=default,
+            label=label,
+            help_text=help_text,
+            datatable_column_title=datatable_column_title,
+            style=style,
+            validators=validators,
+            error_messages=error_messages,
+            allow_null=allow_null,
         )
-        self.default_validators = [DaysFieldDefaultValidator()]
+
     display_widget = DaysViewer
     edit_widget = DaysAndCounterPicker
 
@@ -324,6 +333,7 @@ class ForeignKeyField(RelatedField):
         default=empty,
         label: str = '',
         help_text: str = None,
+        datatable_column_title: str = None,
         style=None,
         error_messages: dict = None,
         validators: list = [],
@@ -332,7 +342,9 @@ class ForeignKeyField(RelatedField):
     ):
         self.fields = foreign_form()._form_fields(write_only=False).values()
         self.foreign_form = foreign_form
-        self.default_validators = [ForeignKeyValidator(foreign_form().Meta.model)]
+        self.default_validators = [
+            ForeignKeyValidator(foreign_form().Meta.model)
+        ]
 
         # self.queryset = queryset
         # self.default_validators = self.default_validators.copy()
@@ -348,6 +360,7 @@ class ForeignKeyField(RelatedField):
             default=default,
             label=label,
             help_text=help_text,
+            datatable_column_title=datatable_column_title,
             style=style,
             validators=validators,
             error_messages=error_messages,

@@ -40,7 +40,7 @@ class ConfirmActionDialog(AlertDialog):
         self.on_success()
         if self.success_snack_bar:
             self.page.snack_bar = SnackBar(
-                Text("Success.", size=18),
+                Text("Успешно.", size=18),
                 duration=self.success_snack_bar_duration,
                 bgcolor=colors.GREY_700,
                 open=True

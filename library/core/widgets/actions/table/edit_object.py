@@ -20,7 +20,7 @@ from flet import (
     padding,
 )
 from typing import Callable
-from library.core.widgets.text import Text, TitleText
+from library.core.widgets.text import Text, TitleText, Title2Text
 from library.utils import LazyAttribute
 from library.core.widgets import ErrorText
 from library.model_form.fields import Field, empty
@@ -34,20 +34,20 @@ class EditFieldWidget(Container):
         label: str,
         editing_field: Control = None,
         errors: Callable[[], list[str]] = None,
-        help_text: str = None
+        help_text: str = None,
     ):
         self.label = label
         self._get_errors = errors
         self.column_errors = Column(self._get_column_errors())
 
-        labels = [Text(label)]
-        if help_text:
-            labels.append(Text(help_text))
+        label = Text(help_text or label)
+        # if help_text:
+        #     label = Text(help_text)
 
         super().__init__(
             content=Column(
                 [
-                    *labels,
+                    label,
                     editing_field,
                     self.column_errors
                 ]
@@ -148,7 +148,7 @@ class EditObjectActionDialog(AlertDialog):
             content=Container(
                 content=ListView(
                     [
-                        TitleText(self.title_text),
+                        Title2Text(self.title_text),
                         Column(self.fields_widgets),
                         Container(
                             content=Row(
@@ -206,17 +206,22 @@ class EditObjectActionDialog(AlertDialog):
                         attr='errors.get',
                         args=(field.label, []),
                     ),
-                    help_text=field.help_text
+                    help_text=field.datatable_column_title or field.help_text
                 )
             )
         return controls
 
     @property
     def title_text(self):
+        name = getattr(
+            self.form.Meta,
+            'model_title',
+            self.form.Meta.model.__name__
+        )
         if self.create:
-            return f"Создать {self.form.Meta.model.__name__}"
+            return f"Создать объект {name}"
 
-        return f"Отредактировать {self.form.Meta.model.__name__}"
+        return f"Отредактировать объект {name}"
 
     def _close_dlg(self, e=None):
         self.open = False

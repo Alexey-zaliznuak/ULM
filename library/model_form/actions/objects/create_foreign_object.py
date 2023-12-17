@@ -10,10 +10,10 @@ from library.core.widgets.actions.objects.create_foreign import (
 from library.utils import LazyAttribute
 from flet import Page, icons
 
-from .object_action import ObjectAction
+from .object_action import DataTableObjectAction
 
 
-class CreateForeignObjectAction(ObjectAction):
+class CreateForeignObjectAction(DataTableObjectAction):
     action_widget = CreateForeignObjectActionButton
 
     def __init__(self, foreign_form, foreign_field, *, icon=icons.EDIT):

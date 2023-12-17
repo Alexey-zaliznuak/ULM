@@ -345,7 +345,7 @@ def generate():
             'club_type': ClubType.get_by_id(3),
             'place': Place.get_by_id(7),
             'date_start_working': date.today() - timedelta(days=10),
-            'working_days': '3:пн;вт;сб',
+            'working_days': '3:вт;чт;сб',
             'start_lesson_time': time(11),
             'end_lesson_time': time(13, 15)
         },
@@ -355,7 +355,7 @@ def generate():
             'club_type': ClubType.get_by_id(4),
             'place': Place.get_by_id(8),
             'date_start_working': date.today() - timedelta(days=300),
-            'working_days': '2:пн;сб',
+            'working_days': '2:пн;вс',
             'start_lesson_time': time(18, 30),
             'end_lesson_time': time(20)
         }

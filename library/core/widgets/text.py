@@ -116,6 +116,7 @@ class Text(FletText):
 
 
 TitleText = partial(Text, size=TITLE_TEXT_SIZE)
+Title2Text = partial(Text, size=int(TITLE_TEXT_SIZE * 1.25))
 
 
 class ErrorText(FletText):

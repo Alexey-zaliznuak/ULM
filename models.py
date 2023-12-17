@@ -284,7 +284,6 @@ class Club(BaseModel):
         )
 
     def validate(obj, create=False, id_=None):
-        print(obj, flush=True)
         if obj['start_lesson_time'] >= obj['end_lesson_time']:
             raise ValidationError(
                 'Начало занятия должно быть раньше его конца'

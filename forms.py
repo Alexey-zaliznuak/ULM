@@ -1,10 +1,10 @@
 from flet import colors, icons
 from library.model_form import UIModelForm
-from library.model_form.fields import ForeignKeyField
+from library.model_form.fields import ForeignKeyField, BooleanField
 from library.model_form.actions.objects import (
     CreateForeignObjectAction,
     DeleteObjectAction,
-    DetailObjectAction,
+    DataTableDetailObjectAction,
     EditObjectAction,
     SetValueObjectAction,
 )
@@ -27,9 +27,12 @@ from models import (
 
 RUDActions = [
     EditObjectAction(),
-    DetailObjectAction(),
+    DataTableDetailObjectAction(),
     DeleteObjectAction(),
 ]
+
+
+# TODO use model title with datatable column name
 
 
 class CategoriesForm(UIModelForm):
@@ -38,10 +41,18 @@ class CategoriesForm(UIModelForm):
         fields = ('id', 'name',)
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Категории'
 
 
 class PlaceForm(UIModelForm):
-    category = ForeignKeyField('category', CategoriesForm, )
+    category = ForeignKeyField(
+        'category',
+        CategoriesForm, datatable_column_title='Категория'
+    )
+    big = BooleanField(
+        'big',
+        datatable_column_title='Вмещает 2 мероприятия'
+    )
 
     class Meta:
         model = Place
@@ -49,6 +60,7 @@ class PlaceForm(UIModelForm):
         objects_actions = RUDActions
 
         table_actions = (CreateObjectAction, )
+        model_title = 'Пространства'
 
 
 class EventTypesForm(UIModelForm):
@@ -57,11 +69,18 @@ class EventTypesForm(UIModelForm):
         fields = ('id', 'name',)
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Вид мероприятия'
 
 
 class EventForm(UIModelForm):
-    event_type = ForeignKeyField('event_type', EventTypesForm)
-    category = ForeignKeyField('category', CategoriesForm, )
+    event_type = ForeignKeyField(
+        'event_type',
+        EventTypesForm, datatable_column_title='Вид мероприятия'
+    )
+    category = ForeignKeyField(
+        'category',
+        CategoriesForm, datatable_column_title='Категория'
+    )
 
     class Meta:
         model = Event
@@ -69,6 +88,7 @@ class EventForm(UIModelForm):
         fields = ('date', 'event_type', 'describe', 'category')
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Мероприятие'
 
 
 class WorkTypeForm(UIModelForm):
@@ -77,6 +97,7 @@ class WorkTypeForm(UIModelForm):
         fields = ('id', 'name',)
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Вид работы'
 
 
 class TasksStatusesForm(UIModelForm):
@@ -85,13 +106,26 @@ class TasksStatusesForm(UIModelForm):
         fields = ('id', 'status_name',)
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Статус заявки'
 
 
 class TasksForm(UIModelForm):
-    event = ForeignKeyField('event', EventForm)
-    work_type = ForeignKeyField('work_type', WorkTypeForm)
-    place = ForeignKeyField('place', PlaceForm)
-    status = ForeignKeyField('status', TasksStatusesForm)
+    event = ForeignKeyField(
+        'event',
+        EventForm, datatable_column_title='События'
+    )
+    work_type = ForeignKeyField(
+        'work_type',
+        WorkTypeForm, datatable_column_title='Вид работы'
+    )
+    place = ForeignKeyField(
+        'place',
+        PlaceForm, datatable_column_title='Помещение'
+    )
+    status = ForeignKeyField(
+        'status',
+        TasksStatusesForm, datatable_column_title='Статус'
+    )
 
     class Meta:
         model = Task
@@ -111,6 +145,7 @@ class TasksForm(UIModelForm):
             )
         )
         table_actions = (CreateObjectAction,)
+        model_title = 'Заявки'
 
     def get_row_params(self, obj, form, datatable) -> dict:
         colours = {
@@ -131,8 +166,14 @@ class TasksForm(UIModelForm):
 
 class BookingForm(UIModelForm):
     # todo queryset
-    place = ForeignKeyField('place', PlaceForm)
-    event = ForeignKeyField('event', EventForm)
+    place = ForeignKeyField(
+        'place',
+        PlaceForm, datatable_column_title='Помещение'
+    )
+    event = ForeignKeyField(
+        'event',
+        EventForm, datatable_column_title='Событие'
+    )
 
     class Meta:
         model = Booking
@@ -148,6 +189,7 @@ class BookingForm(UIModelForm):
         read_only_fields = ('date_creation', )
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Бронирование'
 
 
 EventForm.Meta.objects_actions = [
@@ -166,6 +208,7 @@ class TeacherForm(UIModelForm):
         fields = ('id', 'full_name',)
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Преподаватель'
 
 
 class ClubTypeForm(UIModelForm):
@@ -174,24 +217,35 @@ class ClubTypeForm(UIModelForm):
         fields = ('id', 'name',)
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Вид кружка'
 
 
 class ClubForm(UIModelForm):
-    teacher = ForeignKeyField('teacher', TeacherForm)
-    club_type = ForeignKeyField('club_type', ClubTypeForm)
-    place = ForeignKeyField('place', PlaceForm)
+    teacher = ForeignKeyField(
+        'teacher',
+        TeacherForm, datatable_column_title='Преподаватель'
+    )
+    club_type = ForeignKeyField(
+        'club_type',
+        ClubTypeForm, datatable_column_title='Вид кружка'
+    )
+    place = ForeignKeyField(
+        'place',
+        PlaceForm, datatable_column_title='Помещение'
+    )
 
     class Meta:
         model = Club
         fields = (
             'name',
-            'teacher',
+            'date_start_working',
             'club_type',
             'place',
-            'date_start_working',
             'working_days',
             'start_lesson_time',
             'end_lesson_time',
+            'teacher',
         )
         objects_actions = RUDActions
         table_actions = (CreateObjectAction, )
+        model_title = 'Кружок'

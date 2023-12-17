@@ -25,7 +25,6 @@ class DetailObjectWidget(Container):
         content = Column(
             [*self.fields_row(obj, fields)],
             tight=True,
-            width=300
         )
 
         super().__init__(content=content)
@@ -36,7 +35,7 @@ class DetailObjectWidget(Container):
         for field in fields:
             result.append(
                 Row([
-                    Text(field.label + " - "),
+                    Text((field.help_text or field.label) + " - "),
                     field.display(obj)
                 ])
             )

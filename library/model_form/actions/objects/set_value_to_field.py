@@ -8,10 +8,10 @@ from library.utils import LazyAttribute
 from library.core.widgets import ConfirmActionDialog
 from flet import Page
 
-from .object_action import ObjectAction
+from .object_action import DataTableObjectAction
 
 
-class SetValueObjectAction(ObjectAction):
+class SetValueObjectAction(DataTableObjectAction):
     action_widget = SetValueObjectActionButtonWidget
 
     def __init__(

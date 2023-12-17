@@ -8,10 +8,10 @@ from library.utils import LazyAttribute
 from library.core.widgets import ConfirmActionDialog
 from flet import Page
 
-from .object_action import ObjectAction
+from .object_action import DataTableObjectAction
 
 
-class DeleteObjectAction(ObjectAction):
+class DeleteObjectAction(DataTableObjectAction):
     action_widget = DeleteObjectActionButtonWidget
 
     def __init__(self, request_confirm: bool = True):

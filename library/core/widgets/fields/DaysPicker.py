@@ -1,8 +1,4 @@
-from typing import Any, List, Optional, Union
 import flet as ft
-from flet_core.control import Control, OptionalNumber
-from flet_core.ref import Ref
-from flet_core.types import AnimationValue, CrossAxisAlignment, MainAxisAlignment, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue, ScrollMode
 
 from library.core.widgets.fields.BaseInput import InputField
 from library.core.widgets.fields.BaseViewer import Viewer
@@ -68,7 +64,6 @@ class DaysField(ft.UserControl):
         self.count = cnt_vlu[0]
         self.value = cnt_vlu[1].split(';')
         self.check = check
-
         days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС']
         weekends = ['ВС']
 
@@ -77,7 +72,8 @@ class DaysField(ft.UserControl):
                 lambda day: DayButton(
                     text=day.upper(),
                     check=self.check_all,
-                    weekend=day in weekends
+                    weekend=day in weekends,
+                    select=day.lower() in self.value
                 ),
                 days
             )
@@ -125,11 +121,12 @@ class DaysField(ft.UserControl):
 
 
 class GetMaximum(ft.Row):
-    def __init__(self, value=1):
-        self.value = value
+    def __init__(self, value):
+        cnt_vlu = value.split(':') if value else '0:'
+        self.value = cnt_vlu[0]
 
         txt_number = ft.Text(
-            value=str(value),
+            value=self.value,
             text_align="right",
             width=10
         )
@@ -170,12 +167,12 @@ class DaysAndCounterPicker(ft.UserControl, InputField):
         value: str
     ):
         self.WeekField = DaysField(check=self.check_if_maximum, value=value)
-        self.GetMaximum = GetMaximum()
+        self.GetMaximum = GetMaximum(value=value)
 
         super().__init__()
 
     def check_if_maximum(self):
-        return self.GetMaximum.clear_value
+        return int(self.GetMaximum.clear_value)
 
     def build(self):
         return ft.Column(
@@ -189,22 +186,26 @@ class DaysAndCounterPicker(ft.UserControl, InputField):
     @property
     def clear_value(self):
         ret = self.WeekField.clear_value
-        print(ret)
         days = ';'.join(ret['buttons'])
         count = ret['count']
         return f'{count}:{days}'
 
+
 class DaysViewer(ft.Row, Viewer):
     def __init__(self, value=''):
 
-        
         cnt_vlu = value.split(':') if value else '0:'
         self.value = cnt_vlu[1].split(';')
 
         super().__init__(
             [
-                ft.ElevatedButton(
-                    text=text.upper()
+                ft.TextButton(
+                    content=ft.Text(text.upper(), size=12),
+                    width=45,
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.colors.BLUE_100
+                    )
                 ) for text in self.value
-            ]
+            ],
+            spacing=2
         )

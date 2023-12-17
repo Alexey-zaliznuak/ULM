@@ -4,9 +4,11 @@
 	},
 	"python.formatting.provider": "none",
 	"cSpell.words": [
+		"colours",
 		"datatable",
 		"datatables",
 		"filterset",
+		"filtersets",
 		"flet",
 		"Fletty",
 		"NMIN",

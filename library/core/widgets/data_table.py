@@ -13,7 +13,7 @@ from flet import (
 )
 
 from library.model_form.fields import Field
-from library.model_form.actions import DataTableAction, ObjectAction
+from library.model_form.actions import DataTableAction, DataTableObjectAction
 from library.utils import LazyAttribute
 from library.model_form.filters import FilterSet, Filter
 
@@ -31,7 +31,7 @@ class UIModelFormDataTableCell(DataCell):
 
 
 class UIModelFormDataTableObjectActionCell(DataCell):
-    def __init__(self, actions: list[ObjectAction], *args, **kwargs):
+    def __init__(self, actions: list[DataTableObjectAction], *args, **kwargs):
         super().__init__(Row(actions), *args, **kwargs)
 
 
@@ -46,7 +46,7 @@ class UIModelFormDataTableRow(DataRow):
         obj,
         fields: list[Field],
         form,
-        actions: list[ObjectAction],
+        actions: list[DataTableObjectAction],
         datatable: 'UIModelFormDataTable',
         row_number: int = 0,
         *args,
@@ -82,11 +82,15 @@ class UIModelFormDataTableRow(DataRow):
 class UIModelFormDataTableColumn(DataColumn):
     def __init__(self, label: str, field: Field, *args, **kwargs):
         numeric = getattr(field, 'numeric', False)
-        tooltip = getattr(field, 'help_text', None) or label
+        tooltip = getattr(field, 'help_text', None)
+        column_name = (
+            field.datatable_column_title
+            or getattr(field, 'help_text', None)
+            or label)
 
         # TODO modal window with details of column type
         super().__init__(
-            Text(label),
+            Text(column_name),
             numeric=numeric,
             tooltip=tooltip,
             *args,
@@ -111,7 +115,7 @@ class UIModelFormDataTable(DataTable):
         queryset: Callable,
         filterset: FilterSet = None,
         default_filters: Sequence[Filter] = (),
-        objects_actions: Sequence[ObjectAction] = (),
+        objects_actions: Sequence[DataTableObjectAction] = (),
         table_actions: Sequence[DataTableAction] = (),
         action_column: DataColumn = DataColumn(Text('Actions')),
         get_row_params: Callable = None,

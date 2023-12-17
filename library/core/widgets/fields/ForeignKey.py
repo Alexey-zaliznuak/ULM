@@ -22,7 +22,15 @@ class ForeignKeyViewer(ft.Container, Viewer):
             label = label[:22] + "..."
 
         super().__init__(
-            content=ft.TextButton(text=label, on_click=self.open_detail_modal),
+            content=ft.TextButton(
+                content=ft.Text(
+                    label,
+                    max_lines=2,
+                    overflow=ft.TextOverflow.ELLIPSIS,
+                    text_align=ft.TextAlign.CENTER
+                ),
+                on_click=self.open_detail_modal
+            ),
         )
 
     def open_detail_modal(self, e=None):

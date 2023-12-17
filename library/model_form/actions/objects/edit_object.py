@@ -7,10 +7,10 @@ from library.core.widgets.actions.table.edit_object import (
 from library.utils import LazyAttribute
 from flet import Page
 
-from .object_action import ObjectAction
+from .object_action import DataTableObjectAction
 
 
-class EditObjectAction(ObjectAction):
+class EditObjectAction(DataTableObjectAction):
     action_widget = EditObjectActionButton
 
     def on_click_method(

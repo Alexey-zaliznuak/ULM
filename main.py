@@ -1,11 +1,13 @@
 import flet as ft
 from core.TimeLineTable.TimeLineTable import TimeLineTable
 from filtersets import TasksFilterSet
+from loadpage import LoadPage
 
 from pages.pages import (
     EntertainmentPage,
     LearningPage,
     EducationPage,
+    ScheduleTablePage,
     WorkTablePage
 )
 # from widgets.CustomNavigation import CustomNavigation
@@ -18,9 +20,12 @@ from models import (
     TasksStatuses,
     Task,
     Booking,
+    Club
 )
 
 init_tables()
+
+from core.ScheduleTable.schedule_table import ScheduleDataTable
 
 from forms import (
     EventTypesForm,
@@ -214,6 +219,11 @@ def main(page: ft.Page):
     )
     page.datatables.append(club_type_events_dtOb)
 
+    # ---------------ScheduleTableData---------------
+    ScheduleTableOb = ScheduleDataTable(
+        clubs=Club.select
+    )
+
     t = ft.Tabs(
         selected_index=2,
         animation_duration=50,
@@ -228,7 +238,7 @@ def main(page: ft.Page):
                         WorkTypesFormDataTablePr,
                         TaskFormDataTablePr,
                         BookingFormDataTablePr,
-                        TimeLineTablePr
+                        TimeLineTablePr,
                     ),
                 ),
 
@@ -243,7 +253,7 @@ def main(page: ft.Page):
                         WorkTypesFormDataTableRa,
                         TaskFormDataTableRa,
                         BookingFormDataTableRa,
-                        TimeLineTableRa
+                        TimeLineTableRa,
                     )
                 ),
             ),
@@ -266,18 +276,55 @@ def main(page: ft.Page):
                     )
                 ),
             ),
+            ft.Tab(
+                text="Расписание занятий",
+                content=ft.Container(
+                    content=ScheduleTablePage(
+                        ScheduleTableOb,
+                    )
+                ),
+            ),
         ],
+        on_change=lambda _: ScheduleTableOb.update(),
         expand=True,
     )
 
+    page.window_center()
+    page.window_width = 700
+    page.window_height = 450
+    page.window_resizable = False
+    page.horizontal_alignment = "center"
+    page.window_title_bar_hidden = True
+    page.window_title_bar_buttons_hidden = True
+    page.padding = 0
+
+    loadpage = LoadPage()
     page.add(
-        ft.Row(
-            controls=[
-                t
-            ],
-            expand=True,
-        )
+        loadpage
     )
+
+    if loadpage.animate_me():
+        page.controls.pop()
+
+        page.window_width = 1265.6
+        page.window_height = 682.4
+        page.window_resizable = True
+        page.horizontal_alignment = ''
+        page.window_center()
+        page.window_maximized = True
+        page.window_title_bar_hidden = False
+        page.window_title_bar_buttons_hidden = False
+        page.padding = None
+
+        page.add(
+            ft.Row(
+                controls=[
+                    t
+                ],
+                expand=True,
+            )
+        )
+    page.update()
 
 
 ft.app(target=main)

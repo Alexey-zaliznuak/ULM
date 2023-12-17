@@ -220,17 +220,18 @@ class DateTimePicker(DateWidget):
 class TimePicker(ft.ElevatedButton, InputField):
     def __init__(
         self,
-        value: str
+        value: time
     ):
-        value = value or '0:0'
-        h, m = value.split(':')
-        value = time(hour=int(h), minute=int(m))
 
+        # value = value or '0:0'
+        # h, m = value.split(':')
+        # value = time(hour=int(h), minute=int(m))
+        value = value or time(hour=0, minute=0)
         self.flag = False
         self.time_picker = ft.TimePicker(
             confirm_text="Готово",
             cancel_text="Отмена",
-            error_invalid_text="Неправильно время",
+            error_invalid_text="Неправильное время",
             help_text="Выбери время",
             on_change=self.time_change,
             value=value
