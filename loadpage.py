@@ -31,12 +31,7 @@ import random
 
 
 load_quotes = [
-    'Чудесный день',
-    'Выгляните в окно',
-    '☆*: .｡. o(≧▽≦)o .｡.:*☆',
-    'Как дела?',
-    'Отдохните пять минут',
-    'Ты заработался, разомнись',
+    '',
 ]
 
 
@@ -89,7 +84,7 @@ class LoadPage(UserControl):
             offset=transform.Offset(0, 0),
             animate_offset=animation.Animation(600, AnimationCurve.EASE),
         )
-        t = Text(random.choice(load_quotes), size=24, weight=FontWeight.W_100)
+        t = Text(random.choice(load_quotes), size=24)
         c = Row([self.c1, self.c2, self.c3, self.c4], alignment='center')
         cont = Container(
             content=Column(

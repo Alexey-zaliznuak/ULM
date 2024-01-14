@@ -59,7 +59,7 @@ class Text(FletText):
         text_align: TextAlign = TextAlign.NONE,
         font_family: Optional[str] = None,
         size: OptionalNumber = PARAGRAPH_TEXT_SIZE,
-        weight: Optional[FontWeight] = None,
+        weight: Optional[FontWeight] = FontWeight.W_400,
         italic: Optional[bool] = None,
         style: Optional[TextThemeStyle] = None,
         max_lines: Optional[int] = None,
