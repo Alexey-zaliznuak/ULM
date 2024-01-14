@@ -23,8 +23,12 @@ class DataTableDetailObjectAction(DataTableObjectAction):
         if isinstance(page, LazyAttribute):
             page = page()
 
-        page.dialog = DetailObjectActionDialog(obj, datatable.fields)
-        page.dialog.open = True
+        detail_object_action_dialog = DetailObjectActionDialog(
+            obj=obj,
+            fields=datatable.fields
+        )
+        page.overlay.append(detail_object_action_dialog)
+        detail_object_action_dialog.open = True
         page.update()
 
 
@@ -41,6 +45,10 @@ class DetailObjectAction(DataTableObjectAction):
         if isinstance(page, LazyAttribute):
             page = page()
 
-        page.dialog = DetailObjectActionDialog(obj, fields)
-        page.dialog.open = True
+        detail_object_action_dialog = DetailObjectActionDialog(
+            obj=obj,
+            fields=fields
+        )
+        page.overlay.append(detail_object_action_dialog)
+        detail_object_action_dialog.open = True
         page.update()

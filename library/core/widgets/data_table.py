@@ -8,10 +8,10 @@ from flet import (
     DataColumn,
     DataCell,
     DataRow,
-    Text,
     Row,
 )
 
+from library.core.widgets.text import Text
 from library.model_form.fields import Field
 from library.model_form.actions import DataTableAction, DataTableObjectAction
 from library.utils import LazyAttribute

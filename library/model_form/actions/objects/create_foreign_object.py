@@ -31,10 +31,11 @@ class CreateForeignObjectAction(DataTableObjectAction):
         if isinstance(page, LazyAttribute):
             page = page()
 
-        page.dialog = EditObjectActionDialog(
+        edit_object_action_dialog = EditObjectActionDialog(
             form=self.foreign_form,
             obj={self.foreign_field.name: obj},
             datatable=datatable
         )
-        page.dialog.open = True
-        page.update()
+        self.page.overlay.append(edit_object_action_dialog)
+        edit_object_action_dialog.open = True
+        self.page.update()

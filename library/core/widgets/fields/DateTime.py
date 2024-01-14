@@ -1,4 +1,23 @@
-import flet as ft
+from flet import (
+    MainAxisAlignment,
+    ElevatedButton,
+    ButtonStyle,
+    UserControl,
+    TextButton,
+    Container,
+    icons,
+    OptionalNumber,
+    AlertDialog,
+    alignment,
+    MaterialState,
+    RoundedRectangleBorder,
+    Stack,
+    DatePicker as FtDatePicker,
+    TimePicker as FtTimePicker
+)
+
+from library.core.widgets.text import Text
+
 from ..datepicker.datepicker import DateWidget
 from ..datepicker.selection_type import SelectionType
 from datetime import datetime, date, time
@@ -7,7 +26,7 @@ from .BaseViewer import Viewer
 from .BaseInput import InputField
 
 
-class DateTimeClass(ft.UserControl):
+class DateTimeClass(UserControl):
     holidays = [
         datetime(2023, 4, 25),
         datetime(2023, 5, 1),
@@ -17,7 +36,7 @@ class DateTimeClass(ft.UserControl):
     def __init__(
         self,
         value: str,
-        width: ft.OptionalNumber = None,
+        width: OptionalNumber = None,
         hour_minute: bool = False,
         show_three_months: bool = False,
         hide_no_month: bool = False,
@@ -35,13 +54,13 @@ class DateTimeClass(ft.UserControl):
         self.show_three_months = show_three_months
         self.hide_no_month = hide_no_month
 
-        self.dlg_modal = ft.AlertDialog(
+        self.dlg_modal = AlertDialog(
             modal=True,
-            title=ft.Text("Календарь"),
+            title=Text("Календарь"),
             actions=[
-                ft.TextButton("Закрыть", on_click=self.cancel_dlg),
+                TextButton("Закрыть", on_click=self.cancel_dlg),
             ],
-            actions_alignment=ft.MainAxisAlignment.END,
+            actions_alignment=MainAxisAlignment.END,
             actions_padding=5,
             content_padding=0
         )
@@ -55,29 +74,29 @@ class DateTimeClass(ft.UserControl):
             else:
                 value = datetime.strftime(value, "%Y-%m-%d")
 
-        self.tf = ft.Container(
-            content=ft.Text(
+        self.tf = Container(
+            content=Text(
                 value=value,
             ),
             width=120,
             height=50,
-            alignment=ft.alignment.center_left,
+            alignment=alignment.center_left,
         )
 
-        self.cal_ico = ft.TextButton(
-            icon=ft.icons.CALENDAR_MONTH,
+        self.cal_ico = TextButton(
+            icon=icons.CALENDAR_MONTH,
             on_click=self.open_dlg_modal,
             height=50,
             width=40,
             right=0,
-            style=ft.ButtonStyle(
+            style=ButtonStyle(
                 shape={
-                    ft.MaterialState.DEFAULT:
-                    ft.RoundedRectangleBorder(radius=1),
+                    MaterialState.DEFAULT:
+                    RoundedRectangleBorder(radius=1),
                 },
             ))
 
-        self.st = ft.Stack(
+        self.st = Stack(
             [
                 self.tf,
                 self.cal_ico,
@@ -86,7 +105,7 @@ class DateTimeClass(ft.UserControl):
         )
 
     def build(self):
-        return ft.Container(
+        return Container(
             content=self.st,
         )
 
@@ -115,8 +134,9 @@ class DateTimeClass(ft.UserControl):
         self.update()
 
     def cancel_dlg(self, e):
-        self.page.dialog.open = False
-        self.page.update()
+        self.dlg_modal.open = False
+        self.dlg_modal.update()
+        self.page.overlay.remove(self.dlg_modal)
 
     def open_dlg_modal(self, e):
         self.datepicker = DateWidget(
@@ -130,12 +150,11 @@ class DateTimeClass(ft.UserControl):
             # disable_from=self._to_datetime(self.tf2.value),
             # locale=self.selected_locale,
         )
-        if not (self.page.dialog and self.page.dialog.open):
-            self.page.dialog = self.dlg_modal
-            self.dlg_modal.content = self.datepicker
-            self.dlg_modal.open = True
+        self.dlg_modal.content = self.datepicker
+        self.page.overlay.append(self.dlg_modal)
+        self.dlg_modal.open = True
+
         self.page.update()
-        self.update()
 
     def _to_datetime(self, dt):
         if isinstance(dt, (datetime, date)):
@@ -170,41 +189,48 @@ class DateTimeViewer(DateViewer):
         super().__init__(*args, **kwargs)
 
 
-class DatePicker(DateTimeClass, InputField):
+class DatePicker(UserControl, InputField):
     def __init__(
         self,
-        value: datetime,
-        hour_minute: bool = False,
-        show_three_months: bool = False,
-        hide_no_month: bool = False,
-        datepicker_type: int = 0,
+        value: date,
         on_change=None
     ):
+        super().__init__()
 
-        super().__init__(value=value)
-        self.value = self._to_datetime(value)
-        self.datepicker_type = datepicker_type
-        self.hour_minute = hour_minute
-        self.show_three_months = show_three_months
-        self.hide_no_month = hide_no_month
+        self.value = value
         self.on_change = on_change
-
-    def build(self):
-        self.datepicker = DateWidget(
-            hour_minute=self.hour_minute,
-            show_three_months=self.show_three_months,
-            hide_prev_next_month_days=False,
-            selected_date=[self.value] if self.value else None,
-            selection_type=self.datepicker_type,
-            holidays=self.holidays,
-            on_change=self.on_change
+        self.date_picker = FtDatePicker(
+            value=self.value,
+            on_change=self.picker_change,
+            open=True,
+            on_dismiss=self.on_dismiss,
         )
 
-        return self.datepicker
+    def build(self):
+        self.date_button = ElevatedButton(
+            text=self.value,
+            icon=icons.CALENDAR_MONTH,
+            on_click=self.pick_date,
+        )
+
+        return self.date_button
+
+    def pick_date(self, e):
+        self.page.overlay.append(self.date_picker)
+        self.page.update()
+        self.date_picker.pick_date()
+
+    def picker_change(self, e):
+        self.date_button.text = self.date_picker.value.date()
+        self.update()
+        if self.on_change: self.on_change()
+
+    def on_dismiss(self, e):
+        self.page.overlay.remove(self.date_picker)
 
     @property
     def clear_value(self):
-        return self.datepicker.selected_data[0]
+        return self.date_picker.value.date()
 
 
 class DateTimePicker(DateWidget):
@@ -213,51 +239,48 @@ class DateTimePicker(DateWidget):
     }
 
     def __init__(self, *args, **kwargs):
-        kwargs = kwargs | self.defaults
-        super().__init__(*args, **kwargs)
+        kwargs = kwargs | self.defaults | {'selected_date': [args[0]]}
+        super().__init__(**kwargs)
 
 
-class TimePicker(ft.ElevatedButton, InputField):
+class TimePicker(ElevatedButton, InputField):
     def __init__(
         self,
         value: time
     ):
-
-        # value = value or '0:0'
-        # h, m = value.split(':')
-        # value = time(hour=int(h), minute=int(m))
         value = value or time(hour=0, minute=0)
-        self.flag = False
-        self.time_picker = ft.TimePicker(
+        self.time_picker = FtTimePicker(
             confirm_text="Готово",
             cancel_text="Отмена",
             error_invalid_text="Неправильное время",
             help_text="Выбери время",
-            on_change=self.time_change,
-            value=value
+            on_change=self.on_change,
+            value=value,
+            on_dismiss=self.on_dismiss
         )
-
+        
         super().__init__(
             self.time_to_text(value),
-            icon=ft.icons.ACCESS_TIME,
+            icon=icons.ACCESS_TIME,
             on_click=lambda _: self.pick_time(),
         )
 
-    def time_change(self, e):
+
+    def pick_time(self):
+        self.page.overlay.append(self.time_picker)
+        self.page.update()
+        self.time_picker.pick_time()
+
+    def on_dismiss(self, e):
+        self.page.overlay.remove(self.time_picker)
+
+    def on_change(self, e):
         self.text = self.time_to_text(self.time_picker.value)
         self.update()
 
     def time_to_text(self, time):
         return f"{time.hour:02}:{time.minute:02}"
-
-    def pick_time(self):
-        if not self.flag:
-            self.page.overlay.append(self.time_picker)
-            self.page.update()
-        self.flag = True
-
-        self.time_picker.pick_time()
-
+    
     @property
     def clear_value(self):
         return self.time_picker.value

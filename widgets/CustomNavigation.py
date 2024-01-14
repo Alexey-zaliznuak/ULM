@@ -1,31 +1,46 @@
-import flet as ft
+from flet import (
+    NavigationRailDestination,
+    NavigationRailLabelType,
+    VerticalDivider,
+    NavigationRail,
+    UserControl,
+    Container,
+    ListView,
+    margin,
+    Column,
+    colors,
+    Row,
+)
 
 from library.core.widgets.text import Text
 
 
-class Title(Text):
+class Title(Container):
     def __init__(self, text):
+        self.value = text
         super().__init__(
-            value=text,
-            size=24,
-            weight=ft.FontWeight.W_500
+            content=Text(
+                value=text,
+                size=24,
+            ),
+            margin=margin.only(bottom=10)
         )
-
 
 def set_page(routes, selected_index):
     FormData = routes[selected_index]["page"]
-    title = Title(routes[selected_index]["title"])
+    title =  Title(routes[selected_index]["title"])
+
     page = [FormData]
 
     if title.value:
         page = [title, FormData]
 
-    if isinstance(FormData, ft.UserControl):
-        return ft.Column(page, expand=True)
-    return ft.ListView(page, expand=True)
+    if isinstance(FormData, UserControl):
+        return Column(page, expand=True)
+    return ListView(page, expand=True)
 
 
-class CustomNavigation(ft.UserControl):
+class CustomNavigation(UserControl):
     def __init__(
         self,
         *,
@@ -40,7 +55,7 @@ class CustomNavigation(ft.UserControl):
         self.destinations = list(map(self.get_destinations, routes))
 
     def get_destinations(self, icons):
-        return ft.NavigationRailDestination(
+        return NavigationRailDestination(
             icon=icons["icon"][0],
             selected_icon=icons["icon"][1],
         )
@@ -52,19 +67,19 @@ class CustomNavigation(ft.UserControl):
     def build(self):
         self.state = set_page(self.routes, self.selected_index)
 
-        self.rail = ft.NavigationRail(
+        self.rail = NavigationRail(
             selected_index=self.selected_index,
-            label_type=ft.NavigationRailLabelType.ALL,
+            label_type=NavigationRailLabelType.ALL,
             extended=True,
             width=70,
             destinations=self.destinations,
             on_change=lambda e: self.navigation(e.control.selected_index),
-            bgcolor=ft.colors.WHITE,
+            bgcolor=colors.WHITE,
         )
-        self.row = ft.Row(
+        self.row = Row(
             controls=[
                 self.rail,
-                ft.VerticalDivider(width=1),
+                VerticalDivider(width=3, color=colors.GREY_200),
                 self.state
             ],
         )

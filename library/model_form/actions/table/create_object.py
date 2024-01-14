@@ -8,9 +8,11 @@ class CreateObjectAction(DataTableAction):
     action_widget = CreateObjectActionButtonWidget
 
     def on_click_method(self, *args, datatable, form, **kwargs):
-        datatable.page.dialog = EditObjectActionDialog(
+
+        edit_object_action_dialog = EditObjectActionDialog(
             datatable=datatable,
             form=form,
         )
-        datatable.page.dialog.open = True
+        datatable.page.overlay.append(edit_object_action_dialog)
+        edit_object_action_dialog.open = True
         datatable.page.update()

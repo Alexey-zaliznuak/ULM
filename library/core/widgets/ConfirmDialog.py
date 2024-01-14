@@ -5,10 +5,10 @@ from flet import (
     ElevatedButton,
     MainAxisAlignment,
     SnackBar,
-    Text,
-    colors
+    colors,
 )
 
+from library.core.widgets.text import Text
 
 class ConfirmActionDialog(AlertDialog):
     def __init__(
@@ -48,8 +48,10 @@ class ConfirmActionDialog(AlertDialog):
 
         self.open = False
         self.page.update()
+        self.page.overlay.remove(self)
 
     def cancel(self, e=None):
         self.on_cancel()
         self.open = False
         self.page.update()
+        self.page.overlay.remove(self)

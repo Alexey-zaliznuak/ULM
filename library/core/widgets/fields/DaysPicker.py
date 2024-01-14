@@ -1,10 +1,26 @@
-import flet as ft
+from flet import (
+    CrossAxisAlignment,
+    MainAxisAlignment,
+    ElevatedButton,
+    ButtonStyle,
+    UserControl,
+    IconButton,
+    TextButton,
+    Container,
+    Column,
+    colors,
+    margin,
+    icons,
+    Row,
+)
+
+from library.core.widgets.text import Text
 
 from library.core.widgets.fields.BaseInput import InputField
 from library.core.widgets.fields.BaseViewer import Viewer
 
 
-class DayButton(ft.ElevatedButton):
+class DayButton(ElevatedButton):
     def __init__(
             self,
             text,
@@ -24,22 +40,22 @@ class DayButton(ft.ElevatedButton):
         )
 
     def change_style(self):
-        style = ft.ButtonStyle(
+        style = ButtonStyle(
             bgcolor={
-                "": None if not self.select else ft.colors.BLUE_400
+                "": None if not self.select else colors.BLUE_400
             },
             color={
-                "": ft.colors.BLACK
+                "": colors.BLACK
             }
         )
 
         if self.weekend:
-            style = ft.ButtonStyle(
+            style = ButtonStyle(
                 bgcolor={
-                    "": None if not self.select else ft.colors.YELLOW_800
+                    "": None if not self.select else colors.YELLOW_800
                 },
                 color={
-                    "": ft.colors.BLACK
+                    "": colors.BLACK
                 }
             )
         return style
@@ -52,7 +68,7 @@ class DayButton(ft.ElevatedButton):
         e.control.update()
 
 
-class DaysField(ft.UserControl):
+class DaysField(UserControl):
     def __init__(
         self,
         value: str,
@@ -99,33 +115,33 @@ class DaysField(ft.UserControl):
         }
 
     def build(self):
-        return ft.Row(
+        return Row(
             [
-                ft.Column([
-                    ft.Row([
+                Column([
+                    Row([
                         *self.buttons[0:3]
                     ]),
-                    ft.Row([
+                    Row([
                         *self.buttons[3:6]
                     ]),
-                    ft.Container(
+                    Container(
                         self.buttons[6],
-                        margin=ft.margin.only(0, 10, 0, 0)
+                        margin=margin.only(0, 10, 0, 0)
                     ),
                 ],
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                    horizontal_alignment=CrossAxisAlignment.CENTER
                 ),
 
             ]
         )
 
 
-class GetMaximum(ft.Row):
+class GetMaximum(Row):
     def __init__(self, value):
         cnt_vlu = value.split(':') if value else '0:'
         self.value = cnt_vlu[0]
 
-        txt_number = ft.Text(
+        txt_number = Text(
             value=self.value,
             text_align="right",
             width=10
@@ -133,11 +149,11 @@ class GetMaximum(ft.Row):
 
         super().__init__(
             [
-                ft.IconButton(ft.icons.REMOVE, on_click=self.minus_click),
+                IconButton(icons.REMOVE, on_click=self.minus_click),
                 txt_number,
-                ft.IconButton(ft.icons.ADD, on_click=self.plus_click),
+                IconButton(icons.ADD, on_click=self.plus_click),
             ],
-            alignment=ft.MainAxisAlignment.CENTER
+            alignment=MainAxisAlignment.CENTER
         )
 
     def minus_click(self, e):
@@ -161,7 +177,7 @@ class GetMaximum(ft.Row):
         return self.value
 
 
-class DaysAndCounterPicker(ft.UserControl, InputField):
+class DaysAndCounterPicker(UserControl, InputField):
     def __init__(
         self,
         value: str
@@ -175,7 +191,7 @@ class DaysAndCounterPicker(ft.UserControl, InputField):
         return int(self.GetMaximum.clear_value)
 
     def build(self):
-        return ft.Column(
+        return Column(
             [
                 self.GetMaximum,
                 self.WeekField,
@@ -191,7 +207,7 @@ class DaysAndCounterPicker(ft.UserControl, InputField):
         return f'{count}:{days}'
 
 
-class DaysViewer(ft.Row, Viewer):
+class DaysViewer(Row, Viewer):
     def __init__(self, value=''):
 
         cnt_vlu = value.split(':') if value else '0:'
@@ -199,11 +215,15 @@ class DaysViewer(ft.Row, Viewer):
 
         super().__init__(
             [
-                ft.TextButton(
-                    content=ft.Text(text.upper(), size=12),
+                TextButton(
+                    content=Text(
+                        text.upper(),
+                        size=12,
+                        selectable=False
+                    ),
                     width=45,
-                    style=ft.ButtonStyle(
-                        bgcolor=ft.colors.BLUE_100
+                    style=ButtonStyle(
+                        bgcolor=colors.BLUE_100
                     )
                 ) for text in self.value
             ],

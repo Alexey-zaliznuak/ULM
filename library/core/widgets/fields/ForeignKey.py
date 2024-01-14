@@ -1,12 +1,22 @@
-import flet as ft
+from flet import (
+    Container,
+    dropdown,
+    Dropdown,
+    TextAlign,
+    TextButton,
+    TextOverflow,
+)
+
+from library.core.widgets.text import Text
+from .BaseInput import InputField
 from .BaseViewer import Viewer
 from library.core.widgets.actions.objects.detail import (
     DetailObjectActionDialog
 )
-from .BaseInput import InputField
 
 
-class ForeignKeyViewer(ft.Container, Viewer):
+
+class ForeignKeyViewer(Container, Viewer):
     has_value_for_copy = False
 
     def __init__(
@@ -22,28 +32,32 @@ class ForeignKeyViewer(ft.Container, Viewer):
             label = label[:22] + "..."
 
         super().__init__(
-            content=ft.TextButton(
-                content=ft.Text(
+            content=TextButton(
+                content=Text(
                     label,
                     max_lines=2,
-                    overflow=ft.TextOverflow.ELLIPSIS,
-                    text_align=ft.TextAlign.CENTER
+                    overflow=TextOverflow.ELLIPSIS,
+                    text_align=TextAlign.CENTER,
+                    size=None,
+                    selectable=False
                 ),
                 on_click=self.open_detail_modal
             ),
         )
 
     def open_detail_modal(self, e=None):
-        # TODO While open https://github.com/flet-dev/flet/issues/1670
-        # don`t open NEW modal
         if not getattr(self.page.dialog, 'open', False):
-            # self.page.dialog.open = False
-            self.page.dialog = DetailObjectActionDialog(self.obj, self.fields)
-            self.page.dialog.open = True
+
+            detail_object_action_dialog = DetailObjectActionDialog(
+                obj=self.obj,
+                fields=self.fields
+            )
+            self.page.overlay.append(detail_object_action_dialog)
+            detail_object_action_dialog.open = True
             self.page.update()
 
 
-class ForeignKeyEditor(ft.Dropdown, InputField):
+class ForeignKeyEditor(Dropdown, InputField):
     defaults = {
         'width': 300,
         'hint_text': 'Выберете',
@@ -52,7 +66,7 @@ class ForeignKeyEditor(ft.Dropdown, InputField):
     def __init__(self, queryset, default_key=None):  # TODO filters
         return super().__init__(
             options=[
-                ft.dropdown.Option(text=str(obj), key=obj.id)
+                dropdown.Option(text=str(obj), key=obj.id)
                 for obj in queryset()
             ],
             value=default_key,

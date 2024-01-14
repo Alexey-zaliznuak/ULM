@@ -1,4 +1,15 @@
-import flet as ft
+from flet import (
+    app,
+    Page,
+    ThemeMode,
+    Tabs,
+    Tab,
+    Row,
+    colors,
+    Container,
+)
+
+from widgets.TabText import TabText
 from core.TimeLineTable.TimeLineTable import TimeLineTable
 from filtersets import TasksFilterSet
 from loadpage import LoadPage
@@ -55,11 +66,19 @@ club_form = ClubForm()
 club_type_form = ClubTypeForm()
 
 
-def main(page: ft.Page):
+def main(page: Page):
     # TODO global context class
-    page.theme_mode = ft.ThemeMode.LIGHT
+    page.theme_mode = ThemeMode.LIGHT
     page.datatables = []
     page.title = 'Fletty birds'
+    page.fonts = {
+        "Comfortaa-Variable": "/fonts/Comfortaa-Variable.ttf",
+        "DidactGothic-Regular": "/fonts/DidactGothic-Regular.ttf",
+        "Pacifico-Regular": "/fonts/Pacifico-Regular.ttf",
+        "MarckScript-Regular": "/fonts/MarckScript-Regular.ttf",
+        
+    }
+
     # ---------------PlaceData---------------
     PlaceDataTablePr, place_dtPr = place_form.DataTable(
         default_filters=[
@@ -224,13 +243,14 @@ def main(page: ft.Page):
         clubs=Club.select
     )
 
-    t = ft.Tabs(
+    t = Tabs(
         selected_index=2,
         animation_duration=50,
+        overlay_color=colors.BLUE_100,
         tabs=[
-            ft.Tab(
-                text="Просвещение",
-                content=ft.Container(
+            Tab(
+                tab_content=TabText("Просвещение"),
+                content=Container(
                     content=EducationPage(
                         EventFormDataTablePr,
                         PlaceDataTablePr,
@@ -243,9 +263,9 @@ def main(page: ft.Page):
                 ),
 
             ),
-            ft.Tab(
-                text="Развлечение",
-                content=ft.Container(
+            Tab(
+                tab_content=TabText("Развлечение"),
+                content=Container(
                     content=LearningPage(
                         EventFormDataTableRa,
                         PlaceDataTableRa,
@@ -257,9 +277,9 @@ def main(page: ft.Page):
                     )
                 ),
             ),
-            ft.Tab(
-                text="Образование",
-                content=ft.Container(
+            Tab(
+                tab_content=TabText("Образование"),
+                content=Container(
                     content=EntertainmentPage(
                         PlaceDataTableOb,
                         TeacherFormDataTableOb,
@@ -268,17 +288,17 @@ def main(page: ft.Page):
                     )
                 ),
             ),
-            ft.Tab(
-                text="Активные заявки",
-                content=ft.Container(
+            Tab(
+                tab_content=TabText("Активные заявки"),
+                content=Container(
                     content=WorkTablePage(
                         WorkTableFormDataTable,
                     )
                 ),
             ),
-            ft.Tab(
-                text="Расписание занятий",
-                content=ft.Container(
+            Tab(
+                tab_content=TabText("Расписание занятий"),
+                content=Container(
                     content=ScheduleTablePage(
                         ScheduleTableOb,
                     )
@@ -317,7 +337,7 @@ def main(page: ft.Page):
         page.padding = None
 
         page.add(
-            ft.Row(
+            Row(
                 controls=[
                     t
                 ],
@@ -327,4 +347,4 @@ def main(page: ft.Page):
     page.update()
 
 
-ft.app(target=main)
+app(target=main)

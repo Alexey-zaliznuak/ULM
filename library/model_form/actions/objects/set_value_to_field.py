@@ -56,8 +56,11 @@ class SetValueObjectAction(DataTableObjectAction):
         action = partial(change_obj, obj, page, datatable)
 
         if self.request_confirm:
-            page.dialog = ConfirmActionDialog(action)
-            page.dialog.open = True
+            confirm_action_dialog = ConfirmActionDialog(
+                action
+            )
+            page.overlay.append(confirm_action_dialog)
+            confirm_action_dialog.open = True
             page.update()
 
         else:

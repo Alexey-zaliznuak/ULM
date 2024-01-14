@@ -1,16 +1,20 @@
-import flet as ft
+from flet import (
+    Checkbox,
+    LabelPosition,
+)
+
 from .BaseViewer import Viewer
 from .BaseInput import InputField
 
 
-class BooleanViewer(ft.Checkbox, Viewer):
+class BooleanViewer(Checkbox, Viewer):
     has_value_for_copy = False
 
     def __init__(
         self,
         value,
         tristate: bool = False,
-        label_position: ft.LabelPosition = ft.LabelPosition.RIGHT,
+        label_position: LabelPosition = LabelPosition.RIGHT,
         label: str = '',
 
     ):
@@ -23,14 +27,14 @@ class BooleanViewer(ft.Checkbox, Viewer):
         )
 
 
-class BooleanInput(ft.Checkbox, InputField):
+class BooleanInput(Checkbox, InputField):
     has_value_for_copy = False
 
     def __init__(
         self,
         value: bool,
         tristate: bool = False,
-        label_position: ft.LabelPosition = ft.LabelPosition.RIGHT,
+        label_position: LabelPosition = LabelPosition.RIGHT,
         label: str = '',
     ):
         super().__init__(

@@ -23,10 +23,11 @@ class EditObjectAction(DataTableObjectAction):
         if isinstance(page, LazyAttribute):
             page = page()
 
-        page.dialog = EditObjectActionDialog(
+        edit_object_action_dialog = EditObjectActionDialog(
             obj=obj,
             datatable=datatable,
             form=datatable.form
         )
-        page.dialog.open = True
+        page.overlay.append(edit_object_action_dialog)
+        edit_object_action_dialog.open = True
         page.update()

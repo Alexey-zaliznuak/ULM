@@ -1,4 +1,11 @@
-import flet as ft
+from flet import (
+    IconButton,
+    icons,
+    Row,
+    TextSpan,
+    TextStyle,
+    TextField,
+)
 
 from library.core.widgets.text import Text
 
@@ -6,13 +13,13 @@ from .BaseViewer import Viewer
 from .BaseInput import InputField
 
 
-class IntegerInput(ft.Row, InputField):
+class IntegerInput(Row, InputField):
 
     def __init__(
         self,
         value: int,
     ):
-        txt_number = ft.TextField(
+        txt_number = TextField(
             value=str(value),
             text_align="right",
             width=100
@@ -20,9 +27,9 @@ class IntegerInput(ft.Row, InputField):
 
         super().__init__(
             [
-                ft.IconButton(ft.icons.REMOVE, on_click=self.minus_click),
+                IconButton(icons.REMOVE, on_click=self.minus_click),
                 txt_number,
-                ft.IconButton(ft.icons.ADD, on_click=self.plus_click),
+                IconButton(icons.ADD, on_click=self.plus_click),
             ]
         )
 
@@ -51,13 +58,13 @@ class FloatViewer(Text, Viewer):
         if len(number) < 2:
             number.append('00')
 
-        self.dot = ft.TextSpan(
+        self.dot = TextSpan(
             text='.',
-            style=ft.TextStyle(size=18),
+            style=TextStyle(size=18),
         )
-        self.text_float = ft.TextSpan(
+        self.text_float = TextSpan(
             text=str(number[1]),
-            style=ft.TextStyle(size=18),
+            style=TextStyle(size=18),
         )
         super().__init__(
             value=str(number[0]),

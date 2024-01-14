@@ -1,4 +1,13 @@
-import flet as ft
+from flet import (
+    ButtonStyle,
+    icons,
+    colors,
+    TextField,
+    KeyboardType,
+)
+
+from library.core.widgets.text import Text
+
 import re
 
 from .BaseViewer import Viewer
@@ -25,24 +34,24 @@ class PhoneViewer(Text, PhoneParent, Viewer):
         super().__init__(
             value=self.input_mask(value),
             width=150,
-            style=ft.ButtonStyle(
-                color=ft.colors.BLACK87
+            style=ButtonStyle(
+                color=colors.BLACK87
             ),
         )
 
 
-class PhoneInput(ft.TextField, PhoneParent, InputField):
+class PhoneInput(TextField, PhoneParent, InputField):
 
     MASK = '(XXX) XXX-XX-XX'
 
     def __init__(self, default_value: str):
         super().__init__(
             value=self.input_mask(default_value),
-            icon=ft.icons.PHONE,
+            icon=icons.PHONE,
             hint_text='(123) 456-78-90',
             prefix_text='+7 ',
             label="Your phone number",
-            keyboard_type=ft.KeyboardType.PHONE,
+            keyboard_type=KeyboardType.PHONE,
             on_change=self.broker_input,
         )
 

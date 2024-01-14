@@ -33,3 +33,4 @@ class FilterActionDialog(AlertDialog):
         self.datatable.update_rows()
         self.open = False
         self.page.update()
+        self.page.overlay.remove(self)

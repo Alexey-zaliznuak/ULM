@@ -1,5 +1,5 @@
 from flet import Control
-from datetime import datetime
+from datetime import datetime, date
 from types import FunctionType
 
 from library.core.validators import (
@@ -227,7 +227,7 @@ class TimeField(Field):
 class DateField(Field):
     display_widget = DateViewer
     edit_widget = DatePicker
-    initial_empty_value = datetime.today
+    initial_empty_value = date.today()
 
 
 class DateTimeField(Field):

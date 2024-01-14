@@ -226,6 +226,7 @@ class EditObjectActionDialog(AlertDialog):
     def _close_dlg(self, e=None):
         self.open = False
         self.page.update()
+        self.page.overlay.remove(self)
 
     def _save_obj(self, e=None):
         new_obj = {}
@@ -240,8 +241,9 @@ class EditObjectActionDialog(AlertDialog):
             _, object_error, self.errors = self.form.update(self.obj, new_obj)
 
         if not (self.errors or object_error):
-            self.page.dialog.open = False
+            self.open = False
             self.page.update()
+            self.page.overlay.remove(self)
             self.datatable.update_rows()
             return
 
