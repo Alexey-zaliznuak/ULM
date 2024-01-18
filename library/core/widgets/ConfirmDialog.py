@@ -10,6 +10,7 @@ from flet import (
 
 from library.core.widgets.text import Text
 
+
 class ConfirmActionDialog(AlertDialog):
     def __init__(
         self,

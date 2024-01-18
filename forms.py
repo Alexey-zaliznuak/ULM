@@ -51,7 +51,7 @@ class PlaceForm(UIModelForm):
     )
     big = BooleanField(
         'big',
-        datatable_column_title='Вмещает 2 мероприятия'
+        datatable_column_title='Вмещает 2 мероприятия',
     )
 
     class Meta:

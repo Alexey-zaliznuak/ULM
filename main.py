@@ -7,6 +7,7 @@ from flet import (
     Row,
     colors,
     Container,
+    AppView
 )
 
 from widgets.TabText import TabText
@@ -76,7 +77,6 @@ def main(page: Page):
         "DidactGothic-Regular": "/fonts/DidactGothic-Regular.ttf",
         "Pacifico-Regular": "/fonts/Pacifico-Regular.ttf",
         "MarckScript-Regular": "/fonts/MarckScript-Regular.ttf",
-        
     }
 
     # ---------------PlaceData---------------
@@ -174,17 +174,17 @@ def main(page: Page):
 
     # ---------------TaskData---------------
     TaskFormDataTablePr, task_events_dtPr = (
-        task_form.DataTable()
+        task_form.DataTable(filterset=TasksFilterSet)
     )
     page.datatables.append(task_events_dtPr)
 
     TaskFormDataTableOb, task_events_dtOb = (
-        task_form.DataTable()
+        task_form.DataTable(filterset=TasksFilterSet)
     )
     page.datatables.append(task_events_dtOb)
 
     TaskFormDataTableRa, task_events_dtRa = (
-        task_form.DataTable()
+        task_form.DataTable(filterset=TasksFilterSet)
     )
     page.datatables.append(task_events_dtRa)
 

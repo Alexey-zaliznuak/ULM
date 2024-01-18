@@ -1,7 +1,7 @@
 from typing import Iterable
 
 import flet as ft
-from .filter import Filter
+from .filter import Filter, FilterWidget
 from library.core.widgets.filters import FilterValueFieldWidget
 from library.types import AllPossibleValues
 
@@ -12,13 +12,16 @@ class FieldValueFilter(Filter):
     def __init__(self, field, value=AllPossibleValues):
         self.field = field
         self.value = value
-        self.filter_widget = None
 
-    def filter(self, queryset: Iterable):
+    def filter(
+        self,
+        queryset: Iterable,
+        widget: FilterValueFieldWidget | None = None,
+    ):
         values = [self.value]
 
-        if self.filter_widget:
-            filter_value = self.filter_widget.value
+        if widget:
+            filter_value = widget.value
             if not filter_value and self.value is AllPossibleValues:
                 return []
 
@@ -36,8 +39,8 @@ class FieldValueFilter(Filter):
 
         return queryset.where(self.field.in_(values))
 
-    def widget(self, form, datatable) -> ft.Control:
-        if not self.filter_widget:
-            self.filter_widget = self.widget_(self.field, form, datatable)
-
-        return self.filter_widget
+    def widget(self, form) -> ft.Control:
+        return FilterWidget(
+            self.widget_(field=self.field, form=form),
+            self.filter
+        )

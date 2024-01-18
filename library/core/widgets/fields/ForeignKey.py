@@ -15,7 +15,6 @@ from library.core.widgets.actions.objects.detail import (
 )
 
 
-
 class ForeignKeyViewer(Container, Viewer):
     has_value_for_copy = False
 
