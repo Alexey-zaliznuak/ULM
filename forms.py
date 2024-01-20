@@ -141,9 +141,9 @@ class TasksForm(UIModelForm):
         )
         objects_actions = (
             *RUDActions,
-            # SetValueObjectAction(
-            #     Task.status, TasksStatuses.get(status_name='Выполнено')
-            # )
+            SetValueObjectAction(
+                Task.status, TasksStatuses.get(status_name='Выполнено')
+            )
         )
         table_actions = (CreateObjectAction,)
         model_title = 'Заявки'

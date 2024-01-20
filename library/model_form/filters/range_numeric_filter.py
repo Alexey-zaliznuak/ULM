@@ -34,14 +34,14 @@ class NumericRangeFieldFilter(FieldFilter):
         self.start_value = start_value or minimum
         self.end_value = end_value or maximum
 
-        self.divisions=divisions
+        self.divisions = divisions
 
     def filter(
         self,
         queryset: Iterable,
         widget: FieldRangeFilterWidget | None = None,
     ):
-        if not queryset: # mb peewee feature
+        if not queryset:  # mb peewee feature
             return queryset
 
         minimum = self.start_value

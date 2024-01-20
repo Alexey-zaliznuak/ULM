@@ -337,5 +337,6 @@ def manage_db():
     if "--make" in sys.argv:
         make()
 
+
 if __name__ == '__main__':
     manage_db()
