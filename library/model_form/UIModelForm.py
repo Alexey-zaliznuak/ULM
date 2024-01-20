@@ -34,7 +34,7 @@ from .fields import (
 )
 from .fields import Field as UIField
 from .fields import IntegerField
-from .filters import FilterSet, Filter
+from .filters import FieldFilter, TableFilter, FilterSet
 
 
 class UIModelForm(metaclass=Singleton):
@@ -73,9 +73,9 @@ class UIModelForm(metaclass=Singleton):
         table_actions: list[DataTableAction] = [],
         objects_actions: list[DataTableObjectAction] = [],
         filterset: FilterSet = None,
-        default_filters: Sequence[Filter] = (),
+        default_filters: Sequence[FieldFilter | TableFilter] = (),
         **kwargs,
-    ) -> UIModelFormDataTable:
+    ) -> Column:
         # todo in class
 
         queryset = self.get_queryset(queryset)
@@ -286,7 +286,7 @@ class UIModelForm(metaclass=Singleton):
         )
 
         for field_name in self.Meta.fields:
-            field = self._all_form_fields[field_name]
+            field = self.__form_fields[field_name]
 
             if not read_only and getattr(field, 'read_only', False):
                 continue
@@ -338,7 +338,7 @@ class UIModelForm(metaclass=Singleton):
         return attrs
 
     @cached_property
-    def _all_form_fields(self) -> dict[str, UIField]:
+    def __form_fields(self) -> dict[str, UIField]:
         ui_fields = {}
 
         for field_name in self.Meta.fields:
@@ -365,4 +365,4 @@ class UIModelForm(metaclass=Singleton):
         table_actions: list[DataTableAction] = []
         objects_actions: list[DataTableObjectAction] = []
         filterset: FilterSet = None
-        default_filters: Sequence[Filter] = ()
+        default_filters: Sequence[FieldFilter | TableFilter] = ()

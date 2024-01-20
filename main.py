@@ -10,6 +10,19 @@ from flet import (
     AppView
 )
 
+from models import (
+    Event,
+    Categories,
+    Place,
+    TasksStatuses,
+    Task,
+    Booking,
+    Club,
+    manage_db,
+)
+
+manage_db()
+
 from widgets.TabText import TabText
 from core.TimeLineTable.TimeLineTable import TimeLineTable
 from filtersets import TasksFilterSet
@@ -23,19 +36,6 @@ from pages.pages import (
     WorkTablePage
 )
 # from widgets.CustomNavigation import CustomNavigation
-
-from models import (
-    Event,
-    Categories,
-    Place,
-    init_tables,
-    TasksStatuses,
-    Task,
-    Booking,
-    Club
-)
-
-init_tables()
 
 from core.ScheduleTable.schedule_table import ScheduleDataTable
 
@@ -52,7 +52,7 @@ from forms import (
     ClubTypeForm
 )
 
-from library.model_form.filters import FieldValueFilter
+from library.model_form.filters import ValueFieldFilter
 
 
 place_catagories_form = CategoriesForm()
@@ -82,7 +82,7 @@ def main(page: Page):
     # ---------------PlaceData---------------
     PlaceDataTablePr, place_dtPr = place_form.DataTable(
         default_filters=[
-            FieldValueFilter(
+            ValueFieldFilter(
                 Place.category,
                 Categories.get(name='Просветительское')
             )
@@ -92,7 +92,7 @@ def main(page: Page):
 
     PlaceDataTableOb, place_dtOb = place_form.DataTable(
         default_filters=[
-            FieldValueFilter(
+            ValueFieldFilter(
                 Place.category,
                 Categories.get(name='Образовательное')
             )
@@ -102,7 +102,7 @@ def main(page: Page):
 
     PlaceDataTableRa, place_dtRa = place_form.DataTable(
         default_filters=[
-            FieldValueFilter(
+            ValueFieldFilter(
                 Place.category,
                 Categories.get(name='Развлекательное')
             )
@@ -128,7 +128,7 @@ def main(page: Page):
     # ---------------EventData---------------
     EventFormDataTablePr, events_dtPr = events_form.DataTable(
         default_filters=[
-            FieldValueFilter(
+            ValueFieldFilter(
                 Event.category,
                 Categories.get(name='Просветительское')
             )
@@ -138,7 +138,7 @@ def main(page: Page):
 
     EventFormDataTableOb, events_dtOb = events_form.DataTable(
         default_filters=[
-            FieldValueFilter(
+            ValueFieldFilter(
                 Event.category,
                 Categories.get(name='Образовательное')
             )
@@ -148,7 +148,7 @@ def main(page: Page):
 
     EventFormDataTableRa, events_dtRa = events_form.DataTable(
         default_filters=[
-            FieldValueFilter(
+            ValueFieldFilter(
                 Event.category,
                 Categories.get(name='Развлекательное')
             )
@@ -192,7 +192,7 @@ def main(page: Page):
     WorkTableFormDataTable, work_table_dt = (
         task_form.DataTable(
             default_filters=[
-                FieldValueFilter(
+                ValueFieldFilter(
                     Task.status,
                     TasksStatuses.get(status_name='К выполнению')
                 )

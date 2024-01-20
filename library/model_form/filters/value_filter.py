@@ -1,13 +1,11 @@
 from typing import Iterable
-
-import flet as ft
-from .filter import Filter, FilterWidget
-from library.core.widgets.filters import FilterValueFieldWidget
+from .filter import FieldFilter, LiteWidgetFilter
+from library.core.widgets.filters import FieldValueFilterWidget
 from library.types import AllPossibleValues
 
 
-class FieldValueFilter(Filter):
-    widget_ = FilterValueFieldWidget
+class ValueFieldFilter(FieldFilter):
+    widget_ = FieldValueFilterWidget
 
     def __init__(self, field, value=AllPossibleValues):
         self.field = field
@@ -16,8 +14,11 @@ class FieldValueFilter(Filter):
     def filter(
         self,
         queryset: Iterable,
-        widget: FilterValueFieldWidget | None = None,
+        widget: FieldValueFilterWidget | None = None,
     ):
+        if not queryset:
+            return queryset
+
         values = [self.value]
 
         if widget:
@@ -39,8 +40,8 @@ class FieldValueFilter(Filter):
 
         return queryset.where(self.field.in_(values))
 
-    def widget(self, form) -> ft.Control:
-        return FilterWidget(
+    def lite_widget_filter(self, form) -> LiteWidgetFilter:
+        return LiteWidgetFilter(
             self.widget_(field=self.field, form=form),
             self.filter
         )
