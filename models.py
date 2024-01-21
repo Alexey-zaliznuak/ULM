@@ -101,7 +101,9 @@ class TasksStatuses(BaseModel):
 
 
 class Task(BaseModel):
-    date_registration = DateField()
+    date_registration = DateField(
+        help_text='Дата регистрации'
+    )
     event = ForeignKeyField(
         Event,
         to_field='id',
@@ -122,7 +124,7 @@ class Task(BaseModel):
     )
     deadline = DateField(help_text='Дедлайн')
 
-    describe = TextField(help_text='описание')
+    describe = TextField(help_text='Описание')
     status = ForeignKeyField(
         TasksStatuses,
         to_field='id',

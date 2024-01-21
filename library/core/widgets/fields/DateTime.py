@@ -233,7 +233,7 @@ class DatePicker(UserControl, InputField):
         return self.date_picker.value.date()
 
 
-class DateTimePicker(DateWidget):
+class DateTimePicker(DateWidget, InputField):
     defaults = {
         'hour_minute': True,
     }
@@ -241,6 +241,11 @@ class DateTimePicker(DateWidget):
     def __init__(self, *args, **kwargs):
         kwargs = kwargs | self.defaults | {'selected_date': [args[0]]}
         super().__init__(**kwargs)
+    
+    @property
+    def clear_value(self):
+        return self.selected_data[0]
+    
 
 
 class TimePicker(ElevatedButton, InputField):

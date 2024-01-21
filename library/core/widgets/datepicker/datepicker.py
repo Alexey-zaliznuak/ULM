@@ -56,7 +56,9 @@ class DateWidget(ft.UserControl):
     ):
         super().__init__()
 
+        selected_date = selected_date if selected_date[0] else [datetime.today()]
         self.selected = selected_date
+
         if (
             (not hour_minute)
             or (not isinstance(selected_date[0], datetime) and hour_minute)

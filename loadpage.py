@@ -17,11 +17,6 @@ from flet import (
     Icon,
     Row,
 )
-from flet_core.control import OptionalNumber
-from flet_core.ref import Ref
-from flet_core.text_span import TextSpan
-from flet_core.types import AnimationValue, FontWeight, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue, TextAlign
-from library.core.widgets.settings import PARAGRAPH_TEXT_SIZE
 
 from library.core.widgets.text import Text as DefaultText
 
@@ -31,7 +26,12 @@ import random
 
 
 load_quotes = [
-    '',
+    # 'Чудесный день',
+    # 'Выгляните в окно',
+    '☆*: .｡. o(≧▽≦)o .｡.:*☆',
+    # 'Как дела?',
+    # 'Отдохните пять минут',
+    # 'Ты заработался, разомнись',
 ]
 
 

@@ -86,8 +86,12 @@ class UIModelFormDataTableColumn(DataColumn):
         column_name = (
             field.datatable_column_title
             or getattr(field, 'help_text', None)
-            or label)
+            or label
+        )
 
+        if column_name == tooltip:
+            tooltip = None
+        
         # TODO modal window with details of column type
         super().__init__(
             Text(column_name),

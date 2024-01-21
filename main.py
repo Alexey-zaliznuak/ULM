@@ -109,6 +109,7 @@ def main(page: Page):
         ]
     )
     page.datatables.append(place_dtRa)
+
     # ---------------EventTypesData---------------
     EventTypesDataTablePr, events_types_form_dtPr = (
         events_types_form.DataTable()
@@ -244,7 +245,7 @@ def main(page: Page):
     )
 
     t = Tabs(
-        selected_index=2,
+        selected_index=0,
         animation_duration=50,
         overlay_color=colors.BLUE_100,
         tabs=[

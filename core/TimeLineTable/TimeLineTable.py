@@ -1,5 +1,5 @@
 import flet as ft
-from datetime import datetime
+from datetime import date
 from core.TimeLineTable.TimeLine import TimeLine
 from core.TimeLineTable.TimeLineDataFormatter import TimeLineDataFormatter
 
@@ -16,7 +16,7 @@ class TimeLineTable(ft.UserControl):
         self.places = get_places
 
         self.datepicker = DatePicker(
-            value=datetime.now(),
+            value=date.today(),
             on_change=self.on_change
         )
 
