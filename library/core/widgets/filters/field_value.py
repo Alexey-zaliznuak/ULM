@@ -1,6 +1,8 @@
 from typing import Any
 import flet as ft
-from .filter_field import FilterField
+
+from library.core.widgets.text import TitleText
+from .filter_field import FilterFieldWidget
 from peewee import ForeignKeyField
 
 
@@ -8,17 +10,17 @@ LABEL_ID = 0
 KEY_ID = 1
 
 
-class FilterValueFieldWidget(ft.UserControl, FilterField):
-    def __init__(self, field, form, datatable):
-        self.field = field
-        self.form = form
-        self.datatable = datatable
+class FieldValueFilterWidget(FilterFieldWidget):
+    def __init__(self, form, field):
+        super().__init__(field=field, form=form)
         self.checkboxes: list[ft.Checkbox] = self._build_checkboxes()
-        super().__init__()
 
     def build(self):
         # todo upgrade ui
-        return ft.Column(self.checkboxes)
+        return ft.Column([
+            TitleText(value=self.form._form_fields()[self.field.name].label),
+            *self.checkboxes
+        ])
 
     def _build_checkboxes(self):
         checkboxes = []
@@ -47,7 +49,7 @@ class FilterValueFieldWidget(ft.UserControl, FilterField):
         return checkboxes
 
     @property
-    def value(self):
+    def value(self) -> list[str]:
         values = []
 
         for chb in self.checkboxes:

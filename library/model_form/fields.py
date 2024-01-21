@@ -1,5 +1,5 @@
 from flet import Control
-from datetime import datetime, date
+from datetime import date
 from types import FunctionType
 
 from library.core.validators import (

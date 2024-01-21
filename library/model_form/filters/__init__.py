@@ -1,3 +1,4 @@
-from .filter import Filter
+from .filter import FieldFilter, TableFilter
 from .filter_set import FilterSet
-from .field_value_filter import FieldValueFilter
+from .value_filter import ValueFieldFilter
+from .range_numeric_filter import NumericRangeFieldFilter

@@ -19,7 +19,7 @@ class FilterActionDialog(AlertDialog):
                 content=Column(
                     controls=[
                         Text('Фильтрация'),
-                        datatable.filterset.widget(),
+                        datatable.filterset.widget,
                         ElevatedButton(
                             "Сохранить",
                             on_click=self._close_and_update,

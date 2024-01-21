@@ -5,6 +5,7 @@ from peewee import (
     CharField,
     DateTimeField,
     DateField,
+    IntegerField,
     TimeField,
     ForeignKeyField,
     Model,
@@ -104,6 +105,7 @@ class Task(BaseModel):
     date_registration = DateField(
         help_text='Дата регистрации'
     )
+    price = IntegerField(default=0)
     event = ForeignKeyField(
         Event,
         to_field='id',
@@ -294,48 +296,49 @@ class Club(BaseModel):
         return obj
 
 
-def init_tables():
-    tables = [
-        Categories,
-        Place,
-        EventTypes,
-        Event,
-        TasksStatuses,
-        WorkType,
-        Task,
-        Booking,
-        Teacher,
-        ClubType,
-        Club,
-    ]
+tables = [
+    Categories,
+    Place,
+    EventTypes,
+    Event,
+    TasksStatuses,
+    WorkType,
+    Task,
+    Booking,
+    Teacher,
+    ClubType,
+    Club,
+]
 
-    def remake_db():
-        print('create')
-        try:
-            db.connect()
-        except Exception:
-            pass
-        db.drop_tables(tables)
-        db.create_tables(tables)
-        from generators import generate
-        generate()
 
-    if '--make' in sys.argv:
-        remake_db()
-        return
+def rebuild():
+    print("start rebuilding database...")
+    try:
+        db.connect()
+    except Exception:
+        pass
+    db.drop_tables(tables)
+    db.create_tables(tables)
+    print("success rebuild database")
 
-    if os.path.exists('./db.db'):
-        try:
-            db.connect()
-        except Exception:
-            pass
-        if __name__ == '__main__':
-            db.drop_tables(tables)
-        db.create_tables(tables)
-    else:
-        remake_db()
+
+def make():
+    rebuild()
+    print("Load base data...")
+    from generators import generate
+    generate()
+    print("Load base data: success")
+
+
+def manage_db():
+    if not os.path.exists('./db.db'):
+        make()
+
+    if "--rebuild" in sys.argv:
+        rebuild()
+    if "--make" in sys.argv:
+        make()
 
 
 if __name__ == '__main__':
-    pass
-    # init_tables()
+    manage_db()

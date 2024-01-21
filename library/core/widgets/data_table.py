@@ -15,7 +15,7 @@ from library.core.widgets.text import Text
 from library.model_form.fields import Field
 from library.model_form.actions import DataTableAction, DataTableObjectAction
 from library.utils import LazyAttribute
-from library.model_form.filters import FilterSet, Filter
+from library.model_form.filters import FieldFilter, TableFilter, FilterSet
 
 
 class UIModelFormDataTableCell(DataCell):
@@ -118,7 +118,7 @@ class UIModelFormDataTable(DataTable):
         model: Model,
         queryset: Callable,
         filterset: FilterSet = None,
-        default_filters: Sequence[Filter] = (),
+        default_filters: Sequence[FieldFilter | TableFilter] = (),
         objects_actions: Sequence[DataTableObjectAction] = (),
         table_actions: Sequence[DataTableAction] = (),
         action_column: DataColumn = DataColumn(Text('Actions')),

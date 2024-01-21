@@ -1,4 +1,4 @@
-def segments_do_not_intersect(segments):
+def segments_do_not_intersect(segments: list[int]) -> bool:
     for i in range(len(segments)):
         for j in range(i + 1, len(segments)):
             if (
