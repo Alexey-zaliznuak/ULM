@@ -14,7 +14,7 @@ class FieldRangeFilterWidget(FilterFieldWidget):
         start_value,
         end_value,
         divisions: int = 100,
-        label="{value}",
+        label='{value}',
     ):
         super().__init__(field=field, form=form)
         self.field = field

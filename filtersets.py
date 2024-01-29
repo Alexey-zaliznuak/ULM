@@ -11,7 +11,7 @@ class TasksFilterSet(FilterSet):
     price_filter = NumericRangeFieldFilter(
         field=Task.price,
         minimum=0,
-        maximum=100_000
+        maximum=1_000_000
     )
 
     class Meta:
