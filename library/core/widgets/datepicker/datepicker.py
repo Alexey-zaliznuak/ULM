@@ -5,6 +5,7 @@ from typing import Optional, Union
 from datetime import datetime, timedelta
 
 from .selection_type import SelectionType
+from library.core.widgets.text import Text
 
 PREV_MONTH = "PM"
 NEXT_MONTH = "NM"
@@ -149,7 +150,7 @@ class DateWidget(ft.UserControl):
 
                 if self.hide_prev_next_month_days and not is_main_month:
                     row.append(
-                        ft.Text(
+                        Text(
                             "",
                             width=CELL_SIZE,
                             height=CELL_SIZE,
@@ -314,23 +315,23 @@ class DateWidget(ft.UserControl):
                 on_click=self._adjust_calendar
             )
         else:
-            prev_year = ft.Text(
+            prev_year = Text(
                 EMPTY,
                 height=CELL_SIZE,
             )
-            next_year = ft.Text(EMPTY)
-            prev_month = ft.Text(EMPTY)
-            next_month = ft.Text(EMPTY)
+            next_year = Text(EMPTY)
+            prev_month = Text(EMPTY)
+            next_month = Text(EMPTY)
 
         ym = ft.Row([
             ft.Row([
                 prev_year,
-                ft.Text(year),
+                Text(year),
                 next_year,
             ], spacing=0),
             ft.Row([
                 prev_month,
-                ft.Text(
+                Text(
                     calendar.month_name[month],
                     text_align=ft.alignment.center
                 ),
@@ -380,21 +381,21 @@ class DateWidget(ft.UserControl):
                         data=PREV_HOUR,
                         on_click=self._adjust_hh_min
                     ),
-                    ft.Text(hour),
+                    Text(hour),
                     ft.IconButton(
                         icon=ft.icons.ARROW_FORWARD,
                         data=NEXT_HOUR,
                         on_click=self._adjust_hh_min
                     ),
                 ]),
-                ft.Text(":"),
+                Text(":"),
                 ft.Row([
                     ft.IconButton(
                         icon=ft.icons.ARROW_BACK,
                         data=PREV_MINUTE,
                         on_click=self._adjust_hh_min,
                     ),
-                    ft.Text(minute),
+                    Text(minute),
                     ft.IconButton(
                         icon=ft.icons.ARROW_FORWARD,
                         data=NEXT_MINUTE,
