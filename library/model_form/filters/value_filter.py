@@ -1,11 +1,11 @@
 from typing import Iterable
-from .filter import FieldFilter, LiteWidgetFilter
-from library.core.widgets.filters import FieldValueFilterWidget
+from .filter import FieldFilter, FormFilter
+from library.core.widgets.filters import ValueFieldFilterWidget
 from library.types import AllPossibleValues
 
 
 class ValueFieldFilter(FieldFilter):
-    widget_ = FieldValueFilterWidget
+    widget_ = ValueFieldFilterWidget
 
     def __init__(self, field, value=AllPossibleValues):
         self.field = field
@@ -14,7 +14,7 @@ class ValueFieldFilter(FieldFilter):
     def filter(
         self,
         queryset: Iterable,
-        widget: FieldValueFilterWidget | None = None,
+        widget: ValueFieldFilterWidget | None = None,
     ):
         if not queryset:
             return queryset
@@ -40,8 +40,8 @@ class ValueFieldFilter(FieldFilter):
 
         return queryset.where(self.field.in_(values))
 
-    def lite_widget_filter(self, form) -> LiteWidgetFilter:
-        return LiteWidgetFilter(
+    def form_filter(self, form) -> FormFilter:
+        return FormFilter(
             self.widget_(field=self.field, form=form),
             self.filter
         )

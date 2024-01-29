@@ -2,7 +2,7 @@ import flet as ft
 
 from typing import Sequence
 from functools import cached_property
-from .filter import FieldFilter, TableFilter, LiteWidgetFilter
+from .filter import FieldFilter, TableFilter, FormFilter
 
 
 # todo group field
@@ -34,9 +34,9 @@ class FilterSet:
         return queryset
 
     @cached_property
-    def filters(self) -> list[LiteWidgetFilter]:
+    def filters(self) -> list[FormFilter]:
         return [
-            getattr(self, f_name).lite_widget_filter(self.form)
+            getattr(self, f_name).form_filter(self.form)
             for f_name in self.Meta.filters
         ]
 

@@ -1,4 +1,5 @@
 from .filter_field import FilterFieldWidget
 from .filter_table import FilterTableWidget
-from .field_value import FieldValueFilterWidget
-from .field_range import FieldRangeFilterWidget
+from .field_value import ValueFieldFilterWidget
+from .field_numeric_range_slider import NumericRangeSliderFieldFilterWidget
+from .field_numeric_range_input import NumericRangeInputFieldFilterWidget

@@ -4,7 +4,7 @@ from .filter_field import FilterFieldWidget
 from library.core.widgets.text import TitleText
 
 
-class FieldRangeFilterWidget(FilterFieldWidget):
+class NumericRangeSliderFieldFilterWidget(FilterFieldWidget):
     def __init__(
         self,
         form,

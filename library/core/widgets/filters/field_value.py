@@ -10,7 +10,7 @@ LABEL_ID = 0
 KEY_ID = 1
 
 
-class FieldValueFilterWidget(FilterFieldWidget):
+class ValueFieldFilterWidget(FilterFieldWidget):
     def __init__(self, form, field):
         super().__init__(field=field, form=form)
         self.checkboxes: list[ft.Checkbox] = self._build_checkboxes()

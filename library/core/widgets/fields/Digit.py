@@ -43,9 +43,16 @@ class IntegerInput(Row, InputField):
 
     @property
     def clear_value(self):
-        cleared = ''.join(s for s in self.controls[1].value if s.isdigit())
+        cleared = ''.join(s for s in self.controls[1].value if s.isdigit() or s == "-")
+
         if cleared:
+            cleared = cleared[0] + cleared[1:].replace("-", "")
+
+            self.controls[1].value = str(int(cleared))
+            self.controls[1].update()
+
             return int(cleared)
+
         return ''
 
 

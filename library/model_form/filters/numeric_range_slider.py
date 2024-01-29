@@ -1,8 +1,8 @@
 from typing import Iterable
 
 import flet as ft
-from .filter import FieldFilter, LiteWidgetFilter
-from library.core.widgets.filters import FieldRangeFilterWidget
+from .filter import FieldFilter, FormFilter
+from library.core.widgets.filters import NumericRangeSliderFieldFilterWidget
 from peewee import fn
 from library.model_form.fields import IntegerField, FloatField
 
@@ -12,8 +12,8 @@ OptionalNumber = Number | None
 NumericField = IntegerField | FloatField
 
 
-class NumericRangeFieldFilter(FieldFilter):
-    widget_ = FieldRangeFilterWidget
+class NumericRangeSliderFieldFilter(FieldFilter):
+    widget_ = NumericRangeSliderFieldFilterWidget
 
     def __init__(
         self,
@@ -31,15 +31,19 @@ class NumericRangeFieldFilter(FieldFilter):
         self.minimum = minimum or mn
         self.maximum = maximum or mx
 
+        assert self.minimum <= self.maximum
+
         self.start_value = start_value or minimum
         self.end_value = end_value or maximum
+
+        assert self.start_value <= self.end_value
 
         self.divisions = divisions
 
     def filter(
         self,
         queryset: Iterable,
-        widget: FieldRangeFilterWidget | None = None,
+        widget: NumericRangeSliderFieldFilterWidget | None = None,
     ):
         if not queryset:  # mb peewee feature
             return queryset
@@ -64,8 +68,8 @@ class NumericRangeFieldFilter(FieldFilter):
 
         return queryset
 
-    def lite_widget_filter(self, form) -> ft.Control:
-        return LiteWidgetFilter(
+    def form_filter(self, form) -> FormFilter:
+        return FormFilter(
             self.widget_(
                 form=form,
                 field=self.field,
