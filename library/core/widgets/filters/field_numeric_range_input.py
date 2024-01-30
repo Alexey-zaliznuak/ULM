@@ -50,7 +50,7 @@ class NumericRangeInputFieldFilterWidget(FilterFieldWidget):
         maximum = (self._integer_inputs[1].clear_value or 0)
 
         if self.page and self.notify_if_invalid and minimum > maximum:
-            self.page.snack_bar = ft.SnackBar(ft.Text(f"Были введены некорректные данные для фильтров!"))
+            self.page.snack_bar = ft.SnackBar(Text(f"Были введены некорректные данные для фильтров!"))
             self.page.snack_bar.open = True
             self.page.update()
 

@@ -3,6 +3,7 @@ import flet as ft
 from models import Club
 from forms import ClubForm
 
+from library.core.widgets.text import Text
 
 DAYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
 
@@ -38,46 +39,46 @@ class ScheduleTable(ft.DataTable):
             data_row_max_height=130,
             vertical_lines=ft.BorderSide(.1),
             columns=[
-                ft.DataColumn(ft.Text("")),
+                ft.DataColumn(Text("")),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Понедельник"),
+                        Text("Понедельник"),
                         alignment=ft.alignment.center
                     )
                 ),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Вторник"),
+                        Text("Вторник"),
                         alignment=ft.alignment.center
                     )
                 ),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Среда"),
+                        Text("Среда"),
                         alignment=ft.alignment.center
                     )
                 ),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Четверг"),
+                        Text("Четверг"),
                         alignment=ft.alignment.center
                     )
                 ),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Пятница"),
+                        Text("Пятница"),
                         alignment=ft.alignment.center
                     )
                 ),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Суббота"),
+                        Text("Суббота"),
                         alignment=ft.alignment.center
                     )
                 ),
                 ft.DataColumn(
                     ft.Container(
-                        ft.Text("Воскресение"),
+                        Text("Воскресение"),
                         alignment=ft.alignment.center
                     )
                 ),
@@ -85,9 +86,9 @@ class ScheduleTable(ft.DataTable):
             rows=[
                 ft.DataRow(
                     [
-                        ft.DataCell(ft.Text(row['name'])),
+                        ft.DataCell(Text(row['name'])),
                         *[
-                            ft.DataCell(ft.Text('')) if not obj else (
+                            ft.DataCell(Text('')) if not obj else (
                                 self.get_cell_by_obj(obj)
                             ) for obj in row['data']
                         ]
@@ -103,7 +104,7 @@ class ScheduleTable(ft.DataTable):
                     [
                         ClubForm.teacher.display(obj),
                         ClubForm.place.display(obj),
-                        ft.Text(
+                        Text(
                             f"{obj.start_lesson_time.hour:02}:"
                             f"{obj.start_lesson_time.minute:02} — "
                             f"{obj.end_lesson_time.hour:02}:"

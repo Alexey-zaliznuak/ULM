@@ -54,9 +54,19 @@ class NumericRangeSliderFieldFilter(FieldFilter):
         if widget:
             minimum, maximum = widget.value
 
-        return queryset.where(
-            (self.field >= minimum) & (self.field <= maximum)
-        )
+        maximum = float(maximum)
+        minimum = float(minimum)
+
+        if self.maximum != maximum:
+            queryset = queryset.where(self.field <= maximum)
+
+        if not queryset:  # mb peewee feature
+            return queryset
+
+        if self.minimum != minimum:
+            queryset = queryset.where(self.field >= minimum)
+
+        return queryset
 
     def form_filter(self, form) -> FormFilter:
         return FormFilter(

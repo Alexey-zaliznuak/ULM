@@ -1,5 +1,6 @@
 import flet as ft
 from itertools import cycle
+from library.core.widgets.text import Text
 
 CELL_WIDTH = 40
 FIRST_COLUMN_WIDTH = 100
@@ -43,7 +44,7 @@ class TimeLine(ft.UserControl):
                 ft.Row(
                     [
                         ft.Container(
-                            content=ft.Text(row['name']),
+                            content=Text(row['name']),
                             width=FIRST_COLUMN_WIDTH,
                         ),
                         ft.Container(
@@ -74,13 +75,13 @@ class TimeLine(ft.UserControl):
                     ft.Row(
                         [
                             ft.Container(
-                                content=ft.Text('Помещение'),
+                                content=Text('Помещение'),
                                 width=FIRST_COLUMN_WIDTH,
                                 alignment=ft.alignment.center
                             ),
                             *[
                                 ft.Container(
-                                    content=ft.Text(f'{hour:02}:00', size=12),
+                                    content=Text(f'{hour:02}:00', size=12),
                                     width=CELL_WIDTH
                                 ) for hour in range(24)
                             ]
