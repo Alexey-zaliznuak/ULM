@@ -78,7 +78,7 @@ class Event(BaseModel):
 
     def validate(obj, create=False, id_=None):
         if create:
-            if obj['date'] < datetime.today() - timedelta(days=1):
+            if obj['date'] < datetime.date(datetime.today()) - timedelta(days=1):
                 raise ValidationError('Выбранная дата уже прошла!')
 
         return obj

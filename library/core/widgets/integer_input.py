@@ -21,8 +21,6 @@ class IntegerInput(Row):
             if self.page:
                 self.picker.value = str(int(cleared))
                 self.picker.update()
-                print("NEW", str(int(cleared)))
-                print(str(int(cleared)) == self.picker.value)
 
             return int(cleared)
 
