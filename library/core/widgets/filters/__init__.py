@@ -3,3 +3,5 @@ from .filter_table import FilterTableWidget
 from .field_value import ValueFieldFilterWidget
 from .field_numeric_range_slider import NumericRangeSliderFieldFilterWidget
 from .field_numeric_range_input import NumericRangeInputFieldFilterWidget
+from .field_date_range_input import DateRangeInputFieldFilterWidget
+from .field_time_range_input import TimeRangeInputFieldFilterWidget

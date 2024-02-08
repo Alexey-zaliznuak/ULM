@@ -49,9 +49,4 @@ class NumericRangeInputFieldFilterWidget(FilterFieldWidget):
         minimum = (self._integer_inputs[0].clear_value or 0)
         maximum = (self._integer_inputs[1].clear_value or 0)
 
-        # if self.page and self.notify_if_invalid and minimum > maximum:
-        #     self.page.snack_bar = ft.SnackBar(Text(f"Были введены некорректные данные для фильтров!"))
-        #     self.page.snack_bar.open = True
-        #     self.page.update()
-
         return minimum, maximum

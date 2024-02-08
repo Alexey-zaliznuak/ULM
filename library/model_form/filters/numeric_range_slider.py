@@ -1,6 +1,5 @@
 from typing import Iterable
 
-import flet as ft
 from .filter import FieldFilter, FormFilter
 from library.core.widgets.filters import NumericRangeSliderFieldFilterWidget
 from peewee import fn
@@ -37,6 +36,9 @@ class NumericRangeSliderFieldFilter(FieldFilter):
         self.end_value = end_value or maximum
 
         assert self.start_value <= self.end_value
+
+        assert self.start_value >= self.minimum
+        assert self.end_value <= self.maximum
 
         self.divisions = divisions
 

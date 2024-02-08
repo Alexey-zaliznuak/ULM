@@ -78,7 +78,11 @@ class Event(BaseModel):
 
     def validate(obj, create=False, id_=None):
         if create:
-            if obj['date'] < datetime.date(datetime.today()) - timedelta(days=1):
+            if (
+                obj['date'] < (
+                    datetime.date(datetime.today()) - timedelta(days=1)
+                )
+            ):
                 raise ValidationError('Выбранная дата уже прошла!')
 
         return obj
@@ -131,8 +135,9 @@ class Task(BaseModel):
         TasksStatuses,
         to_field='id',
         on_delete='CASCADE',
-        help_text='Статус'
+        help_text='Статус',
     )
+    time_field = TimeField(help_text="?????")
 
     def validate(obj, create=False, id_=None):
         if obj['date_registration'] > obj['deadline']:

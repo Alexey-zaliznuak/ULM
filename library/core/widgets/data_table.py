@@ -91,7 +91,7 @@ class UIModelFormDataTableColumn(DataColumn):
 
         if column_name == tooltip:
             tooltip = None
-        
+
         # TODO modal window with details of column type
         super().__init__(
             Text(column_name),

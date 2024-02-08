@@ -13,7 +13,9 @@ class IntegerInput(Row):
 
     @property
     def clear_value(self):
-        cleared = ''.join(s for s in self.picker.value if s.isdigit() or s == "-")
+        cleared = ''.join(
+            s for s in self.picker.value if s.isdigit() or s == "-"
+        )
 
         if cleared:
             cleared = cleared[0] + cleared[1:].replace("-", "")

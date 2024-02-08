@@ -7,7 +7,6 @@ from flet import (
     Row,
     colors,
     Container,
-    AppView
 )
 
 from models import (

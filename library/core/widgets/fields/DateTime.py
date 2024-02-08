@@ -245,7 +245,6 @@ class DateTimePicker(DateWidget, InputField):
     @property
     def clear_value(self):
         return self.selected_data[0]
-    
 
 
 class TimePicker(ElevatedButton, InputField):
@@ -263,7 +262,7 @@ class TimePicker(ElevatedButton, InputField):
             value=value,
             on_dismiss=self.on_dismiss
         )
-        
+
         super().__init__(
             self.time_to_text(value),
             icon=icons.ACCESS_TIME,
