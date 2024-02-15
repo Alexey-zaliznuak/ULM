@@ -1,2 +1,2 @@
 # powershell ./share.ps1
-New-SmbShare –Name ShareName –Path C:\ULM
+New-SmbShare –Name ShareName –Path ./ULM
