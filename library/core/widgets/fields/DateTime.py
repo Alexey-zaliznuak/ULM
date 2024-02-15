@@ -213,11 +213,11 @@ class TimePicker(ElevatedButton, InputField):
         super().__init__(
             self.time_to_text(value),
             icon=icons.ACCESS_TIME,
-            on_click=lambda _: self.pick_time(),
+            on_click=self.pick_time,
         )
 
 
-    def pick_time(self):
+    def pick_time(self, e):
         self.page.overlay.append(self.time_picker)
         self.page.update()
         self.time_picker.pick_time()
