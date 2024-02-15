@@ -139,6 +139,7 @@ class TasksForm(UIModelForm):
             'describe',
             'status',
             'time_field',
+            'date_time_field',
         )
         objects_actions = (
             *RUDActions,

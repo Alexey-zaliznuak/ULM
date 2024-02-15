@@ -4,10 +4,11 @@ from library.model_form.filters import (
     NumericRangeInputFieldFilter,
     NumericRangeSliderFieldFilter,
     DateRangeInputFieldFilter,
-    TimeRangeInputFieldFilter
+    TimeRangeInputFieldFilter,
+    DateTimeRangeInputFieldFilter,
 )
 from models import Task
-from datetime import date
+from datetime import date, time, datetime, timedelta
 
 
 class TasksFilterSet(FilterSet):
@@ -31,12 +32,16 @@ class TasksFilterSet(FilterSet):
         maximum=date(2024, 12, 31),
     )
     time_filter = TimeRangeInputFieldFilter(Task.time_field)
+    date_time_filter = DateTimeRangeInputFieldFilter(
+        Task.date_time_field,
+    )
 
     class Meta:
         filters = (
-            # "work_type_filter",
-            # "price_numeric_input_filter",
-            # "price_numeric_slider_filter",
+            "date_time_filter",
+            "work_type_filter",
+            "price_numeric_input_filter",
+            "price_numeric_slider_filter",
+            "time_filter",
             "deadline_filter",
-            "time_filter"
         )
