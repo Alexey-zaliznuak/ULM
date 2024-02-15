@@ -7,7 +7,7 @@ from library.core.widgets.filters import FilterFieldWidget, FilterTableWidget
 # todo what a hell.....
 # todo provide form in filter func
 
-class FormFilter:
+class FormFilter:  # todo rename on model filter
     def __init__(self, widget: FilterFieldWidget, filter_: FunctionType):
         self.widget = widget
         self.__filter = filter_

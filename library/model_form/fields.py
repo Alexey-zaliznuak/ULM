@@ -9,7 +9,7 @@ from library.core.validators import (
     DaysFieldDefaultValidator,
 )
 from library.core.exceptions import ValidationError
-from library.core.widgets.fields.DateTime import TimePicker
+from library.core.widgets.fields import TimePicker
 from library.core.widgets.fields.DaysPicker import (
     DaysAndCounterPicker,
     DaysViewer

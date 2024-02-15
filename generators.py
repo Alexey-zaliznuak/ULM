@@ -211,7 +211,8 @@ def generate():
             'place': Place.get_by_id(1),
             'deadline': date.today() + timedelta(days=2),
             'describe': 'Лучшая заявка в мире',
-            'status': TasksStatuses.get_by_id(1)
+            'status': TasksStatuses.get_by_id(1),
+            'time_field': time(10, 10)
         },
         {
             'date_registration': date.today() - timedelta(days=1),
@@ -220,7 +221,8 @@ def generate():
             'place': Place.get_by_id(1),
             'deadline': date.today() + timedelta(days=12),
             'describe': 'Лучшая заявка в мире',
-            'status': TasksStatuses.get_by_id(1)
+            'status': TasksStatuses.get_by_id(1),
+            'time_field': time(20, 30)
         },
         {
             'date_registration': date.today() - timedelta(days=2),
@@ -229,7 +231,8 @@ def generate():
             'place': Place.get_by_id(2),
             'deadline': date.today() + timedelta(days=5),
             'describe': 'Лучшая заявка в мире',
-            'status': TasksStatuses.get_by_id(2)
+            'status': TasksStatuses.get_by_id(2),
+            'time_field': time(10, 00)
         },
         {
             'date_registration': date.today() - timedelta(days=10),
@@ -238,7 +241,8 @@ def generate():
             'place': Place.get_by_id(2),
             'deadline': date.today() + timedelta(days=25),
             'describe': 'Лучшая заявка в мире',
-            'status': TasksStatuses.get_by_id(2)
+            'status': TasksStatuses.get_by_id(2),
+            'time_field': time(0, 0)
         },
         {
             'date_registration': date.today() - timedelta(days=6),
@@ -247,7 +251,8 @@ def generate():
             'place': Place.get_by_id(3),
             'deadline': date.today() + timedelta(days=5),
             'describe': 'Лучшая заявка в мире',
-            'status': TasksStatuses.get_by_id(3)
+            'status': TasksStatuses.get_by_id(3),
+            'time_field': time(0, 0)
         },
         {
             'date_registration': date.today() - timedelta(days=6),
@@ -256,7 +261,8 @@ def generate():
             'place': Place.get_by_id(4),
             'deadline': date.today() + timedelta(days=4),
             'describe': 'Лучшая заявка в мире',
-            'status': TasksStatuses.get_by_id(3)
+            'status': TasksStatuses.get_by_id(3),
+            'time_field': time(0, 0)
         },
     ]
 
