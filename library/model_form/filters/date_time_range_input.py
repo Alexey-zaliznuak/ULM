@@ -14,8 +14,6 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
         field: DateTimeField,
         minimum: datetime = datetime.today(),
         maximum: datetime = datetime.today(),
-        *,
-        notify_if_invalid: bool = False
     ):
         self.field = field
 
@@ -23,8 +21,6 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
         self.maximum = maximum
 
         assert self.minimum <= self.maximum
-
-        self.notify_if_invalid = notify_if_invalid
 
     def filter(
         self,
@@ -51,7 +47,6 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
                 field=self.field,
                 minimum=self.minimum,
                 maximum=self.maximum,
-                notify_if_invalid=self.notify_if_invalid
             ),
             self.filter
         )

@@ -188,11 +188,11 @@ class DateTimePicker(UserControl, Viewer):
             self.date_button,
             self.time_button
         ])
-    
+
     @property
     def clear_value(self):
         return self.value
-    
+
 
 class TimePicker(ElevatedButton, InputField):
     def __init__(
@@ -231,7 +231,7 @@ class TimePicker(ElevatedButton, InputField):
 
     def time_to_text(self, time):
         return f"{time.hour:02}:{time.minute:02}"
-    
+
     @property
     def clear_value(self):
         return self.time_picker.value
