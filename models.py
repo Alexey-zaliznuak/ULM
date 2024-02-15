@@ -140,7 +140,6 @@ class Task(BaseModel):
     time_field = TimeField(help_text="Test time field")
     date_time_field = DateTimeField(help_text="Test date time field")
 
-
     def validate(obj, create=False, id_=None):
         if obj['date_registration'] > obj['deadline']:
             raise ValidationError(

@@ -268,7 +268,7 @@ def generate():
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(3),
             'time_field': time(0, 0),
-            'date_time_field': datetime.now() + timedelta(days=365+10)
+            'date_time_field': datetime.now() + timedelta(days=365 + 10)
         },
     ]
 

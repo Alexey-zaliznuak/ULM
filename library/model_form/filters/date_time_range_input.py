@@ -12,8 +12,8 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
     def __init__(
         self,
         field: DateTimeField,
-        minimum: datetime = datetime.now() + timedelta(days=-365*3),
-        maximum: datetime = datetime.now() + timedelta(days=365*3),
+        minimum: datetime = datetime.now() + timedelta(days=-365 * 3),
+        maximum: datetime = datetime.now() + timedelta(days=365 * 3),
     ):
         self.field = field
 

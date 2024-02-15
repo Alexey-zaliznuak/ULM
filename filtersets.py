@@ -8,7 +8,7 @@ from library.model_form.filters import (
     DateTimeRangeInputFieldFilter,
 )
 from models import Task
-from datetime import date, time, datetime, timedelta
+from datetime import date
 
 
 class TasksFilterSet(FilterSet):
