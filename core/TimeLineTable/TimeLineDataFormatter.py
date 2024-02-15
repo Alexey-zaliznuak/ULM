@@ -21,12 +21,28 @@ class TimeLineDataFormatter():
         self.select_day = datetime(
             year=self.select_day.year,
             month=self.select_day.month,
-            day=self.select_day.day
+            day=self.select_day.day,
+            hour=0,
+            minute=0
         )
 
     def time_to_pixels(self, start_booking_time, end_booking_time):
-        tomorrow = self.select_day + timedelta(hours=23, minutes=59)
-        start = max(self.select_day, start_booking_time)
+        tomorrow = datetime(
+            year=self.select_day.year,
+            month=self.select_day.month,
+            day=self.select_day.day,
+            hour=23,
+            minute=59
+        )
+        select_day = datetime(
+            year=self.select_day.year,
+            month=self.select_day.month,
+            day=self.select_day.day,
+            hour=0,
+            minute=0
+        )
+        
+        start = max(select_day, start_booking_time)
         end = min(tomorrow, end_booking_time)
 
         start = start.hour * CELL_WIDTH + start.minute * CELL_WIDTH / 60
@@ -81,7 +97,7 @@ class TimeLineDataFormatter():
                     year=self.select_day.year,
                     month=self.select_day.month,
                     day=self.select_day.day
-                ) + timedelta(days=1) - timedelta(microseconds=1),
+                ) + timedelta(hours=23, minutes=59),
                 Booking.end_booking_time >= datetime(
                     year=self.select_day.year,
                     month=self.select_day.month,

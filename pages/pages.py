@@ -65,7 +65,7 @@ def EducationPage(
     TimeLineTable
 ):
     return CustomNavigation(
-        selected_index=0,
+        selected_index=4,
         routes=[
             {
                 "icon": (

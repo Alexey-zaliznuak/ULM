@@ -85,8 +85,6 @@ class DateWidget(ft.UserControl):
         self.show_three_months = show_three_months
         self.on_change = on_change
 
-        if locale:
-            loc.setlocale(loc.LC_ALL, locale)
 
         self.now = datetime.combine(datetime.now(), datetime.min.time())
         self.yy = self.now.year

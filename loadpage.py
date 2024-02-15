@@ -123,7 +123,8 @@ class LoadPage(UserControl):
 
     def animate_me(self):
         now = time()
-        while time() - now < 2:
+        while time() - now < .2:
+        # while time() - now < 2:
             self.c1.offset = transform.Offset(1, 0)  # -2 0
             self.c2.offset = transform.Offset(1, 1)  # 0 0
             self.c3.offset = transform.Offset(1, 0)  # 2 0
@@ -131,26 +132,26 @@ class LoadPage(UserControl):
             self.update()
             sleep(.6)
 
-            self.c1.offset = transform.Offset(3, -1)  # 0 0
-            self.c2.offset = transform.Offset(3, 0)  # 2 0
-            self.c3.offset = transform.Offset(-1, 1)  # 0 0
-            self.c4.offset = transform.Offset(-5, 0)  # -2 0
-            self.update()
-            sleep(.6)
+            # self.c1.offset = transform.Offset(3, -1)  # 0 0
+            # self.c2.offset = transform.Offset(3, 0)  # 2 0
+            # self.c3.offset = transform.Offset(-1, 1)  # 0 0
+            # self.c4.offset = transform.Offset(-5, 0)  # -2 0
+            # self.update()
+            # sleep(.6)
 
-            self.c1.offset = transform.Offset(5, 0)  # 2 0
-            self.c2.offset = transform.Offset(1, -1)  # 0 0
-            self.c3.offset = transform.Offset(-3, 0)  # -2 0
-            self.c4.offset = transform.Offset(-3, 1)  # 0 0
-            self.update()
-            sleep(.6)
+            # self.c1.offset = transform.Offset(5, 0)  # 2 0
+            # self.c2.offset = transform.Offset(1, -1)  # 0 0
+            # self.c3.offset = transform.Offset(-3, 0)  # -2 0
+            # self.c4.offset = transform.Offset(-3, 1)  # 0 0
+            # self.update()
+            # sleep(.6)
 
-            self.c1.offset = transform.Offset(3, 1)  # 0 0
-            self.c2.offset = transform.Offset(-1, 0)  # -2 0
-            self.c3.offset = transform.Offset(-1, -1)  # 0 0
-            self.c4.offset = transform.Offset(-1, 0)  # 2 0
-            self.update()
-            sleep(.6)
+            # self.c1.offset = transform.Offset(3, 1)  # 0 0
+            # self.c2.offset = transform.Offset(-1, 0)  # -2 0
+            # self.c3.offset = transform.Offset(-1, -1)  # 0 0
+            # self.c4.offset = transform.Offset(-1, 0)  # 2 0
+            # self.update()
+            # sleep(.6)
 
         return True
 

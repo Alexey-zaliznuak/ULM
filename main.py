@@ -53,7 +53,13 @@ from forms import (
 )
 
 from library.model_form.filters import ValueFieldFilter
+import locale
 
+locale.setlocale(locale.LC_ALL, ('ru_RU', 'UTF-8'))
+locale.setlocale(
+    category=locale.LC_ALL,
+    locale="Russian"
+)
 
 place_catagories_form = CategoriesForm()
 place_form = PlaceForm()
