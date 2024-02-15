@@ -177,6 +177,15 @@ class BookingForm(UIModelForm):
         'event',
         EventForm, datatable_column_title='Событие'
     )
+    book_full = BooleanField(
+        'book_full',
+        datatable_column_title='Забронировано все помещение',
+        help_text=(
+            'Забронировано все помещение'
+            '(если помещение может вместить только одно мероприятие, '
+            'то значение будет установлено автоматически)'
+        ),
+    )
 
     class Meta:
         model = Booking
