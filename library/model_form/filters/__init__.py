@@ -3,5 +3,6 @@ from .filter_set import FilterSet
 from .value_filter import ValueFieldFilter
 from .numeric_range_slider import NumericRangeSliderFieldFilter
 from .numeric_range_input import NumericRangeInputFieldFilter
+from .date_time_range_input import DateTimeRangeInputFieldFilter
 from .date_range_input import DateRangeInputFieldFilter
 from .time_range_input import TimeRangeInputFieldFilter

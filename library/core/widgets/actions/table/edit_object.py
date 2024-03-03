@@ -18,7 +18,6 @@ from flet import (
     Offset,
     ListView,
     padding,
-    Image
 )
 from typing import Callable
 from library.core.widgets.text import Text, TitleText, Title2Text
@@ -88,7 +87,7 @@ class ObjectErrorBottomSheet(BottomSheet):
                                 offset=Offset(0, 0),
                                 blur_style=ShadowBlurStyle.OUTER,
                             )
-                        ),                    
+                        ),
                         Row(
                             [
                                 ElevatedButton(

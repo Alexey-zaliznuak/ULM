@@ -212,7 +212,8 @@ def generate():
             'deadline': date.today() + timedelta(days=2),
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(1),
-            'time_field': time(10, 10)
+            'time_field': time(10, 10),
+            'date_time_field': datetime.now() + timedelta(days=10)
         },
         {
             'date_registration': date.today() - timedelta(days=1),
@@ -222,7 +223,8 @@ def generate():
             'deadline': date.today() + timedelta(days=12),
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(1),
-            'time_field': time(20, 30)
+            'time_field': time(20, 30),
+            'date_time_field': datetime.now() + timedelta(days=-10)
         },
         {
             'date_registration': date.today() - timedelta(days=2),
@@ -232,7 +234,8 @@ def generate():
             'deadline': date.today() + timedelta(days=5),
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(2),
-            'time_field': time(10, 00)
+            'time_field': time(10, 00),
+            'date_time_field': datetime.now() + timedelta(days=100)
         },
         {
             'date_registration': date.today() - timedelta(days=10),
@@ -242,7 +245,8 @@ def generate():
             'deadline': date.today() + timedelta(days=25),
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(2),
-            'time_field': time(0, 0)
+            'time_field': time(0, 0),
+            'date_time_field': datetime.now() + timedelta(days=0)
         },
         {
             'date_registration': date.today() - timedelta(days=6),
@@ -252,7 +256,8 @@ def generate():
             'deadline': date.today() + timedelta(days=5),
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(3),
-            'time_field': time(0, 0)
+            'time_field': time(0, 0),
+            'date_time_field': datetime.now() + timedelta(days=3)
         },
         {
             'date_registration': date.today() - timedelta(days=6),
@@ -262,7 +267,8 @@ def generate():
             'deadline': date.today() + timedelta(days=4),
             'describe': 'Лучшая заявка в мире',
             'status': TasksStatuses.get_by_id(3),
-            'time_field': time(0, 0)
+            'time_field': time(0, 0),
+            'date_time_field': datetime.now() + timedelta(days=365 + 10)
         },
     ]
 

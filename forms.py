@@ -139,6 +139,7 @@ class TasksForm(UIModelForm):
             'describe',
             'status',
             'time_field',
+            'date_time_field',
         )
         objects_actions = (
             *RUDActions,
@@ -175,6 +176,15 @@ class BookingForm(UIModelForm):
     event = ForeignKeyField(
         'event',
         EventForm, datatable_column_title='Событие'
+    )
+    book_full = BooleanField(
+        'book_full',
+        datatable_column_title='Забронировано все помещение',
+        help_text=(
+            'Забронировано все помещение'
+            '(если помещение может вместить только одно мероприятие, '
+            'то значение будет установлено автоматически)'
+        ),
     )
 
     class Meta:

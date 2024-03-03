@@ -1,5 +1,5 @@
 from typing import Iterable
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .filter import FieldFilter, FormFilter
 from library.core.widgets.filters import DateTimeRangeInputFieldFilterWidget
@@ -12,10 +12,8 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
     def __init__(
         self,
         field: DateTimeField,
-        minimum: datetime = datetime.today(),
-        maximum: datetime = datetime.today(),
-        *,
-        notify_if_invalid: bool = False
+        minimum: datetime = datetime.now() + timedelta(days=-365 * 3),
+        maximum: datetime = datetime.now() + timedelta(days=365 * 3),
     ):
         self.field = field
 
@@ -23,8 +21,6 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
         self.maximum = maximum
 
         assert self.minimum <= self.maximum
-
-        self.notify_if_invalid = notify_if_invalid
 
     def filter(
         self,
@@ -51,7 +47,6 @@ class DateTimeRangeInputFieldFilter(FieldFilter):
                 field=self.field,
                 minimum=self.minimum,
                 maximum=self.maximum,
-                notify_if_invalid=self.notify_if_invalid
             ),
             self.filter
         )
