@@ -1,6 +1,6 @@
 import inspect
 from functools import cached_property
-from typing import Callable, Sequence, Optional
+from typing import Callable, Sequence, Optional, Union
 
 import peewee
 from flet import Control, DataColumn, Text, Column, Row, ScrollMode
@@ -73,7 +73,7 @@ class UIModelForm(metaclass=Singleton):
         table_actions: list[DataTableAction] = [],
         objects_actions: list[DataTableObjectAction] = [],
         filterset: FilterSet = None,
-        default_filters: Sequence[FieldFilter | TableFilter] = (),
+        default_filters: Sequence[Union[FieldFilter, TableFilter]] = (),
         **kwargs,
     ) -> Column:
         # todo in class
@@ -365,4 +365,4 @@ class UIModelForm(metaclass=Singleton):
         table_actions: list[DataTableAction] = []
         objects_actions: list[DataTableObjectAction] = []
         filterset: FilterSet = None
-        default_filters: Sequence[FieldFilter | TableFilter] = ()
+        default_filters: Sequence[Union[FieldFilter, TableFilter]] = ()

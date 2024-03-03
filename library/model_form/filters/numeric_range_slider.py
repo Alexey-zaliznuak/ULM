@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 
 from .filter import FieldFilter, FormFilter
 from library.core.widgets.filters import NumericRangeSliderFieldFilterWidget
@@ -6,9 +6,9 @@ from peewee import fn
 from library.model_form.fields import IntegerField, FloatField
 
 
-Number = int | float
-OptionalNumber = Number | None
-NumericField = IntegerField | FloatField
+Number = Union[int, float]
+OptionalNumber = Union[Number, None]
+NumericField = Union[IntegerField, FloatField]
 
 
 class NumericRangeSliderFieldFilter(FieldFilter):
@@ -45,7 +45,7 @@ class NumericRangeSliderFieldFilter(FieldFilter):
     def filter(
         self,
         queryset: Iterable,
-        widget: NumericRangeSliderFieldFilterWidget | None = None,
+        widget: Union[NumericRangeSliderFieldFilterWidget, None] = None,
     ):
         if not queryset:  # mb peewee feature
             return queryset

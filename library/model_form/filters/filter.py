@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 import flet as ft
 from types import FunctionType
 from library.core.widgets.filters import FilterFieldWidget, FilterTableWidget
@@ -31,7 +31,7 @@ class FieldFilter:
     def filter(
         self,
         queryset: Iterable,
-        widget: FilterFieldWidget | None = None,
+        widget: Union[FilterFieldWidget, None] = None,
     ):
         ...
 
@@ -48,6 +48,6 @@ class TableFilter:
     def filter(
         self,
         queryset: Iterable,
-        widget: FilterTableWidget | None = None
+        widget: Union[FilterTableWidget, None] = None
     ):
         ...

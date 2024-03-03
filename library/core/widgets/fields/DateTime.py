@@ -240,6 +240,6 @@ class TimePicker(ElevatedButton, InputField):
 class TimeViewer(TextViewer, Viewer):
     def __init__(self, value):
         value = str(value).split(':')
-        value = f"{value[0]:02}:{value[1]:02}"
+        value = f"{value[0]}:{value[1]}"
 
         super().__init__(value=value)

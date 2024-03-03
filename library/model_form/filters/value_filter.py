@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 from .filter import FieldFilter, FormFilter
 from library.core.widgets.filters import ValueFieldFilterWidget
 from library.types import AllPossibleValues
@@ -14,7 +14,7 @@ class ValueFieldFilter(FieldFilter):
     def filter(
         self,
         queryset: Iterable,
-        widget: ValueFieldFilterWidget | None = None,
+        widget: Union[ValueFieldFilterWidget, None] = None,
     ):
         if not queryset:
             return queryset
