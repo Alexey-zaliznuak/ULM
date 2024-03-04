@@ -42,13 +42,12 @@ class DateViewer(UserControl, Viewer):
     def on_dismiss(self, e):
         self.page.overlay.remove(self.date_picker)
 
-class DatePicker(UserControl, InputField):
+class DatePicker(ElevatedButton, InputField):
     def __init__(
         self,
         value: date,
         on_change=None
     ):
-        super().__init__()
 
         self.value = value
         self.on_change = on_change
@@ -59,14 +58,11 @@ class DatePicker(UserControl, InputField):
             on_dismiss=self.on_dismiss,
         )
 
-    def build(self):
-        self.date_button = ElevatedButton(
+        super().__init__(
             text=self.value,
             icon=icons.CALENDAR_MONTH,
-            on_click=self.pick_date,
+            on_click=self.pick_date
         )
-
-        return self.date_button
 
     def pick_date(self, e):
         self.page.overlay.append(self.date_picker)
@@ -74,9 +70,10 @@ class DatePicker(UserControl, InputField):
         self.date_picker.pick_date()
 
     def picker_change(self, e):
-        self.date_button.text = self.date_picker.value.date()
+        self.text = self.date_picker.value.date()
         self.update()
         if self.on_change: self.on_change(self.date_picker.value.date())
+        self.page.overlay.remove(self.date_picker)
 
     def on_dismiss(self, e):
         self.page.overlay.remove(self.date_picker)
@@ -119,7 +116,7 @@ class DateTimeViewer(UserControl, Viewer):
         return self.date_button
 
 
-class DateTimePicker(UserControl, Viewer):
+class DateTimePicker(Row, Viewer):
     def __init__(self, value):
         self.value = value or datetime.now()
 
@@ -132,8 +129,8 @@ class DateTimePicker(UserControl, Viewer):
             error_invalid_text="Неправильное время",
             help_text="Выбери время",
             on_change=self.on_change_time,
-            value=value,
-            on_dismiss=self.on_dismiss_time
+            value=self.value.time(),
+            on_dismiss=self.on_dismiss_time,
         )
 
         self.date_picker = FtDatePicker(
@@ -143,7 +140,21 @@ class DateTimePicker(UserControl, Viewer):
             on_dismiss=self.on_dismiss_date,
         )
 
-        super().__init__()
+        self.date_button = ElevatedButton(
+            text=self.date_text,
+            icon=icons.CALENDAR_MONTH,
+            on_click=self.pick_date,
+        )
+        self.time_button = ElevatedButton(
+            self.time_text,
+            icon=icons.ACCESS_TIME,
+            on_click=self.pick_time,
+        )
+
+        super().__init__([
+            self.date_button,
+            self.time_button
+        ])
 
     def pick_date(self, e):
         self.page.overlay.append(self.date_picker)
@@ -155,6 +166,7 @@ class DateTimePicker(UserControl, Viewer):
         self.date_text = self.date_picker.value.strftime("%Y-%m-%d")
         self.date_button.text = self.date_text
         self.update()
+        self.page.overlay.remove(self.date_picker)
 
     def on_dismiss_date(self, e):
         self.page.overlay.remove(self.date_picker)
@@ -168,26 +180,11 @@ class DateTimePicker(UserControl, Viewer):
         self.page.overlay.remove(self.time_picker)
 
     def on_change_time(self, e):
-        self.value = self.value.replace(hour = self.time_picker.value.hour,  minute =self.time_picker.value.minute )
+        self.value = self.value.replace(hour = self.time_picker.value.hour,  minute = self.time_picker.value.minute )
         self.time_text = self.time_picker.value.strftime("%H:%M")
         self.time_button.text = self.time_text
         self.update()
-
-    def build(self):
-        self.date_button = ElevatedButton(
-            text=self.date_text,
-            icon=icons.CALENDAR_MONTH,
-            on_click=self.pick_date,
-        )
-        self.time_button = ElevatedButton(
-            self.time_text,
-            icon=icons.ACCESS_TIME,
-            on_click=self.pick_time,
-        )
-        return Row([
-            self.date_button,
-            self.time_button
-        ])
+        self.page.overlay.remove(self.time_picker)
 
     @property
     def clear_value(self):
@@ -227,6 +224,7 @@ class TimePicker(ElevatedButton, InputField):
 
     def on_change(self, e):
         self.text = self.time_to_text(self.time_picker.value)
+        self.page.overlay.remove(self.time_picker)
         self.update()
 
     def time_to_text(self, time):

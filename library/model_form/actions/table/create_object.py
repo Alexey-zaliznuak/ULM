@@ -8,7 +8,6 @@ class CreateObjectAction(DataTableAction):
     action_widget = CreateObjectActionButtonWidget
 
     def on_click_method(self, *args, datatable, form, **kwargs):
-
         edit_object_action_dialog = EditObjectActionDialog(
             datatable=datatable,
             form=form,

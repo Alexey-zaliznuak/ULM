@@ -21,7 +21,7 @@ class FilterSet:
                     for f in self.filters
                 ]
             ),
-            width=500
+            width=500,
         )
 
     def filter(self, queryset):
