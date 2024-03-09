@@ -10,6 +10,7 @@ from flet import (
     Container,
 )
 from library.core.widgets.actions import ActionButton
+from library.core.widgets.text import Text
 
 
 class DetailObjectActionButtonWidget(ActionButton):
@@ -35,7 +36,7 @@ class DetailObjectWidget(Container):
         for field in fields:
             result.append(
                 Row([
-                    Text((field.help_text or field.label) + " - "),
+                    Text((field.datatable_column_title or field.help_text or field.label) + " - "),
                     field.display(obj)
                 ])
             )
