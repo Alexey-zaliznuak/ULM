@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 from datetime import date
 
 from .filter import FieldFilter, FormFilter
@@ -25,7 +25,7 @@ class DateRangeInputFieldFilter(FieldFilter):
     def filter(
         self,
         queryset: Iterable,
-        widget: DateRangeInputFieldFilterWidget | None = None,
+        widget: Union[DateRangeInputFieldFilterWidget, None] = None,
     ):
         if not queryset:  # mb peewee feature
             return queryset

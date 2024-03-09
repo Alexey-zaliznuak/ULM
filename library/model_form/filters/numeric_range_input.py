@@ -1,12 +1,12 @@
-from typing import Iterable
+from typing import Iterable, Union
 
 from .filter import FieldFilter, FormFilter
 from library.core.widgets.filters import NumericRangeInputFieldFilterWidget
 from library.model_form.fields import IntegerField
 
 
-Number = int | float
-OptionalNumber = Number | None
+Number = Union[ int, float]
+OptionalNumber = Union[Number, None]
 
 
 class NumericRangeInputFieldFilter(FieldFilter):
@@ -32,7 +32,7 @@ class NumericRangeInputFieldFilter(FieldFilter):
     def filter(
         self,
         queryset: Iterable,
-        widget: NumericRangeInputFieldFilterWidget | None = None,
+        widget: Union[NumericRangeInputFieldFilterWidget, None] = None,
     ):
         if not queryset:  # mb peewee feature
             return queryset

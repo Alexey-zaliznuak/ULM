@@ -1,4 +1,4 @@
-from typing import Callable, Sequence
+from typing import Callable, Sequence, Union
 
 from peewee import Model
 from flet import (
@@ -118,7 +118,7 @@ class UIModelFormDataTable(DataTable):
         model: Model,
         queryset: Callable,
         filterset: FilterSet = None,
-        default_filters: Sequence[FieldFilter | TableFilter] = (),
+        default_filters: Sequence[Union[FieldFilter, TableFilter]] = (),
         objects_actions: Sequence[DataTableObjectAction] = (),
         table_actions: Sequence[DataTableAction] = (),
         action_column: DataColumn = DataColumn(Text('Actions')),

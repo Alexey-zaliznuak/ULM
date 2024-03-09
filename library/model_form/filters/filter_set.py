@@ -1,6 +1,6 @@
 import flet as ft
 
-from typing import Sequence
+from typing import Sequence, Union
 from functools import cached_property
 from .filter import FieldFilter, TableFilter, FormFilter
 
@@ -21,7 +21,7 @@ class FilterSet:
                     for f in self.filters
                 ]
             ),
-            width=500
+            width=500,
         )
 
     def filter(self, queryset):
@@ -42,4 +42,4 @@ class FilterSet:
 
     class Meta:
         filters: Sequence[str] = ()
-        default_filters: Sequence[FieldFilter | TableFilter] = ()
+        default_filters: Sequence[Union[FieldFilter, TableFilter]] = ()

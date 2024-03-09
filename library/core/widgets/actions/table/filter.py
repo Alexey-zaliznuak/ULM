@@ -1,5 +1,6 @@
-from flet import icons, AlertDialog, Container, Column, ElevatedButton, Text
+from flet import icons, AlertDialog, Container, Column, ElevatedButton, MainAxisAlignment, ListView, margin
 from library.core.widgets.actions import ActionButton
+from library.core.widgets.text import Text, TitleText
 
 
 class FilterActionButton(ActionButton):
@@ -16,21 +17,28 @@ class FilterActionDialog(AlertDialog):
 
         super().__init__(
             content=Container(
-                content=Column(
-                    controls=[
-                        Text('Фильтрация'),
+                content=ListView(
+                    [
+                        TitleText('Фильтрация'),
                         datatable.filterset.widget,
-                        ElevatedButton(
+                        Container(
+                            content=ElevatedButton(
                             "Сохранить",
                             on_click=self._close_and_update,
                         ),
-                    ]
+                        margin=margin.only(top=20)
+                        ),
+                        
+                    ],
+                    width=600,
                 )
-            )
+            ),
+            modal=True,
+            actions_alignment=MainAxisAlignment.END,
         )
 
     def _close_and_update(self, e=None):
         self.datatable.update_rows()
         self.open = False
         self.page.update()
-        self.page.overlay.remove(self)
+        # self.page.overlay.remove(self)

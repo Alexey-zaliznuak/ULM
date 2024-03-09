@@ -10,7 +10,6 @@ from flet import (
     Row,
     Container,
     Column,
-    MainAxisAlignment,
     colors,
     border_radius,
     BoxShadow,
@@ -117,6 +116,7 @@ class ObjectErrorBottomSheet(BottomSheet):
         )
 
     def close(self, e=None):
+        self.page.overlay.remove(self)
         self.open = False
         self.update()
 
