@@ -14,13 +14,13 @@ from .BaseInput import InputField
 
 
 class IntegerInput(Row, InputField):
-
     def __init__(
         self,
         value: int,
     ):
+        
         txt_number = TextField(
-            value=str(value),
+            value=str(value or 0),
             text_align="right",
             width=100
         )

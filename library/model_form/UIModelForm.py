@@ -2,6 +2,7 @@ import inspect
 from functools import cached_property
 from typing import Callable, Sequence, Optional, Union
 
+import pandas as pd
 import peewee
 from flet import Control, DataColumn, Text, Column, Row, ScrollMode
 
@@ -216,8 +217,8 @@ class UIModelForm(metaclass=Singleton):
         ...
 
     def get_queryset(self, q=None) -> Callable:
-        # TODO filters widget
         # TODO filter_widget.get_queryset: Callable
+        # TODO select()
         return q or self.Meta.model.select
 
     def get_row_params(self, obj, form, datatable) -> dict:
@@ -336,6 +337,29 @@ class UIModelForm(metaclass=Singleton):
         attrs['help_text'] = model_field.help_text
 
         return attrs
+
+    # cringe time
+    def to_excel(self, write_file: str, queryset=None):
+        writer = pd.ExcelWriter(f'{write_file}.xls', engine='xlsxwriter')
+ 
+        if not queryset:
+            queryset = self.get_queryset()().execute()
+ 
+        formatted_queryset = []
+        columns = [(form_field.datatable_column_title or form_field.help_text or form_field.label or form_field.source) for form_field in self._form_fields(write_only=False).values() if form_field.source != 'id']
+        print(columns)
+        for obj in queryset:
+            formatted_row = []
+ 
+            for form_field in self._form_fields(write_only=False).values():
+                if form_field.source != 'id':
+                    formatted_row.append(form_field._get_display_value(obj))
+ 
+            formatted_queryset.append(formatted_row)
+ 
+        data_frame = pd.DataFrame(formatted_queryset, columns=columns)
+        data_frame.to_excel(writer, 'Sheet1', index=False)
+        writer.close()
 
     @cached_property
     def __form_fields(self) -> dict[str, UIField]:

@@ -1,6 +1,8 @@
 import flet as ft
 
+from core.ExportTable.ExportDataTable import ExportDataTable
 from widgets.CustomNavigation import CustomNavigation
+from core.ImportTable.ImportDataTable import ImportDataTable
 
 
 def WorkPage(WorkTypesFormDataTable, TaskFormDataTable):
@@ -56,135 +58,29 @@ def BookingPage(BookingFormDataTable, TimeLineTable):
 
 
 def EducationPage(
-    EventFormDataTable,
-    PlaceDataTable,
-    EventTypesDataTable,
-    WorkTypesFormDataTable,
-    TaskFormDataTable,
-    BookingFormDataTable,
-    TimeLineTable
-):
-    return CustomNavigation(
-        selected_index=4,
-        routes=[
-            {
-                "icon": (
-                    ft.icons.EVENT,
-                    ft.icons.EVENT_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventFormDataTable]),
-                'title': 'Мероприятия'
-            },
-            {
-                "icon": (
-                    ft.icons.PLACE,
-                    ft.icons.PLACE_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[PlaceDataTable]),
-                'title': 'Пространства'
-            },
-            {
-                "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventTypesDataTable]),
-                'title': 'Виды мероприятий'
-            },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    WorkPage(WorkTypesFormDataTable, TaskFormDataTable),
-                'title': ''
-            },
-            {
-                "icon": (
-                    ft.icons.EDIT_CALENDAR,
-                    ft.icons.EDIT_CALENDAR_OUTLINED,
-                ),
-                'page':
-                    BookingPage(BookingFormDataTable, TimeLineTable),
-                'title': ''
-            },
-        ],
-    )
-
-
-def LearningPage(
-    EventFormDataTable,
-    PlaceDataTable,
-    EventTypesDataTable,
-    WorkTypesFormDataTable,
-    TaskFormDataTable,
-    BookingFormDataTable,
-    TimeLineTable
+    ExhibitFormDataTable,
 ):
     return CustomNavigation(
         selected_index=0,
         routes=[
             {
                 "icon": (
-                    ft.icons.EVENT,
-                    ft.icons.EVENT_OUTLINED,
+                    ft.icons.FORT,
+                    ft.icons.FORT_OUTLINED,
                 ),
                 'page':
-                    ft.ListView(controls=[EventFormDataTable]),
-                'title': 'Мероприятия'
-            },
-            {
-                "icon": (
-                    ft.icons.PLACE,
-                    ft.icons.PLACE_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[PlaceDataTable]),
-                'title': 'Пространства'
-            },
-            {
-                "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[EventTypesDataTable]),
-                'title': 'Виды мероприятий'
-            },
-            {
-                "icon": (
-                    ft.icons.WORK,
-                    ft.icons.WORK_OUTLINED,
-                ),
-                'page':
-                    WorkPage(WorkTypesFormDataTable, TaskFormDataTable),
-                'title': ''
-            },
-            {
-                "icon": (
-                    ft.icons.EDIT_CALENDAR,
-                    ft.icons.EDIT_CALENDAR_OUTLINED,
-                ),
-                'page':
-                    BookingPage(BookingFormDataTable, TimeLineTable),
-                'title': ''
-            },
-        ]
+                    ft.ListView(controls=[ExhibitFormDataTable]),
+                'title': 'Экспонаты'
+            }
+        ],
     )
 
 
-def EntertainmentPage(
+def LearningPage(
     PlaceDataTable,
-    TeacherFormDataTable,
-    ClubFormDataTable,
-    ClubTypeFormDataTable,
 ):
     return CustomNavigation(
-        selected_index=2,
+        selected_index=0,
         routes=[
             {
                 "icon": (
@@ -194,34 +90,36 @@ def EntertainmentPage(
                 'page':
                     ft.ListView(controls=[PlaceDataTable]),
                 'title': 'Пространства'
-            },
+            }
+        ]
+    )
+
+
+def EntertainmentPage(
+    StudioDataTable,
+    ClubFormDataTable
+):
+    return CustomNavigation(
+        selected_index=0,
+        routes=[
             {
                 "icon": (
-                    ft.icons.MAN,
-                    ft.icons.MAN_OUTLINED,
+                    ft.icons.PLACE,
+                    ft.icons.PLACE_OUTLINED,
                 ),
                 'page':
-                    ft.ListView(controls=[TeacherFormDataTable]),
-                'title': 'Учителя'
+                    ft.ListView(controls=[StudioDataTable]),
+                'title': 'Студии'
             },
             {
                 "icon": (
-                    ft.icons.THEATER_COMEDY,
-                    ft.icons.THEATER_COMEDY_OUTLINED,
+                    ft.icons.MAN_4,
+                    ft.icons.MAN_4_OUTLINED,
                 ),
                 'page':
                     ft.ListView(controls=[ClubFormDataTable]),
-                'title': 'Кружки'
-            },
-            {
-                "icon": (
-                    ft.icons.NOW_WIDGETS,
-                    ft.icons.NOW_WIDGETS_OUTLINED,
-                ),
-                'page':
-                    ft.ListView(controls=[ClubTypeFormDataTable]),
-                'title': 'Виды кружков'
-            },
+                'title': 'Преподаватели'
+            }
         ]
     )
 
@@ -256,5 +154,63 @@ def ScheduleTablePage(ScheduleTable):
                     ft.ListView(controls=[ScheduleTable]),
                 'title': 'Расписание'
             }
+        ]
+    )
+
+def EntertainmentPage(
+    StudioDataTable,
+    TeacherDataTable
+):
+    return CustomNavigation(
+        selected_index=0,
+        routes=[
+            {
+                "icon": (
+                    ft.icons.PLACE,
+                    ft.icons.PLACE_OUTLINED,
+                ),
+                'page':
+                   ft.ListView(controls=[StudioDataTable]),
+                'title': 'Студии'
+            },
+            {
+                "icon": (
+                    ft.icons.MAN_4,
+                    ft.icons.MAN_4_OUTLINED,
+                ),
+                'page':
+                    ft.ListView(controls=[TeacherDataTable]),
+                'title': 'Преподаватели'
+            }
+        ]
+    )
+
+
+def ExcelPage():
+    return CustomNavigation(
+        selected_index=0,
+        routes=[
+            {
+                "icon": (
+                    ft.icons.DOWNLOAD,
+                    ft.icons.DOWNLOAD,
+                ),
+                'page':
+                    ft.ListView(controls=[
+                        ImportDataTable()
+                        ]),
+                'title': 'Загрузка данных из Excel'
+            },
+            {
+                "icon": (
+                    ft.icons.UPLOAD,
+                    ft.icons.UPLOAD,
+                ),
+                'page':
+                    ft.ListView(controls=[
+                        ExportDataTable()
+                        ]),
+                'title': 'Экспорт данных из Excel'
+            },
         ]
     )

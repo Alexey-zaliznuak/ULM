@@ -395,3 +395,47 @@ class StringRelatedField(RelatedField):
 
 class ManyRelatedField(Field):
     ...
+
+
+class MethodField(Field):
+    def __init__(
+        self,
+        method: FunctionType,
+        label: str = '',
+        help_text: str = None,
+        datatable_column_title: str = None
+    ):
+        self.method: FunctionType = method
+ 
+        super().__init__(
+            source=None,
+            read_only=True,
+            write_only=False,
+            required=False,
+            default=empty,
+            label=label,
+            help_text=help_text,
+            datatable_column_title=datatable_column_title,
+            style=None,
+            error_messages=None,
+            validators=[],
+            allow_null=True  # ??
+        )
+ 
+    def _get_display_value(self, obj):
+        return self.method(obj)
+ 
+    def _get_db_value(self, obj):
+        raise AttributeError(
+            'MethodField не обеспечивает функционал получения значений.'
+        )
+ 
+    def get_editing_default_value(self, obj):
+        raise AttributeError(
+            'MethodField не предоставляет функции редактирования объектов.'
+        )
+ 
+    def _editing_form_widget(self, value, action: str = None):
+        raise AttributeError(
+            'MethodField не предоставляет функции редактирования объектов.'
+        )

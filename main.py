@@ -10,45 +10,33 @@ from flet import (
 )
 
 from models import (
-    Event,
-    Categories,
     Place,
-    TasksStatuses,
-    Task,
-    Booking,
-    Club,
+    Studio,
+    Exhibit,
+    Teacher,
     manage_db,
 )
 
 manage_db()
 
 from widgets.TabText import TabText
-from core.TimeLineTable.TimeLineTable import TimeLineTable
-from filtersets import TasksFilterSet
 from loadpage import LoadPage
 
 from pages.pages import (
     EntertainmentPage,
     LearningPage,
     EducationPage,
-    ScheduleTablePage,
-    WorkTablePage
+    ExcelPage
 )
 # from widgets.CustomNavigation import CustomNavigation
 
-from core.ScheduleTable.schedule_table import ScheduleDataTable
+# from core.ScheduleTable.schedule_table import ScheduleDataTable
 
 from forms import (
-    EventTypesForm,
-    EventForm,
     PlaceForm,
-    CategoriesForm,
-    WorkTypeForm,
-    TasksForm,
-    BookingForm,
+    StudioForm,
+    ExhibitForm,
     TeacherForm,
-    ClubForm,
-    ClubTypeForm
 )
 
 from library.model_form.filters import ValueFieldFilter
@@ -60,16 +48,10 @@ locale.setlocale(
     locale="Russian"
 )
 
-place_catagories_form = CategoriesForm()
 place_form = PlaceForm()
-events_types_form = EventTypesForm()
-events_form = EventForm()
-work_types_form = WorkTypeForm()
-task_form = TasksForm()
-booking_form = BookingForm()
 teacher_form = TeacherForm()
-club_form = ClubForm()
-club_type_form = ClubTypeForm()
+studio_form = StudioForm()
+exhibit_form = ExhibitForm()
 
 
 def main(page: Page):
@@ -85,169 +67,29 @@ def main(page: Page):
     }
 
     # ---------------PlaceData---------------
-    PlaceDataTablePr, place_dtPr = place_form.DataTable(
-        default_filters=[
-            ValueFieldFilter(
-                Place.category,
-                Categories.get(name='Просветительское')
-            )
-        ]
-    )
-    page.datatables.append(place_dtPr)
+    PlaceDataTable, place_dt = place_form.DataTable()
 
-    PlaceDataTableOb, place_dtOb = place_form.DataTable(
-        default_filters=[
-            ValueFieldFilter(
-                Place.category,
-                Categories.get(name='Образовательное')
-            )
-        ]
-    )
-    page.datatables.append(place_dtOb)
+    page.datatables.append(place_dt)
+    
+    # ---------------PlaceData---------------
+    TeacherDataTable, teach_dt = teacher_form.DataTable()
 
-    PlaceDataTableRa, place_dtRa = place_form.DataTable(
-        default_filters=[
-            ValueFieldFilter(
-                Place.category,
-                Categories.get(name='Развлекательное')
-            )
-        ]
-    )
-    page.datatables.append(place_dtRa)
+    page.datatables.append(teach_dt)
 
-    # ---------------EventTypesData---------------
-    EventTypesDataTablePr, events_types_form_dtPr = (
-        events_types_form.DataTable()
-    )
-    page.datatables.append(events_types_form_dtPr)
+    # ---------------PlaceData---------------
+    StudioDataTable, studio_dt = studio_form.DataTable()
 
-    EventTypesDataTableOb, events_types_form_dtOb = (
-        events_types_form.DataTable()
-    )
-    page.datatables.append(events_types_form_dtOb)
+    page.datatables.append(studio_dt)
 
-    EventTypesDataTableRa, events_types_form_dtRa = (
-        events_types_form.DataTable()
-    )
-    page.datatables.append(events_types_form_dtRa)
+    # ---------------PlaceData---------------
+    ExhibitDataTable, exhibit_dt = exhibit_form.DataTable()
 
-    # ---------------EventData---------------
-    EventFormDataTablePr, events_dtPr = events_form.DataTable(
-        default_filters=[
-            ValueFieldFilter(
-                Event.category,
-                Categories.get(name='Просветительское')
-            )
-        ]
-    )
-    page.datatables.append(events_dtPr)
+    page.datatables.append(exhibit_dt)
 
-    EventFormDataTableOb, events_dtOb = events_form.DataTable(
-        default_filters=[
-            ValueFieldFilter(
-                Event.category,
-                Categories.get(name='Образовательное')
-            )
-        ]
-    )
-    page.datatables.append(events_dtOb)
+    
 
-    EventFormDataTableRa, events_dtRa = events_form.DataTable(
-        default_filters=[
-            ValueFieldFilter(
-                Event.category,
-                Categories.get(name='Развлекательное')
-            )
-        ]
-    )
-    page.datatables.append(events_dtRa)
+    
 
-    # ---------------WorkTypesData---------------
-    WorkTypesFormDataTablePr, work_types_events_dtPr = (
-        work_types_form.DataTable()
-    )
-    page.datatables.append(work_types_events_dtPr)
-
-    WorkTypesFormDataTableOb, work_types_events_dtOb = (
-        work_types_form.DataTable()
-    )
-    page.datatables.append(work_types_events_dtOb)
-
-    WorkTypesFormDataTableRa, work_types_events_dtRa = (
-        work_types_form.DataTable()
-    )
-    page.datatables.append(work_types_events_dtRa)
-
-    # ---------------TaskData---------------
-    TaskFormDataTablePr, task_events_dtPr = (
-        task_form.DataTable(filterset=TasksFilterSet)
-    )
-    page.datatables.append(task_events_dtPr)
-
-    TaskFormDataTableOb, task_events_dtOb = (
-        task_form.DataTable(filterset=TasksFilterSet)
-    )
-    page.datatables.append(task_events_dtOb)
-
-    TaskFormDataTableRa, task_events_dtRa = (
-        task_form.DataTable(filterset=TasksFilterSet)
-    )
-    page.datatables.append(task_events_dtRa)
-
-    # ---------------WorkTableData---------------
-    WorkTableFormDataTable, work_table_dt = (
-        task_form.DataTable(
-            default_filters=[
-                ValueFieldFilter(
-                    Task.status,
-                    TasksStatuses.get(status_name='К выполнению')
-                )
-            ],
-            filterset=TasksFilterSet
-        )
-    )
-    page.datatables.append(work_table_dt)
-
-    # ---------------BookingTableData---------------
-    BookingFormDataTableRa, booking_events_dtRa = (
-        booking_form.DataTable()
-    )
-    page.datatables.append(booking_events_dtRa)
-
-    BookingFormDataTablePr, booking_events_dtPr = (
-        booking_form.DataTable()
-    )
-    page.datatables.append(booking_events_dtPr)
-
-    # ---------------TimeLineTableData---------------
-
-    TimeLineTableRa = TimeLineTablePr = TimeLineTable(
-        get_bookings=Booking.select,
-        get_places=Place.select
-    )
-
-    # ---------------TeacherTableData---------------
-    TeacherFormDataTableOb, teacher_events_dtOb = (
-        teacher_form.DataTable()
-    )
-    page.datatables.append(teacher_events_dtOb)
-
-    # ---------------ClubTableData---------------
-    ClubFormDataTableOb, club_events_dtOb = (
-        club_form.DataTable()
-    )
-    page.datatables.append(club_events_dtOb)
-
-    # ---------------ClubTypeTableData---------------
-    ClubTypeFormDataTableOb, club_type_events_dtOb = (
-        club_type_form.DataTable()
-    )
-    page.datatables.append(club_type_events_dtOb)
-
-    # ---------------ScheduleTableData---------------
-    ScheduleTableOb = ScheduleDataTable(
-        clubs=Club.select
-    )
 
     t = Tabs(
         selected_index=0,
@@ -255,63 +97,38 @@ def main(page: Page):
         overlay_color=colors.BLUE_100,
         tabs=[
             Tab(
-                tab_content=TabText("Просвещение"),
-                content=Container(
-                    content=EducationPage(
-                        EventFormDataTablePr,
-                        PlaceDataTablePr,
-                        EventTypesDataTablePr,
-                        WorkTypesFormDataTablePr,
-                        TaskFormDataTablePr,
-                        BookingFormDataTablePr,
-                        TimeLineTablePr,
-                    ),
-                ),
-
-            ),
-            Tab(
-                tab_content=TabText("Развлечение"),
+                tab_content=TabText("Развлекательная деятельность"),
                 content=Container(
                     content=LearningPage(
-                        EventFormDataTableRa,
-                        PlaceDataTableRa,
-                        EventTypesDataTableRa,
-                        WorkTypesFormDataTableRa,
-                        TaskFormDataTableRa,
-                        BookingFormDataTableRa,
-                        TimeLineTableRa,
+                        PlaceDataTable,
                     )
                 ),
             ),
             Tab(
-                tab_content=TabText("Образование"),
+                tab_content=TabText("Культурно-просветительская деятельность"),
+                content=Container(
+                    content=EducationPage(
+                        ExhibitDataTable,
+                    ),
+                ),
+            ),
+            Tab(
+                tab_content=TabText("Образовательная деятельность"),
                 content=Container(
                     content=EntertainmentPage(
-                        PlaceDataTableOb,
-                        TeacherFormDataTableOb,
-                        ClubFormDataTableOb,
-                        ClubTypeFormDataTableOb,
+                        StudioDataTable,
+                        TeacherDataTable
                     )
                 ),
             ),
             Tab(
-                tab_content=TabText("Активные заявки"),
+                tab_content=TabText("Загрузка"),
                 content=Container(
-                    content=WorkTablePage(
-                        WorkTableFormDataTable,
-                    )
+                    content=ExcelPage()
                 ),
-            ),
-            Tab(
-                tab_content=TabText("Расписание занятий"),
-                content=Container(
-                    content=ScheduleTablePage(
-                        ScheduleTableOb,
-                    )
-                ),
-            ),
+            )
+
         ],
-        on_change=lambda _: ScheduleTableOb.update(),
         expand=True,
     )
 
